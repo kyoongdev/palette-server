@@ -14,17 +14,27 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                 version = "v1"))
 @RequiredArgsConstructor
 @Configuration
-@EnableWebMvc
-
 public class SwaggerConfig {
 
     @Bean
-    public GroupedOpenApi chatOpenApi() {
+    public GroupedOpenApi tempOpenApi() {
         String[] paths = {"/temp/**"};
 
         return GroupedOpenApi.builder()
-                .group("test group v1")
+                .group("test group1 v1")
                 .pathsToMatch(paths)
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi testOpenApi() {
+        String[] paths = {"/test/**"};
+        String[] excludes = {"/temp/**"};
+
+        return GroupedOpenApi.builder()
+                .group("test group2 v1")
+                .pathsToMatch(paths)
+                .packagesToExclude(excludes)
                 .build();
     }
 }
