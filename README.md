@@ -37,5 +37,3 @@
 - feature/{name} : 특정 피쳐 단위 개발 도메인 ex) feature/auth, feature/artists
 
 **feature/{name}**에서 개발을 마치면 **main**에 Pull Request를 통해 Squash Merge 진행
-
-- 현재 main 브랜치는 PR Reviewer 없이는 merge가 되지 않습니다.
