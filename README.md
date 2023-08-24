@@ -1,5 +1,21 @@
 # palette-server
 
+## Docker Compose 세팅
+
+(Docker가 설치되어있다면 넘어가셔도 좋습니다.)
+Window : https://docs.docker.com/desktop/install/windows-install/
+Mac : https://docs.docker.com/desktop/install/mac-install/
+위 링크를 통해 도커를 설치합니다.
+
+## 서버 실행
+
+서버 실행은 다음과 같은 과정을 통해 진행합니다.
+
+```
+$ sh ./docker/start-docker.sh
+>>> [Y/N]질문에는 Y를 입력
+```
+
 ## 폴더 구조
 
 ```
