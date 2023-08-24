@@ -7,6 +7,10 @@ Window : https://docs.docker.com/desktop/install/windows-install/
 Mac : https://docs.docker.com/desktop/install/mac-install/
 위 링크를 통해 도커를 설치합니다.
 
+## Mysql 명세
+
+docker-compose.yml 파일 참고 - MYSQL_ROOT_PASSWORD=PalleteSecret123 - MYSQL_USER=pallete - MYSQL_DATABASE=pallete - MYSQL_PASSWORD=PalleteSecret123
+
 ## 서버 실행
 
 서버 실행은 다음과 같은 과정을 통해 진행합니다.
