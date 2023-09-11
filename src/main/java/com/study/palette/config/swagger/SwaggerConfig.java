@@ -1,4 +1,4 @@
-package com.study.palette.common.config;
+package com.study.palette.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -18,7 +18,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi tempOpenApi() {
-        String[] paths = {"/temp/**"};
+        String[] paths = {"/api/**"};
 
         return GroupedOpenApi.builder()
                 .group("test group1 v1")
