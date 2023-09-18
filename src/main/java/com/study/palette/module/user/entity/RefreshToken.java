@@ -1,4 +1,4 @@
-package com.study.palette.user.domain;
+package com.study.palette.module.user.entity;
 
 import lombok.Builder;
 import lombok.Getter;

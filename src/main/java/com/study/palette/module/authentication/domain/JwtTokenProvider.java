@@ -1,11 +1,11 @@
-package com.study.palette.authentication.domain;
+package com.study.palette.module.authentication.domain;
 
-import com.study.palette.authentication.presentation.dto.TokenDto;
+import com.study.palette.module.authentication.presentation.dto.TokenDto;
 import com.study.palette.config.UserDetailsServiceImpl;
-import com.study.palette.user.domain.RefreshToken;
-import com.study.palette.user.domain.User;
-import com.study.palette.user.domain.repository.RefreshTokenRepository;
-import com.study.palette.user.domain.repository.UserRepository;
+import com.study.palette.module.user.entity.RefreshToken;
+import com.study.palette.module.user.entity.User;
+import com.study.palette.module.user.repository.RefreshTokenRepository;
+import com.study.palette.module.user.repository.UserRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

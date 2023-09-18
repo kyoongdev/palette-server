@@ -1,6 +1,6 @@
 package com.study.palette.config.security;
 
-import com.study.palette.authentication.domain.JwtTokenProvider;
+import com.study.palette.module.authentication.domain.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

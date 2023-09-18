@@ -1,4 +1,4 @@
-package com.study.palette.authentication.presentation.dto;
+package com.study.palette.module.authentication.presentation.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
