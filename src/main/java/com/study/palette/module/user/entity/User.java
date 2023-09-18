@@ -1,61 +1,97 @@
 package com.study.palette.module.user.entity;
 
-
+import jdk.jfr.Timestamp;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 @Getter
-@Builder
+@Setter     // TODO dto <--> entity 전환을 copyProperty 로 하기위해 추가함--> 추후 좀더 다른 방법 알아보면 될듯
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
+    @Column(columnDefinition = "BINARY(16)")
+//    @Type(type = "org.hibernate.type.BinaryType")
+    private UUID id;
 
-    @Column(length = 20)
-    private String auth;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Column(length = 20)
-    private String email;
+    @Column(columnDefinition = "varchar(255)")
+    String email;
 
-    @Column(length = 255)
-    private String password;
+    @Column(columnDefinition = "varchar(255)")
+    String password;
 
-    @Column(length = 20)
-    private String name;
-    @Column(length = 20)
-    private String phone;
+    @Column(columnDefinition = "varchar(100)")
+    String name;
 
-    private boolean isAlarmAccept;
+    @Column(columnDefinition = "varchar(100)")
+    String phone;
 
-    private int loginFailCount;
+    @Column(columnDefinition = "boolean default false")
+    boolean isAlarmAccept;
 
-    private boolean isLocked;
+    @Column(columnDefinition = "int default 0")
+    int loginFailCount;
 
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "boolean default false")
+    boolean isLocked;
 
-    @OneToOne
-    @JoinColumn(name = "userId")
-    private UserArtist userArtist;
+    @Column(columnDefinition = "datetime default now()")
+    @CreatedDate
+    LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserFile> userFile = new ArrayList<>();
+    @Column(columnDefinition = "datetime")
+    LocalDateTime deletedAt;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserFollowing> userFolloing = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserFollower> userFollower = new ArrayList<>();
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 
+    public String getloginFailCount() {
+        return String.valueOf(this.loginFailCount);
+    }
+
+    public boolean getIsLocked() {
+        return this.isLocked;
+    }
+
+    public void updateLoginFailCount(int loginFailCount) {
+        this.loginFailCount = loginFailCount;
+    }
+
+    public void updateIsLocked(boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+
+    public void generateDeletedAt() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public void resetDeletedAt() {
+        this.deletedAt = null;
+    }
+
+    @Builder
+    public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept) {
+        this.role = role;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.isAlarmAccept = isAlarmAccept;
+    }
 }
+
