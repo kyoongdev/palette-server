@@ -1,7 +1,7 @@
 package com.study.palette.config;
 
-import com.study.palette.user.domain.User;
-import com.study.palette.user.domain.repository.UserRepository;
+import com.study.palette.module.user.entity.User;
+import com.study.palette.module.user.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 
 @Service
