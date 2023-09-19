@@ -78,39 +78,31 @@ public class UserController {
     }
 
     /**
-     * 회원 탈퇴
+     * 회원 탈퇴 soft
      */
-    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 입니다. 회원 탈퇴 시, 회원 정보는 삭제되지 않고, 삭제된 시간만 기록합니")
+    @Operation(summary = "회원 탈퇴 - soft", description = "회원 탈퇴 입니다. 회원 탈퇴 시, 회원 정보는 삭제되지 않고, 삭제된 시간이 기록됩니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "탈퇴 성공"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @PatchMapping("{id}/mark-for-deletion")
+    @DeleteMapping("{id}/soft")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void generateDeletedAt(@PathVariable("id") String id) {
+    void softDelete(@PathVariable("id") String id) {
         userService.generateDeletedAt(id);
     }
 
     /**
-     * 회원 탈퇴 취소
+     * 회원 영구 삭제 hard
      */
-    @Operation(summary = "회원 탈퇴 취소", description = "회원 탈퇴 취소 입니다. 취소시 삭제된 시간을 초기화 합니다.")
+    @Operation(summary = "회원 영구 삭제 - hard", description = "회원 영구 삭제 입니다. 회원 영구 삭제 시, 회원 정보는 삭제됩니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "취소 성공"),
+            @ApiResponse(responseCode = "204", description = "삭제 성공"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @PatchMapping("{id}/reset-deletion-mark")
+    @DeleteMapping("{id}/hard")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void resetDeletedAt(@PathVariable("id") String id) {
-        userService.resetDeletedAt(id);
+    void hardDelete(@PathVariable("id") String id) {
+        userService.deleteUser(id);
     }
 
-    /**
-     * 회원 삭제
-     */
-    @DeleteMapping()
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteUser() {
-        userService.deleteUsers();
-    }
 }

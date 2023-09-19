@@ -103,7 +103,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    //삭제시간 생성
+    //삭제시간 생성 - soft
     @Transactional
     public void generateDeletedAt(String id) {
         User user = getUserById(id)
@@ -114,22 +114,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    //삭제시간 초기화
+    //회원삭제 - hard
     @Transactional
-    public void resetDeletedAt(String id) {
-        User user = getUserById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
-
-        user.resetDeletedAt();
-
-        userRepository.save(user);
-    }
-
-    //회원삭제
-    //TODO deleteAt 의 값이 특정기간 이상 지난 회원은 삭제처리
-    @Transactional
-    public void deleteUsers() {
-//        userRepository.delete(user);
+    public void deleteUser(String id) {
+        userRepository.deleteById(UUID.fromString(id));
     }
 
 
