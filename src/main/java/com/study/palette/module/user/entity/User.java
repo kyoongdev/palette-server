@@ -1,6 +1,7 @@
 package com.study.palette.module.user.entity;
 
 import jdk.jfr.Timestamp;
+import com.study.palette.module.user.entity.Role;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -54,7 +55,6 @@ public class User {
 
     @Column(columnDefinition = "datetime")
     LocalDateTime deletedAt;
-
 
     public String getRoleKey() {
         return this.role.getKey();
