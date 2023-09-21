@@ -114,7 +114,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    //회원삭제 - hard
+    //회원 영구 삭제 - hard
     @Transactional
     public void deleteUser(String id) {
         userRepository.deleteById(UUID.fromString(id));

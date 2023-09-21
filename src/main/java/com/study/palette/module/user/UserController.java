@@ -1,9 +1,6 @@
 package com.study.palette.module.user;
 
-import com.study.palette.module.user.dto.UserCreateRequestDto;
-import com.study.palette.module.user.dto.UserFindEmailDto;
-import com.study.palette.module.user.dto.UserProfileDto;
-import com.study.palette.module.user.dto.UserUpdateDto;
+import com.study.palette.module.user.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,13 +8,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/users")
 public class UserController {
     public final UserService userService;
 
+//    public final MusicianService musicianService; TODO 서비스 구현시 추가
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -26,14 +27,27 @@ public class UserController {
     /**
      * 회원 조회
      */
-    @Operation(summary = "회원 조회 By ID", description = "ID 로 회원조회 합니다.")
+    @Operation(summary = "회원 조회 By ID", description = "ID 로 회원조회 합니다. 요청한 유저 권한이 MUSICIAN 일 경우, 음악인 정보도 함께 조회됩니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
     @GetMapping("{id}")
-    public UserProfileDto findUserById(@PathVariable("id") String id) {
-        return userService.getUserByIdWithDto(id);
+    @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
+    public MyInfoResponseDto findUserById(@PathVariable("id") String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isMusician = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MUSICIAN"));
+
+        if (isMusician) {
+            return MyInfoResponseDto.builder()
+                    .userProfileDto(userService.getUserByIdWithDto(id))
+//                    .musicianProfileDto(musicianService.getMusicianByIdWithDto(id)) TODO 서비스 구현시 추가
+                    .build();
+        } else {
+            return MyInfoResponseDto.builder()
+                    .userProfileDto(userService.getUserByIdWithDto(id))
+                    .build();
+        }
     }
 
     /**
@@ -73,6 +87,7 @@ public class UserController {
     })
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
     void updateUser(@PathVariable("id") String id, @RequestBody UserUpdateDto user) {
         userService.updateUser(id, user);
     }
@@ -87,6 +102,7 @@ public class UserController {
     })
     @DeleteMapping("{id}/soft")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
     void softDelete(@PathVariable("id") String id) {
         userService.generateDeletedAt(id);
     }
@@ -101,6 +117,7 @@ public class UserController {
     })
     @DeleteMapping("{id}/hard")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     void hardDelete(@PathVariable("id") String id) {
         userService.deleteUser(id);
     }
