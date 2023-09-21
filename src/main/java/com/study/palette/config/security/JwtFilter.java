@@ -1,6 +1,6 @@
 package com.study.palette.config.security;
 
-import com.study.palette.module.authentication.domain.JwtTokenProvider;
+import com.study.palette.authentication.domain.JwtTokenProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;

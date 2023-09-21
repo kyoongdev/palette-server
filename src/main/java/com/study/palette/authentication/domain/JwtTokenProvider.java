@@ -1,6 +1,6 @@
-package com.study.palette.module.authentication.domain;
+package com.study.palette.authentication.domain;
 
-import com.study.palette.module.authentication.presentation.dto.TokenDto;
+import com.study.palette.authentication.presentation.dto.TokenDto;
 import com.study.palette.config.UserDetailsServiceImpl;
 import com.study.palette.module.user.entity.RefreshToken;
 import com.study.palette.module.user.entity.User;
