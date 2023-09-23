@@ -1,0 +1,5 @@
+jwt:
+  secret: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwK
+  token:
+    access-expiration-time: 43200000    # 12시간
+    refresh-expiration-time: 604800000   # 7일
