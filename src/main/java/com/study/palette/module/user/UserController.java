@@ -27,31 +27,33 @@ public class UserController {
     /**
      * 회원 조회
      */
-    @Operation(summary = "회원 조회 By ID", description = "ID 로 회원조회 합니다. 요청한 유저 권한이 MUSICIAN 일 경우, 음악인 정보도 함께 조회됩니다.")
+    @Operation(summary = "회원 조회 By tokken", description = "ID 로 회원조회 합니다. 요청한 유저 권한이 MUSICIAN 일 경우, 음악인 정보도 함께 조회됩니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @GetMapping("{id}")
+    @GetMapping("me")
     @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-    public MyInfoResponseDto findUserById(@PathVariable("id") String id) {
+    public MyInfoResponseDto findUserById() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isMusician = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MUSICIAN"));
 
+
         if (isMusician) {
             return MyInfoResponseDto.builder()
-                    .userProfileDto(userService.getUserByIdWithDto(id))
+                    .userProfileDto(userService.getUserByIdWithDto(authentication.getName())) // 토큰에 포함된 ID를 사용하여 조회
 //                    .musicianProfileDto(musicianService.getMusicianByIdWithDto(id)) TODO 서비스 구현시 추가
                     .build();
         } else {
             return MyInfoResponseDto.builder()
-                    .userProfileDto(userService.getUserByIdWithDto(id))
+                    .userProfileDto(userService.getUserByIdWithDto(authentication.getName()))
                     .build();
         }
     }
 
     /**
      * 회원 조회 By Email
+     * TODO 휴대폰 인증 로직 추가
      */
     @Operation(summary = "email 조회", description = "이름과 휴대전화 번호로 email을 조회 합니다.")
     @ApiResponses(value = {
