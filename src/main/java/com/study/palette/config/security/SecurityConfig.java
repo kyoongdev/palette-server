@@ -51,7 +51,9 @@ public class SecurityConfig {
                 .and()                  // exception handling for jwt
                 .exceptionHandling()
                 .accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
+                ;
 
         // jwt 적용
         http.apply(new JwtSecurityConfig(jwtTokenProvider));
