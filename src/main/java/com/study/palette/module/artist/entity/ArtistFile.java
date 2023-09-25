@@ -37,6 +37,8 @@ public class ArtistFile {
     @Column(length = 4)
     private String suffix;
 
+    private boolean isThumbnail;
+
     private boolean isUse;
 
     private LocalDate createdAt;

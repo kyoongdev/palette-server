@@ -24,8 +24,6 @@ public class FilterInfo {
 
     private boolean isUse;
 
-    private int filterMasterCode;
-
     private LocalDate createdAt;
 
     @Column(length = 24)
@@ -34,4 +32,13 @@ public class FilterInfo {
     @ManyToOne
     @JoinColumn(name = "\"key\"")
     private FilterMaster key;
+
+    @Builder
+    public FilterInfo(String codeName, boolean isUse, LocalDate createdAt, String userId, FilterMaster key) {
+        this.codeName = codeName;
+        this.isUse = isUse;
+        this.createdAt = createdAt;
+        this.userId = userId;
+        this.key = key;
+    }
 }
