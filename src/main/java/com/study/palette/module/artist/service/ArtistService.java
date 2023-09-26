@@ -1,4 +1,4 @@
-package com.study.palette.module.artist.artistService;
+package com.study.palette.module.artist.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;

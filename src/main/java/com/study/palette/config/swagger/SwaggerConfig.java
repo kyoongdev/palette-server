@@ -2,11 +2,18 @@ package com.study.palette.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import io.swagger.v3.oas.models.security.SecurityScheme.Type;
+
+import java.util.Arrays;
 
 @OpenAPIDefinition(
         info = @Info(title = "Palette API 명세서",
@@ -15,26 +22,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequiredArgsConstructor
 @Configuration
 public class SwaggerConfig {
-
     @Bean
-    public GroupedOpenApi tempOpenApi() {
-        String[] paths = {"/api/**"};
+    public OpenAPI openApi() {
+        SecurityScheme securityScheme = new SecurityScheme().type(Type.HTTP).scheme("bearer")
+                .bearerFormat("JWT").in(SecurityScheme.In.HEADER).name("Authorization");
 
-        return GroupedOpenApi.builder()
-                .group("test group1 v1")
-                .pathsToMatch(paths)
-                .build();
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
+
+        return new OpenAPI().components(
+                        new Components().addSecuritySchemes("bearerAuth", securityScheme))
+                .security(Arrays.asList(securityRequirement));
+
     }
 
-    @Bean
-    public GroupedOpenApi testOpenApi() {
-        String[] paths = {"/test/**"};
-        String[] excludes = {"/temp/**"};
-
-        return GroupedOpenApi.builder()
-                .group("test group2 v1")
-                .pathsToMatch(paths)
-                .packagesToExclude(excludes)
-                .build();
-    }
 }
