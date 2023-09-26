@@ -1,5 +1,6 @@
 package com.study.palette.module.artist.controller;
 
+import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.artist.dto.query.FindArtistsQuery;
 import com.study.palette.module.artist.service.ArtistService;
@@ -40,8 +41,8 @@ public class ArtistController {
     @GetMapping("/artist")
     //ResponseEntity -> PaginationDto
     //만들어둔 페이지네이션 객체 사용
-    public PaginationDto<ArtistResponseDto> artistInfo(Pageable pageable, @ParameterObject FindArtistsQuery query ) {
-        PaginationDto<ArtistResponseDto> artistInfo = artistService.artistInfo(pageable);
+    public PaginationDto<ArtistResponseDto> artistInfo( @ParameterObject FindArtistsQuery query ) {
+        PaginationDto<ArtistResponseDto> artistInfo = artistService.findArtistInfos(query.toPageable(null));
 
         return artistInfo;
 
