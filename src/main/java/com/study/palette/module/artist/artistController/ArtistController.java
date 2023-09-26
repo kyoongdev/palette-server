@@ -1,5 +1,6 @@
 package com.study.palette.module.artist.artistController;
 
+import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.artist.artistService.ArtistService;
 import com.study.palette.module.artist.dto.ArtistResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ public class ArtistController {
     }
 
 
+    //TODO: Swagger 적용
     @GetMapping("/artist")
-    public ResponseEntity<ArtistResponseDto> artistInfo() {
+    //ResponseEntity -> PaginationDto
+    //만들어둔 페이지네이션 객체 사용
+    public PaginationDto<ArtistResponseDto> artistInfo(Pageable pageable) {
+        PaginationDto<ArtistResponseDto> artistInfo = artistService.artistInfo(pageable);
 
-        Pageable pageable = (Pageable) PageRequest.of(0, 10);
-
-        List<ArtistResponseDto> artistInfo = artistService.artistInfo(pageable);
-
-        return null;
+        return artistInfo;
 
     }
 
