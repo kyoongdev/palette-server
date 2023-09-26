@@ -3,16 +3,13 @@ package com.study.palette.authentication.application;
 import com.study.palette.authentication.domain.JwtTokenProvider;
 import com.study.palette.authentication.presentation.dto.TokenDto;
 import com.study.palette.config.UserDetailsServiceImpl;
-import com.study.palette.user.domain.RefreshToken;
-import com.study.palette.user.domain.repository.RefreshTokenRepository;
+import com.study.palette.module.user.entity.RefreshToken;
+import com.study.palette.module.user.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthService {
