@@ -1,10 +1,7 @@
 package com.study.palette.module.user.entity;
 
-<<<<<<<<< Temporary merge branch 1
 import jdk.jfr.Timestamp;
-=========
 import com.study.palette.module.user.entity.Role;
->>>>>>>>> Temporary merge branch 2
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -88,10 +87,6 @@ public class User {
     }
 
     @Builder
-    public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept) {
-    @Column(columnDefinition = "int default 0")
-    int loginFailCount;
-    @Builder
     public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt) {
         this.role = role;
         this.email = email;
@@ -100,15 +95,6 @@ public class User {
         this.phone = phone;
         this.isAlarmAccept = isAlarmAccept;
     }
-}
-
-    private boolean isAlarmAccept;
-
-    private int loginFailCount;
-
-    private boolean isLocked;
-
-    private LocalDateTime createdAt;
 
     @OneToOne
     @JoinColumn(name = "userId")
