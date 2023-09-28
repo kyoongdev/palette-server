@@ -2,10 +2,7 @@ package com.study.palette.module.user;
 
 
 import com.study.palette.common.PaletteUtils;
-import com.study.palette.module.user.dto.UserCreateRequestDto;
-import com.study.palette.module.user.dto.UserFindEmailDto;
-import com.study.palette.module.user.dto.UserProfileDto;
-import com.study.palette.module.user.dto.UserUpdateDto;
+import com.study.palette.module.user.dto.*;
 import com.study.palette.module.user.entity.Role;
 import com.study.palette.module.user.entity.User;
 import com.study.palette.module.user.repository.UserRepository;
@@ -30,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    //    public final MusicianService musicianService; TODO 서비스 구현시 추가
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -66,14 +64,23 @@ public class UserService {
     }
 
     //회원조회 ID with DTO
-    public UserProfileDto getUserByIdWithDto(String id) {
+    public MyInfoResponseDto getUserByIdWithDto(String id) {
         User user = userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
 
-        return UserProfileDto.builder()
-                .id(user.getId().toString())
-                .email(user.getEmail())
+        MyInfoResponseDto myInfoResponseDto = MyInfoResponseDto.builder()
+                .userProfileDto(UserProfileDto.builder()
+                        .id(user.getId().toString())
+                        .email(user.getEmail())
+                        .build())
                 .build();
+
+        if (user.getRole() == Role.MUSICIAN) {
+            // TODO 음악인 정보 조회
+//            myInfoResponseDto.setMusicianProfileDto(musicianService.getMusicianByIdWithDto(id));
+        }
+
+        return myInfoResponseDto;
     }
 
     //아이디찾기 Name and Phone with DTO

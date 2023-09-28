@@ -6,19 +6,23 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("api/users")
+@Log4j2
 public class UserController {
     public final UserService userService;
 
-//    public final MusicianService musicianService; TODO 서비스 구현시 추가
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -27,29 +31,17 @@ public class UserController {
     /**
      * 회원 조회
      */
-    @Operation(summary = "회원 조회 By tokken", description = "ID 로 회원조회 합니다. 요청한 유저 권한이 MUSICIAN 일 경우, 음악인 정보도 함께 조회됩니다.")
+    @Operation(summary = "내 정보 조회", description = "내 정보를 조회 합니다. 요청한 유저 권한이 MUSICIAN 일 경우, 음악인 정보도 함께 조회됩니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MyInfoResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
     @GetMapping("me")
     @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-    public MyInfoResponseDto findUserById() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isMusician = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MUSICIAN"));
-
-
-        if (isMusician) {
-            return MyInfoResponseDto.builder()
-                    .userProfileDto(userService.getUserByIdWithDto(authentication.getName())) // 토큰에 포함된 ID를 사용하여 조회
-//                    .musicianProfileDto(musicianService.getMusicianByIdWithDto(id)) TODO 서비스 구현시 추가
-                    .build();
-        } else {
-            return MyInfoResponseDto.builder()
-                    .userProfileDto(userService.getUserByIdWithDto(authentication.getName()))
-                    .build();
-        }
+    public MyInfoResponseDto getMyInfo(HttpServletRequest request) {
+        return (MyInfoResponseDto) request.getAttribute("user");
     }
+
 
     /**
      * 회원 조회 By Email

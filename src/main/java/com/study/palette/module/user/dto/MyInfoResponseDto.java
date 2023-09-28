@@ -1,12 +1,12 @@
 package com.study.palette.module.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 @Builder
+@Getter
 public class MyInfoResponseDto {
 
     UserProfileDto userProfileDto;
