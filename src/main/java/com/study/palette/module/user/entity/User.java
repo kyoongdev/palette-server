@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -85,7 +87,7 @@ public class User {
     }
 
     @Builder
-    public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept) {
+    public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt) {
         this.role = role;
         this.email = email;
         this.password = password;
@@ -93,5 +95,18 @@ public class User {
         this.phone = phone;
         this.isAlarmAccept = isAlarmAccept;
     }
-}
 
+    @OneToOne
+    @JoinColumn(name = "userId")
+    private UserArtist userArtist;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserFile> userFile = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserFollowing> userFolloing = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserFollower> userFollower = new ArrayList<>();
+
+}
