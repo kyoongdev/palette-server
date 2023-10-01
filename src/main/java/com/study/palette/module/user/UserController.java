@@ -8,14 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("api/users")
@@ -36,10 +32,10 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MyInfoResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @GetMapping("me")
+    @PostMapping("me")
     @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-    public MyInfoResponseDto getMyInfo(HttpServletRequest request) {
-        return (MyInfoResponseDto) request.getAttribute("user");
+    public ResponseEntity<MyInfoResponseDto> getMyInfo(@GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+        return ResponseEntity.ok(myInfoResponseDto);
     }
 
 
