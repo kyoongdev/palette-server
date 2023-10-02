@@ -10,8 +10,8 @@ services:
       - mysqldata_master:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=PaletteSecret123
-      - MYSQL_USER=pallete
-      - MYSQL_DATABASE=pallete
+      - MYSQL_USER=palette
+      - MYSQL_DATABASE=palette
       - MYSQL_PASSWORD=PaletteSecret123
     networks:
       - mynetwork

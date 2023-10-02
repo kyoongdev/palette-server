@@ -19,8 +19,7 @@ spring: #공통환경
     multipart:
       maxFileSize: 100MB
       maxRequestSize: 100MB
-  main:
-    allow-bean-definition-overriding: true
+
 ---
 
 #server:

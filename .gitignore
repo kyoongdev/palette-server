@@ -1,4 +1,6 @@
 ../HELP.md
+../gredlew
+../gredlew.bat
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -37,3 +39,6 @@ out/
 .vscode/
 /gradle/wrapper/gradle-wrapper.jar
 /gradle/wrapper/gradle-wrapper.properties
+
+### Querydsl ###
+src/main/generated/

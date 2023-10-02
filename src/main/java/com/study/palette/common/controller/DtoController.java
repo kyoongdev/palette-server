@@ -11,17 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.print.Pageable;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1")
 public class DtoController {
 
-    @GetMapping("")
-    public PaginationDto<String> test(){
-        PagingDto pagingDto = new PagingDto(2,1,10,0,false,true);
-        String[] array = {"안녕","ㅇㅇ"};
-        return PaginationDto.of(pagingDto,array);
-    }
+
 
 
     @GetMapping(value = "/test")
