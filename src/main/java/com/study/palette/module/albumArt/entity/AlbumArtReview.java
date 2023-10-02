@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AlbumArtistReview {
+public class AlbumArtReview {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -33,8 +33,8 @@ public class AlbumArtistReview {
     private String userId;
 
     @ManyToOne
-    @JoinColumn(name = "albumArtistInfoId")
-    private AlbumArtistInfo albumArtistInfo;
+    @JoinColumn(name = "albumArtInfoId")
+    private AlbumArtInfo albumArtInfo;
 
 
 }

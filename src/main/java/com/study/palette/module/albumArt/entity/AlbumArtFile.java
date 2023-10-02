@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AlbumArtistFile {
+public class AlbumArtFile {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -42,12 +42,14 @@ public class AlbumArtistFile {
 
     private boolean isUse;
 
+    private boolean isThumbnail;
+
     private LocalDate createdAt;
 
     @Column(length = 24)
     private String userId;
 
     @ManyToOne
-    @JoinColumn(name = "albumArtistInfoId")
-    private AlbumArtistInfo albumArtistInfo;
+    @JoinColumn(name = "albumArtInfoId")
+    private AlbumArtInfo albumArtInfo;
 }

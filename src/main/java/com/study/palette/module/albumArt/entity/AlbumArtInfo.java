@@ -1,5 +1,7 @@
 package com.study.palette.module.albumArt.entity;
 
+import com.study.palette.module.filter.entity.FilterInfo;
+import com.study.palette.module.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AlbumArtistInfo {
+public class AlbumArtInfo {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -26,13 +28,12 @@ public class AlbumArtistInfo {
     @Column(length = 50)
     private String serviceName;
 
-    @Column(length = 20)
-    private String artistId;
-
     @Column(length = 1000)
     private String serviceExplain;
 
-    private int salesType;
+    @ManyToOne
+    @JoinColumn(name = "salesType")
+    private FilterInfo filterInfo;
 
     @Column(length = 1000)
     private String editInfo;
@@ -41,16 +42,17 @@ public class AlbumArtistInfo {
 
     private LocalDate createdAt;
 
-    @Column(length = 24)
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
-    @OneToMany(mappedBy = "albumArtistInfo", fetch = FetchType.LAZY)
-    private List<AlbumArtistFile> albumArtistFile;
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
+    private List<AlbumArtFile> albumArtFile;
 
-    @OneToMany(mappedBy = "albumArtistInfo", fetch = FetchType.LAZY)
-    private List<AlbumArtistReview> albumArtistReview;
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
+    private List<AlbumArtReview> albumArtReview;
 
-    @OneToMany(mappedBy = "albumArtistInfo", fetch = FetchType.LAZY)
-    private List<AlbumArtistLicenseInfo> albumArtistLicenseInfo;
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
+    private List<AlbumArtLicenseInfo> albumArtLicenseInfo;
 
 }
