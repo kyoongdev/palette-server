@@ -9,7 +9,9 @@ import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.artist.dto.ArtistResponseDto;
 import com.study.palette.module.user.GetUserInfo;
 import com.study.palette.module.user.dto.MyInfoResponseDto;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "앨범아트", description = "앨범아트")
@@ -64,8 +67,9 @@ public class AlbumArtController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AlbumArtDetailResponseDto createAlbumArt(@RequestBody AlbumArtCreateDto albumArtCreateDto, @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-        return albumArtService.createAlbumArt(albumArtCreateDto, myInfoResponseDto);
+//    @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
+    public AlbumArtDetailResponseDto createAlbumArt(@RequestBody AlbumArtCreateDto albumArtCreateDto, @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+        return albumArtService.createAlbumArt(albumArtCreateDto, myInfoResponseDto.getUser());
     }
 
     //앨범아트 수정

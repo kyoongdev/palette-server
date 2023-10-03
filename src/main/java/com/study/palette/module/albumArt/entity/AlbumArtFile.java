@@ -83,7 +83,6 @@ public class AlbumArtFile {
     }
 
     public void setAlbumArt(AlbumArtInfo albumArtInfo) {
-
         if (this.albumArtInfo != null) {
             this.albumArtInfo.getAlbumArtFile().remove(this);
         }

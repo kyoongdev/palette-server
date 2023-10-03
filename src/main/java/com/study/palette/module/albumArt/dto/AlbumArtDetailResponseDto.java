@@ -16,11 +16,11 @@ public class AlbumArtDetailResponseDto {
     private String createdAt;
 
     public AlbumArtDetailResponseDto(AlbumArtInfo save) {
-        this.id = save.getId();
+        this.id = save.getId().toString();
         this.serviceName = save.getServiceName();
         this.serviceExplain = save.getServiceExplain();
         this.editInfo = save.getEditInfo();
         this.serviceStatus = save.isServiceStatus();
-        this.createdAt = save.getCreatedAt().toString();
+//        this.createdAt = save.getCreatedAt().toString();
     }
 }

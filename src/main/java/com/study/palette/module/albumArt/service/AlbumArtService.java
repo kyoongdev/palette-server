@@ -7,15 +7,18 @@ import com.study.palette.module.albumArt.dto.AlbumArtDetailResponseDto;
 import com.study.palette.module.albumArt.dto.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
+import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.filter.repository.FilterInfoRepository;
 import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,20 +51,24 @@ public class AlbumArtService {
 
     /* AlbumArt 등록*/
     @Transactional
-    public AlbumArtDetailResponseDto createAlbumArt(AlbumArtCreateDto albumArtCreateDto, MyInfoResponseDto myInfoResponseDto) {
-
+    public AlbumArtDetailResponseDto createAlbumArt(AlbumArtCreateDto albumArtCreateDto, User user) {
         AlbumArtInfo albumArtInfo = AlbumArtInfo.builder()
                 .serviceName(albumArtCreateDto.getServiceName())
                 .serviceExplain(albumArtCreateDto.getServiceExplain())
-                .filterInfo(albumArtCreateDto.getFilterInfo())
                 .serviceStatus(albumArtCreateDto.isServiceStatus())
                 .editInfo(albumArtCreateDto.getEditInfo())
-                .user(myInfoResponseDto.toUserEntity())
+                .user(user)
+                .albumArtLicenseInfo(new ArrayList<>())
+//                .albumArtFile(new ArrayList<>())
                 .build();
 
         //TODO 업로드할 이미지 받아서 이름 변환 후 리스트로 저장하는 작업 해야함 and 소개에 들어갈 파일들 까지
-        List<AlbumArtFile> files = albumArtCreateDto.getAlbumArtFiles().stream()
-                .map(file -> AlbumArtFile.from(file, albumArtInfo))
+//        List<AlbumArtFile> files = albumArtCreateDto.getAlbumArtFiles().stream()
+//                .map(file -> AlbumArtFile.from(file, albumArtInfo))
+//                .toList();
+
+        List<AlbumArtLicenseInfo> licenseInfos = albumArtCreateDto.getAlbumArtLicenseInfo().stream()
+                .map(license -> AlbumArtLicenseInfo.from(license, albumArtInfo))
                 .toList();
 
         return new AlbumArtDetailResponseDto(albumArtRepository.save(albumArtInfo));

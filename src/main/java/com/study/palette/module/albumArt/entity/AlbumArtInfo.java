@@ -6,12 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -23,8 +28,8 @@ public class AlbumArtInfo {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(length = 50)
     private String serviceName;
@@ -41,9 +46,11 @@ public class AlbumArtInfo {
 
     private boolean serviceStatus;
 
-    private LocalDate createdAt;
+    @Column(columnDefinition = "datetime default now()")
+    @CreatedDate
+    private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId")
     private User user;
 
