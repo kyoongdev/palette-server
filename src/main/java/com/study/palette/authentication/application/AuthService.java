@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -29,7 +30,7 @@ public class AuthService {
         Authentication refreshTokenAuthentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.compareToken(tokenDto));
 
         // 저장된 Refresh Token 값을 가져옴
-        Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findByUserId(refreshTokenAuthentication.getName());
+        Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findByUserId(UUID.fromString(refreshTokenAuthentication.getName()));
         String redisRefreshToken = refreshTokenEntity.get().getRefreshToken();
         if (!redisRefreshToken.equals(tokenDto.getRefreshToken())) {
             throw new RuntimeException(); // TODO 추후 예외 처리

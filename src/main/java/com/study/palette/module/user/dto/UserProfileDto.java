@@ -3,7 +3,6 @@ package com.study.palette.module.user.dto;
 import com.study.palette.module.user.entity.Role;
 import lombok.*;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class UserProfileDto {
@@ -19,11 +18,18 @@ public class UserProfileDto {
     private boolean isLocked;
     private String createdAt;
 
-    // TODO 필요시 추가 가능
+    //builder 생성자
     @Builder
-    public UserProfileDto(String id, String email) {
+    public UserProfileDto(String id, Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, String createdAt) {
         this.id = id;
+        this.role = role;
         this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.isAlarmAccept = isAlarmAccept;
+        this.loginFailCount = loginFailCount;
+        this.isLocked = isLocked;
+        this.createdAt = createdAt;
     }
-
 }

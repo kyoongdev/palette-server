@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.UUID;
 
 
 @Component
@@ -46,7 +47,7 @@ public class JwtTokenProvider {
      * 토큰 생성
      */
     public TokenDto createToken(Authentication authentication) {
-        User user = userRepository.findByEmail(authentication.getName())
+        User user = userRepository.findById(UUID.fromString(authentication.getName()))
                 .orElseThrow(() -> {
                     return new RuntimeException("로그인에러");//TODO 추후 에러처리
                 });
@@ -72,12 +73,12 @@ public class JwtTokenProvider {
                 .compact();
 
         //TODO refresh token 저장 전에 기존 refresh token 삭제
-        refreshTokenRepository.deleteByUserId(authentication.getName());
+        refreshTokenRepository.deleteByUserId(UUID.fromString(authentication.getName()));
 
         //refresh token 저장
         refreshTokenRepository.save(
                 RefreshToken.builder()
-                        .userId(authentication.getName())
+                        .user(user)
                         .refreshToken(refreshToken)
                         .refreshExpirationTime(refreshExpirationTime)
                         .issuedAt(now)

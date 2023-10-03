@@ -13,21 +13,9 @@ import java.util.UUID;
 @Getter
 public class MyInfoResponseDto {
 
-    UserProfileDto userProfileDto;
+    User user;
 
     // TODO 서비스 구현시 추가
-//    MusicianProfileDto musicianProfileDto;
+//    Musician musician;
 
-    public User toUserEntity() {
-        User user = new User();
-        PaletteUtils.myCopyProperties(this.userProfileDto, user);
-        return user;
-    }
-
-    //TODO 서비스 구현시 추가
-//    public Musician toMusicianEntity() {
-//        Musician musician = new Musician();
-//        PaletteUtils.myCopyProperties(this.musicianProfileDto, musician);
-//        return musician;
-//    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Service
@@ -23,8 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws RuntimeException {
-        User user = userRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String id) throws RuntimeException {
+        User user = userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> {
                     return new RuntimeException("로그인에러");//TODO 추후 에러처리
                 });
@@ -36,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .security
                 .core
                 .userdetails
-                .User(user.getEmail(), user.getPassword(), grantedAuthorities);
+                .User(user.getId().toString(), user.getPassword(), grantedAuthorities);
     }
 
 }

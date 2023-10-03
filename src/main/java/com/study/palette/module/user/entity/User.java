@@ -58,18 +58,6 @@ public class User {
     @Column(columnDefinition = "datetime")
     LocalDateTime deletedAt;
 
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
-
-    public String getloginFailCount() {
-        return String.valueOf(this.loginFailCount);
-    }
-
-    public boolean getIsLocked() {
-        return this.isLocked;
-    }
-
     public void updateLoginFailCount(int loginFailCount) {
         this.loginFailCount = loginFailCount;
     }

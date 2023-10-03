@@ -22,17 +22,19 @@ public class RefreshToken {
     private String refreshToken;
     @Column(columnDefinition = "bigint")
     private long refreshExpirationTime;
-    @Column(columnDefinition = "binary(16)")
-    private String userId;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
     @Column(columnDefinition = "datetime default now()")
     private Date issuedAt;
 
 
     @Builder
-    public RefreshToken(String refreshToken, long refreshExpirationTime, Date issuedAt, String userId) {
+    public RefreshToken(String refreshToken, long refreshExpirationTime, Date issuedAt, User user) {
         this.refreshToken = refreshToken;
         this.refreshExpirationTime = refreshExpirationTime;
-        this.userId = userId;
+        this.user = user;
         this.issuedAt = issuedAt;
     }
 }
