@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -46,13 +47,13 @@ public class AlbumArtInfo {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
-    private List<AlbumArtFile> albumArtFile;
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<AlbumArtFile> albumArtFile = new ArrayList<>();
 
     @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
-    private List<AlbumArtReview> albumArtReview;
+    private List<AlbumArtReview> albumArtReview = new ArrayList<>();
 
-    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
-    private List<AlbumArtLicenseInfo> albumArtLicenseInfo;
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<AlbumArtLicenseInfo> albumArtLicenseInfo = new ArrayList<>();
 
 }

@@ -25,4 +25,5 @@ public class UserProfileDto {
         this.id = id;
         this.email = email;
     }
+
 }

@@ -7,6 +7,8 @@ import com.study.palette.module.albumArt.dto.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.artist.dto.ArtistResponseDto;
+import com.study.palette.module.user.GetUserInfo;
+import com.study.palette.module.user.dto.MyInfoResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,8 +64,8 @@ public class AlbumArtController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AlbumArtResponseDto createAlbumArt() {
-        return null;
+    public AlbumArtDetailResponseDto createAlbumArt(@RequestBody AlbumArtCreateDto albumArtCreateDto, @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+        return albumArtService.createAlbumArt(albumArtCreateDto, myInfoResponseDto);
     }
 
     //앨범아트 수정

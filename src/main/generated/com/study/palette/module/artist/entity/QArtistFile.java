@@ -30,6 +30,8 @@ public class QArtistFile extends EntityPathBase<ArtistFile> {
 
     public final StringPath id = createString("id");
 
+    public final BooleanPath isThumbnail = createBoolean("isThumbnail");
+
     public final BooleanPath isUse = createBoolean("isUse");
 
     public final StringPath originFileName = createString("originFileName");
@@ -64,7 +66,7 @@ public class QArtistFile extends EntityPathBase<ArtistFile> {
 
     public QArtistFile(Class<? extends ArtistFile> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.artistInfo = inits.isInitialized("artistInfo") ? new QArtistInfo(forProperty("artistInfo")) : null;
+        this.artistInfo = inits.isInitialized("artistInfo") ? new QArtistInfo(forProperty("artistInfo"), inits.get("artistInfo")) : null;
     }
 
 }

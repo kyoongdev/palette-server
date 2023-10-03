@@ -28,8 +28,6 @@ public class QFilterInfo extends EntityPathBase<FilterInfo> {
 
     public final DatePath<java.time.LocalDate> createdAt = createDate("createdAt", java.time.LocalDate.class);
 
-    public final NumberPath<Integer> filterMasterCode = createNumber("filterMasterCode", Integer.class);
-
     public final BooleanPath isUse = createBoolean("isUse");
 
     public final QFilterMaster key;

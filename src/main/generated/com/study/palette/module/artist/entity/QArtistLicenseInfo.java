@@ -66,7 +66,7 @@ public class QArtistLicenseInfo extends EntityPathBase<ArtistLicenseInfo> {
 
     public QArtistLicenseInfo(Class<? extends ArtistLicenseInfo> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.artistInfo = inits.isInitialized("artistInfo") ? new QArtistInfo(forProperty("artistInfo")) : null;
+        this.artistInfo = inits.isInitialized("artistInfo") ? new QArtistInfo(forProperty("artistInfo"), inits.get("artistInfo")) : null;
     }
 
 }
