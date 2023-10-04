@@ -1,6 +1,5 @@
 package com.study.palette.module.albumArt.entity;
 
-import com.study.palette.module.filter.entity.FilterInfo;
 import com.study.palette.module.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,9 +36,7 @@ public class AlbumArtInfo {
     @Column(length = 1000)
     private String serviceExplain;
 
-    @ManyToOne
-    @JoinColumn(name = "salesType")
-    private FilterInfo filterInfo;
+    private int salesType;
 
     @Column(length = 1000)
     private String editInfo;
@@ -63,4 +60,13 @@ public class AlbumArtInfo {
     @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<AlbumArtLicenseInfo> albumArtLicenseInfo = new ArrayList<>();
 
+//    public void setAlbumArtFile(AlbumArtFile albumArtFile) {
+//        this.albumArtFile.add(albumArtFile);
+//        albumArtFile.setAlbumArtInfo(this);
+//    }
+
+    public void setAlbumArtLicenseInfo(AlbumArtLicenseInfo albumArtLicenseInfo) {
+        this.albumArtLicenseInfo.add(albumArtLicenseInfo);
+        albumArtLicenseInfo.setAlbumArtInfo(this);
+    }
 }

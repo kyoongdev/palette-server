@@ -1,10 +1,8 @@
 package com.study.palette.module.albumArt.dto;
 
-import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtReview;
-import com.study.palette.module.filter.entity.FilterInfo;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,7 +16,7 @@ public class AlbumArtResponseDto {
 
     private String id;
     private String serviceName;
-    private List<FilterInfo> filterInfo = new ArrayList<>(); // saleType
+    private int salesType;
     private String editInfo;
     private String serviceExplain;
     private boolean serviceStatus;
@@ -31,6 +29,7 @@ public class AlbumArtResponseDto {
     public AlbumArtResponseDto(AlbumArtInfo albumArtInfo) {
         this.id = albumArtInfo.getId().toString();
         this.serviceName = albumArtInfo.getServiceName();
+        this.salesType = albumArtInfo.getSalesType();
         this.editInfo = albumArtInfo.getEditInfo();
         this.serviceExplain = albumArtInfo.getServiceExplain();
         this.serviceStatus = albumArtInfo.isServiceStatus();

@@ -25,7 +25,6 @@ public class AlbumArtLicenseInfo {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-
     private int licenseType;
 
     private int price;
@@ -58,30 +57,26 @@ public class AlbumArtLicenseInfo {
     private AlbumArtInfo albumArtInfo;
 
     public static AlbumArtLicenseInfo from(AlbumArtLicenseCreateDto albumArtLicenseCreateDto, AlbumArtInfo albumArtInfo) {
-        AlbumArtLicenseInfo a = new AlbumArtLicenseInfo(albumArtLicenseCreateDto);
-        a.setAlbumArt(albumArtInfo);
-        return a;
+        AlbumArtLicenseInfo albumArtLicenseInfo = builder()
+                .licenseType(albumArtLicenseCreateDto.getLicenseType())
+                .price(albumArtLicenseCreateDto.getPrice())
+                .servedFile(albumArtLicenseCreateDto.getServedFile())
+                .updateCount(albumArtLicenseCreateDto.getUpdateCount())
+                .period(albumArtLicenseCreateDto.getPeriod())
+                .draftCount(albumArtLicenseCreateDto.getDraftCount())
+                .isAssign(albumArtLicenseCreateDto.isAssign())
+                .isUseCommercial(albumArtLicenseCreateDto.isUseCommercial())
+                .isServeOriginFile(albumArtLicenseCreateDto.isServeOriginFile())
+                .isOtherUseApproved(albumArtLicenseCreateDto.isOtherUseApproved())
+                .user(albumArtInfo.getUser())
+                .albumArtInfo(albumArtInfo)
+                .build();
+        albumArtInfo.setAlbumArtLicenseInfo(albumArtLicenseInfo);
+        return albumArtLicenseInfo;
     }
 
-    public AlbumArtLicenseInfo(AlbumArtLicenseCreateDto albumArtLicenseCreateDto) {
-        this.licenseType = albumArtLicenseCreateDto.getLicenseType();
-        this.price = albumArtLicenseCreateDto.getPrice();
-        this.servedFile = albumArtLicenseCreateDto.getServedFile();
-        this.updateCount = albumArtLicenseCreateDto.getUpdateCount();
-        this.period = albumArtLicenseCreateDto.getPeriod();
-        this.draftCount = albumArtLicenseCreateDto.getDraftCount();
-        this.isAssign = albumArtLicenseCreateDto.isAssign();
-        this.isUseCommercial = albumArtLicenseCreateDto.isUseCommercial();
-        this.isServeOriginFile = albumArtLicenseCreateDto.isServeOriginFile();
-        this.isOtherUseApproved = albumArtLicenseCreateDto.isOtherUseApproved();
-    }
-
-    public void setAlbumArt(AlbumArtInfo albumArtInfo) {
-        if (this.albumArtInfo != null) {
-            this.albumArtInfo.getAlbumArtLicenseInfo().remove(this);
-        }
-
+    public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
         this.albumArtInfo = albumArtInfo;
-        albumArtInfo.getAlbumArtLicenseInfo().add(this);
     }
+
 }

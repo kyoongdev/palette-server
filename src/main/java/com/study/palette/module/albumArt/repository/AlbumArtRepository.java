@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlbumArtRepository extends JpaRepository<AlbumArtInfo, String> {
-    Page<AlbumArtInfo> findAllByFilterInfo_CodeAndAlbumArtFileIsThumbnail(int key, boolean isUse, Pageable pageable);
+    Page<AlbumArtInfo> findAllByAlbumArtFileIsThumbnail(int key, boolean isUse, Pageable pageable);
 }

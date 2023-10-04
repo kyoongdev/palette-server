@@ -9,8 +9,6 @@ import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
-import com.study.palette.module.filter.repository.FilterInfoRepository;
-import com.study.palette.module.user.dto.MyInfoResponseDto;
 import com.study.palette.module.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,12 +23,10 @@ import java.util.stream.Collectors;
 @Service
 public class AlbumArtService {
 
-    private AlbumArtRepository albumArtRepository;
-    private FilterInfoRepository filterInfoRepository;
+    private final AlbumArtRepository albumArtRepository;
 
     @Autowired
-    public AlbumArtService(AlbumArtRepository albumArtRepository, FilterInfoRepository filterInfoRepository) {
-        this.filterInfoRepository = filterInfoRepository;
+    public AlbumArtService(AlbumArtRepository albumArtRepository) {
         this.albumArtRepository = albumArtRepository;
     }
 
@@ -56,11 +52,14 @@ public class AlbumArtService {
                 .serviceName(albumArtCreateDto.getServiceName())
                 .serviceExplain(albumArtCreateDto.getServiceExplain())
                 .serviceStatus(albumArtCreateDto.isServiceStatus())
+                .salesType(albumArtCreateDto.getSalesType())
                 .editInfo(albumArtCreateDto.getEditInfo())
                 .user(user)
                 .albumArtLicenseInfo(new ArrayList<>())
 //                .albumArtFile(new ArrayList<>())
                 .build();
+
+
 
         //TODO 업로드할 이미지 받아서 이름 변환 후 리스트로 저장하는 작업 해야함 and 소개에 들어갈 파일들 까지
 //        List<AlbumArtFile> files = albumArtCreateDto.getAlbumArtFiles().stream()

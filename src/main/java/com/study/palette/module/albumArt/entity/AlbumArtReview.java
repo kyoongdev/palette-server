@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class AlbumArtReview {
-
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -35,6 +34,4 @@ public class AlbumArtReview {
     @ManyToOne
     @JoinColumn(name = "albumArtInfoId")
     private AlbumArtInfo albumArtInfo;
-
-
 }

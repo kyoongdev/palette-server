@@ -16,22 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public AuthController(AuthService authService, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/reissue")
-    public TokenDto reissue(TokenDto tokenDto){
+    public TokenDto reissue(TokenDto tokenDto) {
         return authService.reissueToken(tokenDto);// TODO 추후 예외 처리
-    }
-
-    @GetMapping("/test_create_token")
-    public String testCreateToken(String id){
-        Authentication authentication = jwtTokenProvider.getAuthentication(id);
-        return jwtTokenProvider.createToken(authentication).getAccessToken();
     }
 }
