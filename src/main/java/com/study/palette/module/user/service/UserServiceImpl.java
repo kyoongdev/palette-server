@@ -9,9 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,4 +57,18 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
+    @Override
+    public Map<String, String> validationHandling(Errors errors) {
+        Map<String, String > validatorResult = new HashMap<>();
+
+        for (FieldError error: errors.getFieldErrors()){
+            String validKeyName = String.format("valid_%s",error.getField());
+            validatorResult.put(validKeyName, error.getDefaultMessage());
+        }
+
+        return validatorResult;
+    }
+
+
 }

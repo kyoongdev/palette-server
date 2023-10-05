@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -14,10 +16,17 @@ import javax.persistence.GenerationType;
 public class CreateUserDto extends User {
 
 
+
+    @Email
     private String email;
+
     private String password;
+
+
     private String name;
+
     private String phone;
+
     private boolean isAlarmAccept;
 
 }
