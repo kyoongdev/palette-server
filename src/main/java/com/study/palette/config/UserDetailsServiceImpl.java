@@ -14,7 +14,6 @@ import java.util.Set;
 
 
 @Service
-@Log4j2
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 

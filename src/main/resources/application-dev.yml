@@ -1,17 +1,17 @@
 spring:
   config:
     activate:
-      on-profile: "localdb"
+      on-profile: "devdb"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/palette?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true #스펠링 수정 pallete --> palette
+    url: jdbc:mysql://localhost:3306/devpalette?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: PaletteSecret123 #스펠링 수정 pallete --> palette
+    password: testpass
   jpa:
     database: mysql
     show-sql: 'true'
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

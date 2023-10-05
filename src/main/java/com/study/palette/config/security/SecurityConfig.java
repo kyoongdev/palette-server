@@ -4,6 +4,7 @@ import com.study.palette.authentication.domain.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,6 +45,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()    // 다음 리퀘스트에 대한 사용권한 체크
                 .antMatchers("/**").permitAll() // 모든 주소 허용
+                .antMatchers(HttpMethod.GET, "/api/users/me").authenticated()// 로그인한 유저만 접근가능
+                .antMatchers(HttpMethod.PATCH, "/api/users/{id}").authenticated()// 로그인한 유저만 접근가능
 //                .requestMatchers()
 //                .antMatchers("/api/user/login", "/api/user/signup").permitAll() // 허용된 주소
                 .anyRequest().authenticated() // Authentication 필요한 주소
