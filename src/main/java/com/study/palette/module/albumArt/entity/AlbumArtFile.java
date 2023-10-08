@@ -1,5 +1,6 @@
 package com.study.palette.module.albumArt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.PaletteUtils;
 import com.study.palette.module.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -56,6 +57,7 @@ public class AlbumArtFile {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User user;
 
     @ManyToOne

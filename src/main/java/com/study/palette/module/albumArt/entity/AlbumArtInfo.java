@@ -1,10 +1,8 @@
 package com.study.palette.module.albumArt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -21,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 public class AlbumArtInfo {
 
@@ -49,6 +48,7 @@ public class AlbumArtInfo {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -57,16 +57,11 @@ public class AlbumArtInfo {
     @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
     private List<AlbumArtReview> albumArtReview = new ArrayList<>();
 
-    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AlbumArtLicenseInfo> albumArtLicenseInfo = new ArrayList<>();
 
-//    public void setAlbumArtFile(AlbumArtFile albumArtFile) {
-//        this.albumArtFile.add(albumArtFile);
-//        albumArtFile.setAlbumArtInfo(this);
-//    }
-
-    public void setAlbumArtLicenseInfo(AlbumArtLicenseInfo albumArtLicenseInfo) {
-        this.albumArtLicenseInfo.add(albumArtLicenseInfo);
-        albumArtLicenseInfo.setAlbumArtInfo(this);
+    public void setAlbumArtLicenseInfo(List<AlbumArtLicenseInfo> albumArtLicenseInfos) {
+        this.albumArtLicenseInfo = albumArtLicenseInfos;
     }
+
 }

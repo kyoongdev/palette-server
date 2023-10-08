@@ -1,6 +1,8 @@
 package com.study.palette.module.albumArt.entity;
 
-import com.study.palette.module.albumArt.dto.AlbumArtLicenseCreateDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
+import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
 import com.study.palette.module.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,14 +52,16 @@ public class AlbumArtLicenseInfo {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "albumArtInfoId")
+    @JsonIgnore
     private AlbumArtInfo albumArtInfo;
 
-    public static AlbumArtLicenseInfo from(AlbumArtLicenseCreateDto albumArtLicenseCreateDto, AlbumArtInfo albumArtInfo) {
-        AlbumArtLicenseInfo albumArtLicenseInfo = builder()
+    public static AlbumArtLicenseInfo from(AlbumArtLicenseInfoCreateRequestDto albumArtLicenseCreateDto, AlbumArtInfo albumArtInfo) {
+        return builder()
                 .licenseType(albumArtLicenseCreateDto.getLicenseType())
                 .price(albumArtLicenseCreateDto.getPrice())
                 .servedFile(albumArtLicenseCreateDto.getServedFile())
@@ -71,9 +75,26 @@ public class AlbumArtLicenseInfo {
                 .user(albumArtInfo.getUser())
                 .albumArtInfo(albumArtInfo)
                 .build();
-        albumArtInfo.setAlbumArtLicenseInfo(albumArtLicenseInfo);
-        return albumArtLicenseInfo;
     }
+
+    public static AlbumArtLicenseInfo from(AlbumArtLicenseInfoWithIdDto albumArtLicenseInfoWithIdDto, AlbumArtInfo albumArtInfo) {
+        return builder()
+                .id(UUID.fromString(albumArtLicenseInfoWithIdDto.getId()))
+                .licenseType(albumArtLicenseInfoWithIdDto.getLicenseType())
+                .price(albumArtLicenseInfoWithIdDto.getPrice())
+                .servedFile(albumArtLicenseInfoWithIdDto.getServedFile())
+                .updateCount(albumArtLicenseInfoWithIdDto.getUpdateCount())
+                .period(albumArtLicenseInfoWithIdDto.getPeriod())
+                .draftCount(albumArtLicenseInfoWithIdDto.getDraftCount())
+                .isAssign(albumArtLicenseInfoWithIdDto.isAssign())
+                .isUseCommercial(albumArtLicenseInfoWithIdDto.isUseCommercial())
+                .isServeOriginFile(albumArtLicenseInfoWithIdDto.isServeOriginFile())
+                .isOtherUseApproved(albumArtLicenseInfoWithIdDto.isOtherUseApproved())
+                .user(albumArtInfo.getUser())
+                .albumArtInfo(albumArtInfo)
+                .build();
+    }
+
 
     public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
         this.albumArtInfo = albumArtInfo;

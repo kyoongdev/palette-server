@@ -38,6 +38,7 @@ dependencies {
 //    implementation 'org.springframework.session:spring-session-core'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
     implementation 'org.springframework.boot:spring-boot-starter-webflux' // webclient 사용을 위한 라이브러리
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8' // Model mapper 라이브러리
 
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
@@ -96,27 +97,27 @@ sourceSets {
 }
 
 /* gradle build 시 QClass 소스도 함께 build 하기 위해서 sourceSets에 해당 위치 추가 */
-def querydslSrcDir = 'src/main/generated'
-sourceSets {
-    main {
-        java {
-            srcDirs += [querydslSrcDir]
-        }
-    }
-}
+//def querydslSrcDir = 'src/main/generated'
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs += [querydslSrcDir]
+//        }
+//    }
+//}
 
 /* 해당 내용 명시하지 않을 시 Q 파일 내 Generated를 import 할 때
    자바 9에만 있는 javax.annotation.processing.Generated 로 import 하기 때문에
 *  다른 버전에서도 사용할 수 있도록 java.annotation.Generated로  import 하도록 설정하는 코드 */
-compileJava {
-    options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
-}
-
-tasks.withType(JavaCompile) {
-    options.generatedSourceOutputDirectory = file(querydslSrcDir)
-}
-
-clean {
-    // clean 실행 시 생성된 QClass 삭제
-    delete file(querydslSrcDir)
-}
+//compileJava {
+//    options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
+//}
+//
+//tasks.withType(JavaCompile) {
+//    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+//}
+//
+//clean {
+//    // clean 실행 시 생성된 QClass 삭제
+//    delete file(querydslSrcDir)
+//}

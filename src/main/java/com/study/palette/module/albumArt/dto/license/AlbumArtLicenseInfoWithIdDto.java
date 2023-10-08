@@ -1,8 +1,5 @@
-package com.study.palette.module.albumArt.dto;
+package com.study.palette.module.albumArt.dto.license;
 
-import com.study.palette.common.PaletteUtils;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +9,8 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlbumArtLicenseCreateDto {
+public class AlbumArtLicenseInfoWithIdDto {
+    private String id;
     private int licenseType;
     private int price;
     private String servedFile;
