@@ -35,7 +35,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MyInfoResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @PostMapping("me")
+    @GetMapping("me")
     @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
     public ResponseEntity<MyInfoResponseDto> getMyInfo(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
         return ResponseEntity.ok(myInfoResponseDto);
