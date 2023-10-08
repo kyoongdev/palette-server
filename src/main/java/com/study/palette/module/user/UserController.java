@@ -2,6 +2,7 @@ package com.study.palette.module.user;
 
 import com.study.palette.module.user.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,9 +35,9 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MyInfoResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @PostMapping("me")
+    @GetMapping("me")
     @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-    public ResponseEntity<MyInfoResponseDto> getMyInfo(@GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+    public ResponseEntity<MyInfoResponseDto> getMyInfo(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
         return ResponseEntity.ok(myInfoResponseDto);
     }
 
