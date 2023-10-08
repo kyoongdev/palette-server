@@ -45,4 +45,13 @@ public class AuthController {
   public TokenDto login(@RequestBody LoginRequest body) {
     return authService.login(body);
   }
+
+  @Operation(summary = "토큰 재발행", description = "토큰을 재발행합니다.")
+  @PostMapping("refresh")
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TokenDto.class)))
+  })
+  public TokenDto refresh(@RequestBody TokenDto body) {
+    return authService.refresh(body);
+  }
 }

@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Transactional
@@ -59,7 +59,7 @@ public class AuthService {
   }
 
 
-  public TokenDto login(@RequestBody LoginRequest loginRequest) {
+  public TokenDto login(LoginRequest loginRequest) {
     Optional<User> optionalUser = userRepository.findByEmail(loginRequest.getEmail());
 
     if (optionalUser.isEmpty()) {
@@ -76,5 +76,18 @@ public class AuthService {
     return jwtTokenProvider.createToken(authentication);
   }
 
+  public TokenDto refresh(TokenDto token) {
+    Authentication refreshTokenAuthentication = jwtTokenProvider.getAuthentication(jwtTokenProvider.compareToken(token));
+
+    // 저장된 Refresh Token 값을 가져옴
+    Optional<User> user = userRepository.findById(UUID.fromString(refreshTokenAuthentication.getName()));
+    if (user.isEmpty()) {
+      throw new AuthException(AuthErrorCode.USER_NOT_FOUND);
+    }
+    // 토큰 재발행
+    Authentication authentication = jwtTokenProvider.getAuthentication(user.get().getId().toString());
+
+    return jwtTokenProvider.createToken(authentication);
+  }
 
 }
