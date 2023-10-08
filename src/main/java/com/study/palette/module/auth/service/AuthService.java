@@ -51,7 +51,7 @@ public class AuthService {
             .isAlarmAccept(createUserDto.isAlarmAccept())
             .build();
 
-    String id = userRepository.save(user).getId();
+    String id = userRepository.save(user).getId().toString();
 
     Authentication authentication = jwtTokenProvider.getAuthentication(id);
 
@@ -71,7 +71,7 @@ public class AuthService {
       throw new AuthException(AuthErrorCode.PASSWORD_BAD_REQUEST);
     }
 
-    Authentication authentication = jwtTokenProvider.getAuthentication(user.getId());
+    Authentication authentication = jwtTokenProvider.getAuthentication(user.getId().toString());
 
     return jwtTokenProvider.createToken(authentication);
   }

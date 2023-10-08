@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 //TODO: user socialId랑 socialType
@@ -25,7 +26,7 @@ public class User {
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
   @Column(columnDefinition = "BINARY(16)")
 //    @Type(type = "org.hibernate.type.BinaryType")
-  private String id;
+  private UUID id;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
