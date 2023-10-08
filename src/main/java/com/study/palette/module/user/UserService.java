@@ -51,10 +51,22 @@ public class UserService {
                         .name(userCreateRequestDto.getName())
                         .phone(userCreateRequestDto.getPhone())
                         .isAlarmAccept(userCreateRequestDto.isAlarmAccept())
+                        .loginFailCount(0)
+                        .isLocked(false)
+                        .createdAt(LocalDateTime.now())
                         .build());
 
         return UserProfileDto.builder()
                 .id(userRepository.save(newUser).getId().toString())
+                .role(newUser.getRole())
+                .email(newUser.getEmail())
+                .password(newUser.getPassword())
+                .name(newUser.getName())
+                .phone(newUser.getPhone())
+                .isAlarmAccept(newUser.isAlarmAccept())
+                .loginFailCount(newUser.getLoginFailCount())
+                .isLocked(newUser.isLocked())
+                .createdAt(newUser.getCreatedAt().toString())
                 .build();
     }
 
@@ -69,15 +81,12 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
 
         MyInfoResponseDto myInfoResponseDto = MyInfoResponseDto.builder()
-                .userProfileDto(UserProfileDto.builder()
-                        .id(user.getId().toString())
-                        .email(user.getEmail())
-                        .build())
+                .user(user)
                 .build();
 
         if (user.getRole() == Role.MUSICIAN) {
             // TODO 음악인 정보 조회
-//            myInfoResponseDto.setMusicianProfileDto(musicianService.getMusicianByIdWithDto(id));
+//            myInfoResponseDto.setMusician(musicianService.getMusicianByIdWithDto(id));
         }
 
         return myInfoResponseDto;

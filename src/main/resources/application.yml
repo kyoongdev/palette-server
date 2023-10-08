@@ -21,6 +21,7 @@ spring: #공통환경
       maxRequestSize: 100MB
   main:
     allow-bean-definition-overriding: true
+
 ---
 
 #server:
