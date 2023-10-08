@@ -41,4 +41,4 @@ out/
 /gradle/wrapper/gradle-wrapper.properties
 
 ### Querydsl ###
-src/main/generated/
+/src/main/generated/
