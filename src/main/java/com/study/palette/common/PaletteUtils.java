@@ -7,6 +7,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class PaletteUtils {
     //Null 값 인 property 를 찾아서 String[] 로 반환
@@ -27,5 +28,12 @@ public class PaletteUtils {
     //Null 값 인 property 를 제외하고 복사
     public static void myCopyProperties(Object src, Object target) {
         BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
+    }
+
+    /* image Utils */
+
+    //파일 이름 변환
+    public static String generateUniqueName(String extension) {
+        return UUID.randomUUID() + "." + extension;
     }
 }

@@ -1,10 +1,10 @@
 package com.study.palette.module.user.entity;
 
-import jdk.jfr.Timestamp;
-import com.study.palette.module.user.entity.Role;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+//TODO: user socialId랑 socialType
 @Entity
 @Getter
 @Setter     // TODO dto <--> entity 전환을 copyProperty 로 하기위해 추가함--> 추후 좀더 다른 방법 알아보면 될듯
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -39,6 +41,8 @@ public class User {
     @Column(columnDefinition = "varchar(100)")
     String name;
 
+
+    //TODO: phone -> 11자리 (char(11))
     @Column(columnDefinition = "varchar(100)")
     String phone;
 
@@ -57,18 +61,6 @@ public class User {
 
     @Column(columnDefinition = "datetime")
     LocalDateTime deletedAt;
-
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
-
-    public String getloginFailCount() {
-        return String.valueOf(this.loginFailCount);
-    }
-
-    public boolean getIsLocked() {
-        return this.isLocked;
-    }
 
     public void updateLoginFailCount(int loginFailCount) {
         this.loginFailCount = loginFailCount;

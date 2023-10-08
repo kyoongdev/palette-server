@@ -38,6 +38,7 @@ dependencies {
 //    implementation 'org.springframework.session:spring-session-core'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
     implementation 'org.springframework.boot:spring-boot-starter-webflux' // webclient 사용을 위한 라이브러리
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8' // Model mapper 라이브러리
 
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
@@ -59,7 +60,7 @@ dependencies {
 
     /* QueryDSL 관련 내용 주석처리 */
     /* QueryDSL을 사용하기 위한 라이브러리 */
-//    implementation 'com.querydsl:querydsl-jpa'
+    implementation 'com.querydsl:querydsl-jpa'
 //    implementation 'com.querydsl:querydsl-apt'          //QClass를 생성하기 위한 라이브러리
 //
 //    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
