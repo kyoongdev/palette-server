@@ -13,7 +13,6 @@ import java.util.List;
 
 
 @Data
-
 public class ArtistResponseDto {
 
     private String id;
@@ -23,15 +22,15 @@ public class ArtistResponseDto {
 
     private List<FilterInfo> filterInfo = new ArrayList<>();
 
-    private int serviceStatus;
+    private boolean serviceStatus;
 
     private String userName;
 
-    private ArtistFile artistFile;
+    private List<ArtistFile> artistFile;
 
-    private ArtistLicenseInfo artistLicenseInfo;
+    private List<ArtistLicenseInfo> artistLicenseInfo;
 
-    private ArtistReview artistReview;
+    private List<ArtistReview> artistReview;
 
     public ArtistResponseDto(ArtistInfo artistInfo){
         this.id= artistInfo.getId();
@@ -39,14 +38,11 @@ public class ArtistResponseDto {
         this.serviceInfo = artistInfo.getServiceInfo();
         this.editInfo = artistInfo.getEditInfo();
         this.serviceInfo = artistInfo.getServiceInfo();
-        this.serviceStatus = artistInfo.getServiceStatus();
+        this.serviceStatus = artistInfo.isServiceStatus();
         this.userName = artistInfo.getUser().getName();
-        this.artistFile = artistInfo.getArtistFile().get(0);
-        this.artistLicenseInfo = artistInfo.getArtistLicenseInfo().get(0);
-        this.artistReview = artistInfo.getArtistReview().get(0);
-
-
-
+        this.artistFile = artistInfo.getArtistFile();
+        this.artistLicenseInfo = artistInfo.getArtistLicenseInfo();
+        this.artistReview = artistInfo.getArtistReview();
     }
 
 }

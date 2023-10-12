@@ -21,6 +21,7 @@ public enum ErrorCode implements ErrorCodeInterface {
   INTERNAL_SERVER_ERROR(500, "서버 에러입니다.");
 
   private final int status;
+
   private final String message;
 
 }
