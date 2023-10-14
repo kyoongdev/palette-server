@@ -1,9 +1,11 @@
 package com.study.palette.common.controller;
 
+import com.study.palette.common.constants.ErrorCode;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
 
 import com.study.palette.common.exception.CustomException;
+
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +27,10 @@ public class DtoController {
     @GetMapping(value = "/test")
     public String test(@RequestParam(required = false) String param) throws Exception {
 
-        if(param.equals("2")) {
-            //ArithmeticException 발생
-            int div = 1/0;
-        }
-        return "success";
+        throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
+
+
+
 
 }

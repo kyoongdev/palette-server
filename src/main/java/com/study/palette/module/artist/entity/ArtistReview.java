@@ -1,10 +1,8 @@
 package com.study.palette.module.artist.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 public class ArtistReview {
 
@@ -32,6 +31,7 @@ public class ArtistReview {
     @Column(length = 24)
     private String userId;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "artistInfoId")
     private ArtistInfo artistInfo;

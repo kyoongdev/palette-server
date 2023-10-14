@@ -1,10 +1,10 @@
 package com.study.palette.module.user.entity;
 
-import jdk.jfr.Timestamp;
-import com.study.palette.module.user.entity.Role;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -13,100 +13,92 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+//TODO: user socialId랑 socialType
 @Entity
 @Getter
 @Setter     // TODO dto <--> entity 전환을 copyProperty 로 하기위해 추가함--> 추후 좀더 다른 방법 알아보면 될듯
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(columnDefinition = "BINARY(16)")
 //    @Type(type = "org.hibernate.type.BinaryType")
-    private UUID id;
+  private UUID id;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
-    @Column(columnDefinition = "varchar(255)")
-    String email;
+  @Column(columnDefinition = "varchar(255)")
+  String email;
 
-    @Column(columnDefinition = "varchar(255)")
-    String password;
+  @Column(columnDefinition = "varchar(255)")
+  String password;
 
-    @Column(columnDefinition = "varchar(100)")
-    String name;
+  @Column(columnDefinition = "varchar(100)")
+  String name;
 
-    @Column(columnDefinition = "varchar(100)")
-    String phone;
 
-    @Column(columnDefinition = "boolean default false")
-    boolean isAlarmAccept;
+  //TODO: phone -> 11자리 (char(11))
+  @Column(columnDefinition = "varchar(100)")
+  String phone;
 
-    @Column(columnDefinition = "int default 0")
-    int loginFailCount;
+  @Column(columnDefinition = "boolean default false")
+  boolean isAlarmAccept;
 
-    @Column(columnDefinition = "boolean default false")
-    boolean isLocked;
+  @Column(columnDefinition = "int default 0")
+  int loginFailCount;
 
-    @Column(columnDefinition = "datetime default now()")
-    @CreatedDate
-    LocalDateTime createdAt;
+  @Column(columnDefinition = "boolean default false")
+  boolean isLocked;
 
-    @Column(columnDefinition = "datetime")
-    LocalDateTime deletedAt;
+  @Column(columnDefinition = "datetime default now()")
+  @CreatedDate
+  LocalDateTime createdAt;
 
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
+  @Column(columnDefinition = "datetime")
+  LocalDateTime deletedAt;
 
-    public String getloginFailCount() {
-        return String.valueOf(this.loginFailCount);
-    }
+  public void updateLoginFailCount(int loginFailCount) {
+    this.loginFailCount = loginFailCount;
+  }
 
-    public boolean getIsLocked() {
-        return this.isLocked;
-    }
+  public void updateIsLocked(boolean isLocked) {
+    this.isLocked = isLocked;
+  }
 
-    public void updateLoginFailCount(int loginFailCount) {
-        this.loginFailCount = loginFailCount;
-    }
+  public void generateDeletedAt() {
+    this.deletedAt = LocalDateTime.now();
+  }
 
-    public void updateIsLocked(boolean isLocked) {
-        this.isLocked = isLocked;
-    }
+  public void resetDeletedAt() {
+    this.deletedAt = null;
+  }
 
-    public void generateDeletedAt() {
-        this.deletedAt = LocalDateTime.now();
-    }
+  @Builder
+  public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt) {
+    this.role = role;
+    this.email = email;
+    this.password = password;
+    this.name = name;
+    this.phone = phone;
+    this.isAlarmAccept = isAlarmAccept;
+  }
 
-    public void resetDeletedAt() {
-        this.deletedAt = null;
-    }
+  @OneToOne
+  @JoinColumn(name = "userId")
+  private UserArtist userArtist;
 
-    @Builder
-    public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt) {
-        this.role = role;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.phone = phone;
-        this.isAlarmAccept = isAlarmAccept;
-    }
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<UserFile> userFile = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "userId")
-    private UserArtist userArtist;
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<UserFollowing> userFolloing = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserFile> userFile = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserFollowing> userFolloing = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserFollower> userFollower = new ArrayList<>();
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<UserFollower> userFollower = new ArrayList<>();
 
 }
