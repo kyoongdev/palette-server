@@ -1,7 +1,7 @@
 package com.study.palette.config;
 
-import com.study.palette.module.user.GetUserInfoArgumentResolver;
-import com.study.palette.module.user.UserService;
+import com.study.palette.module.user.annotation.GetUserInfoArgumentResolver;
+import com.study.palette.module.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,7 @@
-package com.study.palette.module.user;
+package com.study.palette.module.user.annotation;
 
 import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.user.service.UserService;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

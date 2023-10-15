@@ -1,6 +1,6 @@
 package com.study.palette.module.auth.service;
 
-import com.study.palette.authentication.domain.JwtTokenProvider;
+import com.study.palette.config.security.JwtTokenProvider;
 import com.study.palette.common.dto.TokenDto;
 import com.study.palette.module.auth.exception.AuthErrorCode;
 import com.study.palette.module.auth.exception.AuthException;

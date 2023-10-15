@@ -15,15 +15,13 @@ public class UserUpdateDto {
 
 
     private String email;
-    private String password;
     private String name;
     private String phone;
     private boolean isAlarmAccept;
 
     @Builder
-    public UserUpdateDto(String email, String password, String name, String phone, boolean isAlarmAccept) {
+    public UserUpdateDto(String email, String name, String phone, boolean isAlarmAccept) {
         this.email = email;
-        this.password = password;
         this.name = name;
         this.phone = phone;
         this.isAlarmAccept = isAlarmAccept;

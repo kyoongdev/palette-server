@@ -1,4 +1,4 @@
-package com.study.palette.authentication.domain;
+package com.study.palette.config.security;
 
 import com.study.palette.common.dto.TokenDto;
 import com.study.palette.config.UserDetailsServiceImpl;
