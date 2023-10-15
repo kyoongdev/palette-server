@@ -24,7 +24,6 @@ public class AlbumArtDetailResponseDto {
 
 
     public AlbumArtDetailResponseDto(AlbumArtInfo albumArtInfo,
-//                                     List<AlbumArtReviewResponseDto> albumArtReviewResponseDto,
 //                                     List<lbumArtFileResponseDto> albumArtFileResponseDto,
                                      List<AlbumArtLicenseInfoWithIdDto> albumArtLicenseInfoResponseDto) {
         this.id = albumArtInfo.getId().toString();
@@ -34,7 +33,6 @@ public class AlbumArtDetailResponseDto {
         this.serviceStatus = albumArtInfo.isServiceStatus();
         this.createdAt = albumArtInfo.getCreatedAt();
         this.albumArtLicenseInfoResponseDto = albumArtLicenseInfoResponseDto;
-//        this.albumArtReviewResponseDto = albumArtReviewResponseDto;
 //        this.albumArtFileResponseDto = albumArtFileResponseDto;
     }
 }
