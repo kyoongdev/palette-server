@@ -60,7 +60,7 @@ dependencies {
 
     /* QueryDSL 관련 내용 주석처리 */
     /* QueryDSL을 사용하기 위한 라이브러리 */
-//    implementation 'com.querydsl:querydsl-jpa'
+    implementation 'com.querydsl:querydsl-jpa'
 //    implementation 'com.querydsl:querydsl-apt'          //QClass를 생성하기 위한 라이브러리
 //
 //    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"

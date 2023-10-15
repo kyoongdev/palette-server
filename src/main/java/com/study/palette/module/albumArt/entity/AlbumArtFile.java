@@ -8,14 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parent;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -93,4 +89,6 @@ public class AlbumArtFile {
 
         albumArtInfo.getAlbumArtFile().add(this);
     }
+
+
 }

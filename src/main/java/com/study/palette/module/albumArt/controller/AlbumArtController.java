@@ -3,9 +3,8 @@ package com.study.palette.module.albumArt.controller;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.albumArt.dto.info.*;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.service.AlbumArtService;
-import com.study.palette.module.user.GetUserInfo;
+import com.study.palette.module.user.annotation.GetUserInfo;
 import com.study.palette.module.user.dto.MyInfoResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +18,11 @@ import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Tag(name = "앨범아트", description = "앨범아트")
 @RequestMapping("/api/albumArts")
@@ -64,12 +67,13 @@ public class AlbumArtController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-    public AlbumArtCreateResponseDto createAlbumArt(@RequestBody AlbumArtCreateRequestDto albumArtCreateRequestDto, @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-        return albumArtService.createAlbumArt(albumArtCreateRequestDto, myInfoResponseDto.getUser());
+    @PreAuthorize("hasRole('MUSICIAN')")
+    public ResponseEntity<AlbumArtCreateResponseDto> createAlbumArt(@Valid @RequestBody AlbumArtCreateRequestDto albumArtCreateRequestDto, @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+        return ResponseEntity.ok(albumArtService.createAlbumArt(albumArtCreateRequestDto, myInfoResponseDto.getUser()));
     }
 
     //앨범아트 수정
+    //TODO: ROLE_MUSICIAN만 가능하게 + 본인의 앨범아트만 수정
     @Operation(summary = "앨범아트 수정", description = "앨범아트 수정 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtCreateRequestDto.class))),
@@ -77,11 +81,13 @@ public class AlbumArtController {
     })
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateAlbumArt(@PathVariable String id, @RequestBody AlbumArtUpdateReqeustDto albumArtCreateRequestDto) {
-        albumArtService.updateAlbumArt(id, albumArtCreateRequestDto);
+    @PreAuthorize("hasRole('MUSICIAN')")
+    public void updateAlbumArt(@PathVariable String id, @RequestBody AlbumArtUpdateReqeustDto albumArtCreateRequestDto, @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+        albumArtService.updateAlbumArt(id, albumArtCreateRequestDto, myInfoResponseDto.getUser());
     }
 
     //앨범아트 삭제
+    //TODO: ROLE_MUSICIAN만 가능하게 + 본인의 앨범아트만 삭제
     @Operation(summary = "앨범아트 삭제", description = "앨범아트 삭제 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtCreateRequestDto.class))),

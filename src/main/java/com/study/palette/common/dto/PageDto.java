@@ -13,12 +13,10 @@ public class PageDto {
     int page;
 
 
-    @Schema(description = "한 페이지에 보여줄 데이터 개수",defaultValue = "10")
+    @Schema(description = "한 페이지에 보여줄 데이터 개수", defaultValue = "10")
     int limit;
 
-    public Pageable toPageable(Sort sort){
-
-        return PageRequest.of(page-1,limit,sort);
+    public Pageable toPageable(Sort sort) {
+        return PageRequest.of(page-1, limit, sort);
     }
-
 }
