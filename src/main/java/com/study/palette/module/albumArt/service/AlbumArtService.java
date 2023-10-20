@@ -9,6 +9,7 @@ import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateReqeustDto;
+import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
@@ -39,14 +40,14 @@ public class AlbumArtService {
 
     /* AlbumArt 필터 포함 조회*/
     @Transactional(readOnly = true)
-    public PaginationDto<AlbumArtResponseDto> getAlbumArts(Pageable pageable) {
+    public PaginationDto<AlbumArtResponseDto> getAlbumArts(FindAlbumArtQuery query, Pageable pageable) {
         Long count = albumArtRepository.count();
 
         if (count == 0) {
             return PaginationDto.of(new PagingDto(pageable, count), List.of());
         }
 
-        List<AlbumArtResponseDto> artists = albumArtRepository.findAll(pageable).stream()
+        List<AlbumArtResponseDto> artists = albumArtRepository.findAll(query.getSort(), pageable).stream()
                 .map(AlbumArtResponseDto::new).collect(Collectors.toList());
         PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count), artists);
 

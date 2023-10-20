@@ -3,7 +3,9 @@ package com.study.palette.module.albumArt.repository;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -11,9 +13,9 @@ import java.util.UUID;
 
 
 @Repository
-public interface AlbumArtRepository extends JpaRepository<AlbumArtInfo, String> {
+public interface AlbumArtRepository extends JpaRepository<AlbumArtInfo, String>, JpaSpecificationExecutor<AlbumArtInfo> {
 //    Page<AlbumArtInfo> findByAlbumArtFile_isThumbnail(boolean isThumbnail, Pageable pageable);
-    Page<AlbumArtInfo> findAll(Pageable pageable);
+    Page<AlbumArtInfo> findAll(Specification<AlbumArtInfo> spec, Pageable pageable);
 
     Optional<AlbumArtInfo> findById(UUID id);
 

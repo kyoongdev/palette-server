@@ -3,6 +3,7 @@ package com.study.palette.module.albumArt.controller;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.albumArt.dto.info.*;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
+import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.user.annotation.GetUserInfo;
 import com.study.palette.module.user.dto.MyInfoResponseDto;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,7 +46,7 @@ public class AlbumArtController {
     })
     @GetMapping("")
     public PaginationDto<AlbumArtResponseDto> albumArtInfos(@ParameterObject FindAlbumArtQuery query) {
-        return albumArtService.getAlbumArts(query.toPageable(Sort.by(Sort.Direction.DESC, "createdAt")));
+        return albumArtService.getAlbumArts(query, query.toPageable(Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     //앨범아트 상세조회
