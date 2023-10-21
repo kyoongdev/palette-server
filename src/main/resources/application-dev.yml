@@ -23,3 +23,7 @@ spring:
 logging:
   level:
     root: info
+
+s3:
+  naming-strategy:
+    path: dev

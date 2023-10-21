@@ -4,7 +4,7 @@ spring:
       "local": "localdb, common"
       "dev": "devdb, common"
       "prod": "proddb, common"
-    include: "jwt"
+    include: "jwt, aws"
     active: local
 ---
 

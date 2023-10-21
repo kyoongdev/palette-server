@@ -1,0 +1,12 @@
+cloud:
+  aws:
+    s3:
+      bucket: pallete-file
+    credentials:
+      access-key: AKIA2GXA5AAWZIAPUKIF
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
