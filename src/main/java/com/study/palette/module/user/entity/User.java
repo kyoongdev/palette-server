@@ -32,6 +32,11 @@ public class User {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @Enumerated(EnumType.STRING)
+  private SocialType socialType;    //소셜 로그인한 소셜 타입 식별자(Naver, Google)
+
+  private String socialId;          // 로그인한 소셜 타입 식별자(일반 로그인인 경우 null)
+
   @Column(columnDefinition = "varchar(255)")
   String email;
 
@@ -79,13 +84,15 @@ public class User {
   }
 
   @Builder
-  public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt) {
+  public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt, SocialType socialType, String socialId) {
     this.role = role;
     this.email = email;
     this.password = password;
     this.name = name;
     this.phone = phone;
     this.isAlarmAccept = isAlarmAccept;
+    this.socialType = socialType;
+    this.socialId = socialId;
   }
 
   @OneToOne
