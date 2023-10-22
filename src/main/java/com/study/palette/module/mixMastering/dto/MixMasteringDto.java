@@ -13,6 +13,7 @@ public class MixMasteringDto {
   private String serviceExplain;
   private String editInfo;
   private boolean sericeStatus;
+  private int genre;
   private LocalDateTime createdAt;
 
   private User user;
@@ -23,6 +24,7 @@ public class MixMasteringDto {
     this.serviceName = mixMasteringInfo.getServiceName();
     this.serviceExplain = mixMasteringInfo.getServiceExplain();
     this.editInfo = mixMasteringInfo.getEditInfo();
+    this.genre = mixMasteringInfo.getGenre();
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = mixMasteringInfo.getUser();

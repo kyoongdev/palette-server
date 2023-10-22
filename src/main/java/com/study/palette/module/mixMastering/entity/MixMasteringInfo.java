@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -40,6 +41,9 @@ public class MixMasteringInfo {
 
   private boolean serviceStatus;
 
+  @Column(length = 1)
+  private int genre;
+  @CreationTimestamp
   private LocalDateTime createdAt;
 
 
@@ -51,15 +55,8 @@ public class MixMasteringInfo {
 
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<MixMasteringFile> mixMasteringFile = new ArrayList<>();
-
-  @OneToOne
-  @JoinColumn(name = "mixMasteringInfoId")
-  private MixMasteringGenre mixMasteringGenre;
-
   @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "userId")
   @JsonIgnore
   private User user;
-
-
 }

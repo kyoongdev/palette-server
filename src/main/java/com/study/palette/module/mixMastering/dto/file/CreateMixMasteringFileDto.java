@@ -3,7 +3,6 @@ package com.study.palette.module.mixMastering.dto.file;
 import com.study.palette.module.mixMastering.entity.MixMasteringFile;
 
 public class CreateMixMasteringFileDto {
-
   private String originFileName;
   private String uploadFileName;
   private int uploadfileSize;

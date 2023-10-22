@@ -11,19 +11,9 @@ public class MixMasteringFileDto {
   private String id;
   private String originFileName;
   private String uploadFileName;
-
   private int uploadfileSize;
-
-  private String uploadFilePath;
-
-  private int fileMasterCode;
-
-  private int fileType;
-
   private String suffix;
-
-  private boolean isUse;
-
+  private boolean isThumbnail;
   private LocalDate createdAt;
 
   public MixMasteringFileDto(MixMasteringFile mixMasteringFile) {
@@ -31,14 +21,8 @@ public class MixMasteringFileDto {
     this.originFileName = mixMasteringFile.getOriginFileName();
     this.uploadFileName = mixMasteringFile.getUploadFileName();
     this.uploadfileSize = mixMasteringFile.getUploadFileSize();
-    this.uploadFilePath = mixMasteringFile.getUploadFilePath();
-    this.fileMasterCode = mixMasteringFile.getFileMasterCode();
-    this.fileType = mixMasteringFile.getFileType();
     this.suffix = mixMasteringFile.getSuffix();
-    this.isUse = mixMasteringFile.isUse();
+    this.isThumbnail = mixMasteringFile.isThumbnail();
     this.createdAt = mixMasteringFile.getCreatedAt();
-
   }
-
-
 }

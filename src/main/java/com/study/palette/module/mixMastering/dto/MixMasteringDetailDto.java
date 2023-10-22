@@ -1,7 +1,6 @@
 package com.study.palette.module.mixMastering.dto;
 
 import com.study.palette.module.mixMastering.dto.file.MixMasteringFileDto;
-import com.study.palette.module.mixMastering.entity.MixMasteringGenre;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringReview;
@@ -19,12 +18,13 @@ public class MixMasteringDetailDto {
   private String serviceExplain;
   private String editInfo;
   private boolean sericeStatus;
+  private int genre;
   private LocalDateTime createdAt;
   private User user;
   private List<MixMasteringReview> reviews;
   private List<MixMasteringLicenseInfo> mixMasteringLicenseInfo;
   private List<MixMasteringFileDto> mixMasteringFile;
-  private MixMasteringGenre mixMasteringGenre;
+
 
   public MixMasteringDetailDto(MixMasteringInfo mixMasteringInfo) {
     this.id = mixMasteringInfo.getId().toString();
@@ -32,11 +32,11 @@ public class MixMasteringDetailDto {
     this.serviceExplain = mixMasteringInfo.getServiceExplain();
     this.editInfo = mixMasteringInfo.getEditInfo();
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
+    this.genre = mixMasteringInfo.getGenre();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = mixMasteringInfo.getUser();
     this.reviews = mixMasteringInfo.getMixMasteringReview();
     this.mixMasteringLicenseInfo = mixMasteringInfo.getMixMasteringLicenseInfo();
     this.mixMasteringFile = mixMasteringInfo.getMixMasteringFile().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
-    this.mixMasteringGenre = mixMasteringInfo.getMixMasteringGenre();
   }
 }
