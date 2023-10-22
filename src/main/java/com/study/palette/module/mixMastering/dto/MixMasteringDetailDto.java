@@ -22,7 +22,7 @@ public class MixMasteringDetailDto {
   private String serviceExplain;
   @Schema(name = "수정 관련 안내")
   private String editInfo;
-  @Schema(name = "서비스 제목")
+  @Schema(name = "서비스 상태")
   private boolean sericeStatus;
   @Schema(name = "작업 전 음원")
   private String beforeJobMusic;
