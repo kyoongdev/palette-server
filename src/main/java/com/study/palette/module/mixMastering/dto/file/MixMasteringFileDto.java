@@ -1,6 +1,7 @@
 package com.study.palette.module.mixMastering.dto.file;
 
 
+import com.study.palette.module.mixMastering.entity.MixMasteringFile;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -19,11 +20,25 @@ public class MixMasteringFileDto {
 
   private int fileType;
 
-  private String suffic;
+  private String suffix;
 
   private boolean isUse;
 
   private LocalDate createdAt;
+
+  public MixMasteringFileDto(MixMasteringFile mixMasteringFile) {
+    this.id = mixMasteringFile.getId().toString();
+    this.originFileName = mixMasteringFile.getOriginFileName();
+    this.uploadFileName = mixMasteringFile.getUploadFileName();
+    this.uploadfileSize = mixMasteringFile.getUploadFileSize();
+    this.uploadFilePath = mixMasteringFile.getUploadFilePath();
+    this.fileMasterCode = mixMasteringFile.getFileMasterCode();
+    this.fileType = mixMasteringFile.getFileType();
+    this.suffix = mixMasteringFile.getSuffix();
+    this.isUse = mixMasteringFile.isUse();
+    this.createdAt = mixMasteringFile.getCreatedAt();
+
+  }
 
 
 }
