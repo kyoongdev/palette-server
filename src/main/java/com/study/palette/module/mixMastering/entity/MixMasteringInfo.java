@@ -32,6 +32,9 @@ public class MixMasteringInfo {
   @Column(length = 50)
   private String serviceName;
 
+  private String beforeJobMusic;
+
+  private String afterJobMusic;
 
   @Column(length = 1000)
   private String serviceExplain;
@@ -48,13 +51,17 @@ public class MixMasteringInfo {
 
 
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY)
-  private List<MixMasteringReview> mixMasteringReview;
+  private List<MixMasteringReview> mixMasteringReviews;
 
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<MixMasteringLicenseInfo> mixMasteringLicenseInfo;
+  private List<MixMasteringLicenseInfo> mixMasteringLicenseInfos;
 
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<MixMasteringFile> mixMasteringFile = new ArrayList<>();
+
+  @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  private List<MixMasteringContact> mixMasteringContacts;
+
   @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "userId")
   @JsonIgnore

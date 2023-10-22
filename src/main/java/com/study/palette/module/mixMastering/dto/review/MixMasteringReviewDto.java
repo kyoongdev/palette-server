@@ -1,8 +1,8 @@
-package com.study.palette.module.mixMastering.dto;
+package com.study.palette.module.mixMastering.dto.review;
 
 
 import com.study.palette.module.mixMastering.entity.MixMasteringReview;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.user.dto.CommonUserDto;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,14 +18,13 @@ public class MixMasteringReviewDto {
 
   private LocalDate createdAt;
 
-  private User user;
+  private CommonUserDto user;
 
   public MixMasteringReviewDto(MixMasteringReview mixMasteringReview) {
     this.id = mixMasteringReview.getId().toString();
     this.rating = mixMasteringReview.getRating().intValue();
     this.review = mixMasteringReview.getReview();
     this.createdAt = mixMasteringReview.getCreatedAt();
-    this.user = mixMasteringReview.getUser();
-
+    this.user = new CommonUserDto(mixMasteringReview.getUser());
   }
 }
