@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.7'
     id 'io.spring.dependency-management' version '1.1.2'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.study'
@@ -24,8 +25,17 @@ repositories {
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
+    queryDslVersion = '5.0.0'
+    profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
 }
-
+//리소스 폴더 지정
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources", "src/main/resources-s%{profile}"
+        }
+    }
+}
 dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -58,15 +68,29 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    /* QueryDSL 관련 내용 주석처리 */
-    /* QueryDSL을 사용하기 위한 라이브러리 */
-    implementation 'com.querydsl:querydsl-jpa'
-//    implementation 'com.querydsl:querydsl-apt'          //QClass를 생성하기 위한 라이브러리
-//
-//    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
-//    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
-//    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+// query dsl=============================================================
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+    annotationProcessor(
+            "javax.persistence:javax.persistence-api",
+            "javax.annotation:javax.annotation-api",
+    )
 }
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+// query dsl=============================================================
 
 tasks.named('test') {
     outputs.dir snippetsDir
@@ -81,19 +105,6 @@ tasks.named('asciidoctor') {
 tasks {
     processResources {
         duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
-    }
-}
-
-//프로젝트 단위 변수 설정
-ext {
-    profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
-}
-//리소스 폴더 지정
-sourceSets {
-    main {
-        resources {
-            srcDirs "src/main/resources", "src/main/resources-s%{profile}"
-        }
     }
 }
 
