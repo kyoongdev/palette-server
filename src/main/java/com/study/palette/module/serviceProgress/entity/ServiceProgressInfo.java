@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +25,14 @@ public class ServiceProgressInfo {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     private ServiceType serviceType; // 인기순 집계를 위해 추가
 
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID serviceId; // service 구분을 위해 추가
 
     private int licenseType;
@@ -63,7 +65,6 @@ public class ServiceProgressInfo {
     private User user;
 
     @OneToMany(mappedBy = "serviceProgressInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<ServiceProgressFile> ServiceProgressFile = new ArrayList<>();
-
+    private List<ServiceProgressFile> serviceProgressFile = new ArrayList<>();
 
 }

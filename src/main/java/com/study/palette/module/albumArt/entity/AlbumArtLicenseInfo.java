@@ -94,10 +94,4 @@ public class AlbumArtLicenseInfo {
                 .albumArtInfo(albumArtInfo)
                 .build();
     }
-
-
-    public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
-        this.albumArtInfo = albumArtInfo;
-    }
-
 }

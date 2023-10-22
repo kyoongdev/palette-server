@@ -47,8 +47,11 @@ public class AlbumArtService {
             return PaginationDto.of(new PagingDto(pageable, count), List.of());
         }
 
-        List<AlbumArtResponseDto> artists = albumArtRepository.findAll(query.getSort(), pageable).stream()
-                .map(AlbumArtResponseDto::new).collect(Collectors.toList());
+        List<AlbumArtResponseDto> artists = albumArtRepository.findAll(query, pageable)
+                .stream()
+                .map(data -> modelMapper.map(data, AlbumArtResponseDto.class))
+                .collect(Collectors.toList());
+
         PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count), artists);
 
         return row;

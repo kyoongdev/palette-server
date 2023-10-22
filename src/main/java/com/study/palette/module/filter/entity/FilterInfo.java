@@ -30,7 +30,7 @@ public class FilterInfo {
     private String userId;
 
     @ManyToOne
-    @JoinColumn(name = "\"key\"")
+    @JoinColumn(name = "filterMasterKey")
     private FilterMaster key;
 
     @Builder

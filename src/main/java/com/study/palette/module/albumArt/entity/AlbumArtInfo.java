@@ -46,7 +46,8 @@ public class AlbumArtInfo {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    //    @ManyToOne(cascade = CascadeType.PERSIST) TODO detached 오류 해결 필요
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     @JsonIgnore
     private User user;

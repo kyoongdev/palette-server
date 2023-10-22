@@ -3,16 +3,10 @@ package com.study.palette.module.albumArt.dto.query;
 
 import com.study.palette.common.constants.CustomSort;
 import com.study.palette.common.dto.PageDto;
-import com.study.palette.common.exception.CustomException;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
-import com.study.palette.module.albumArt.service.AlbumArtSpecification;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
 @Data
 @AllArgsConstructor
@@ -36,22 +30,22 @@ public class FindAlbumArtQuery extends PageDto {
 
     평점 순 = 서비스 후기 10개 이상인 서비스 중 서비스후기 평점이 가장 좋은 순서(평점이 같은 경우 매출액 순 다음 판매량 순)
 */
-    @Schema(description = "정렬", defaultValue = "NEW")
-    CustomSort sort;
+    @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW", "POPULAR", "RECOMMEND", "SCORE"})
+    private CustomSort sort;
 
-    public Specification<AlbumArtInfo> getSort() {
-        if (this.sort == null) {
-            throw new CustomException(AlbumArtErrorCode.ALBUM_ART_NOT_SORT);
-        }
-
-        if (this.sort == CustomSort.POPULAR) {
-            return AlbumArtSpecification.filterByPOPULAR();
-        } else if (this.sort == CustomSort.RECOMMEND) {
-            return AlbumArtSpecification.filterByRECOMMEND();
-        } else if (this.sort == CustomSort.SCORE) {
-            return AlbumArtSpecification.filterBySCORE();
-        } else { // 신규등록
-            return AlbumArtSpecification.filterByNEW();
-        }
-    }
+//    public Specification<AlbumArtInfo> getSort() {
+//        if (this.sort == null) {
+//            throw new CustomException(AlbumArtErrorCode.ALBUM_ART_NOT_SORT);
+//        }
+//
+//        if (this.sort == CustomSort.POPULAR) {
+//            return AlbumArtSpecification.filterByPOPULAR();
+//        } else if (this.sort == CustomSort.RECOMMEND) {
+//            return AlbumArtSpecification.filterByRECOMMEND();
+//        } else if (this.sort == CustomSort.SCORE) {
+//            return AlbumArtSpecification.filterBySCORE();
+//        } else { // 신규등록
+//            return AlbumArtSpecification.filterByNEW();
+//        }
+//    }
 }

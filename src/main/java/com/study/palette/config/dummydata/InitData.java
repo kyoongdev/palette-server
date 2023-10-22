@@ -1,5 +1,12 @@
 package com.study.palette.config.dummydata;
 
+import com.study.palette.common.constants.ServiceType;
+import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
+import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
+import com.study.palette.module.albumArt.entity.AlbumArtInfo;
+import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
+import com.study.palette.module.albumArt.repository.AlbumArtRepository;
+import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
@@ -9,6 +16,8 @@ import com.study.palette.module.filter.entity.FilterInfo;
 import com.study.palette.module.filter.entity.FilterMaster;
 import com.study.palette.module.filter.repository.FilterInfoRepository;
 import com.study.palette.module.filter.repository.FilterMasterRepository;
+import com.study.palette.module.serviceProgress.entity.ServiceProgressInfo;
+import com.study.palette.module.serviceProgress.repository.ServiceProgressInfoRepository;
 import com.study.palette.module.user.entity.Role;
 import com.study.palette.module.user.entity.User;
 import com.study.palette.module.user.repository.UserRepository;
@@ -20,9 +29,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -31,13 +39,12 @@ public class InitData implements ApplicationRunner {
 
     private final FilterMasterRepository filterMasterRepository;
     private final FilterInfoRepository filterInfoRepository;
-
     private final ArtistRepository artistRepository;
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
+    private final AlbumArtService albumArtService;
+    private final AlbumArtRepository albumArtRepository;
+    private final ServiceProgressInfoRepository serviceProgressInfoRepository;
 
     /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
     @Override
@@ -45,6 +52,8 @@ public class InitData implements ApplicationRunner {
 
         /* 연관관계 확인 후 save */
         FilterMaster filterMaster = new FilterMaster(1, "아티스트", true, LocalDate.now(), "234234");
+        filterMasterRepository.save(filterMaster);
+        filterMaster = new FilterMaster(2, "앨범아트 판매유형", true, LocalDate.now(), "234234");
         filterMasterRepository.save(filterMaster);
 
         List<FilterInfo> filterInfoList = new ArrayList<>();
@@ -56,21 +65,30 @@ public class InitData implements ApplicationRunner {
         filterInfoList.add(new FilterInfo(4, "악기 녹음", true, LocalDate.now(), "234234", filterMaster));
         filterInfoList.add(new FilterInfo(5, "레코드 엔지니어", true, LocalDate.now(), "234234", filterMaster));
         filterInfoList.add(new FilterInfo(6, "그 외 서비스", true, LocalDate.now(), "234234", filterMaster));
+        /*save 메소드 사용해 저장 */
+        filterInfoRepository.saveAll(filterInfoList);
+
+        filterInfoList = new ArrayList<>();
+
+        filterInfoList.add(new FilterInfo(7, "사진편집", true, LocalDate.now(), "234234", filterMaster));
+        filterInfoList.add(new FilterInfo(8, "일러스트", true, LocalDate.now(), "234234", filterMaster));
+        filterInfoList.add(new FilterInfo(9, "그래픽아트", true, LocalDate.now(), "234234", filterMaster));
+        filterInfoList.add(new FilterInfo(10, "그외장르", true, LocalDate.now(), "234234", filterMaster));
 
         /*save 메소드 사용해 저장 */
         filterInfoRepository.saveAll(filterInfoList);
 
         Optional<User> findUser = userRepository.findByEmail("test@test");
 
-        if(!findUser.isPresent()) {
+        if (!findUser.isPresent()) {
 
             User newUser = userRepository.save(
-                User.builder()
-                        .role(Role.MUSICIAN)
-                        .email("test@test")
-                        .password(passwordEncoder.encode("test1234"))
-                        .name("홍길동")
-                        .build());
+                    User.builder()
+                            .role(Role.MUSICIAN)
+                            .email("test@test")
+                            .password(passwordEncoder.encode("test1234"))
+                            .name("홍길동")
+                            .build());
 
             /* Artist 관련 클래스 예시 */
             ArtistFile artistFile = new ArtistFile();
@@ -87,6 +105,78 @@ public class InitData implements ApplicationRunner {
 
             /* 연관관계 확인 후 save*/
             artistRepository.save(artistInfo);
+
+            List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseCreateRequestDtos = new ArrayList<>();
+
+            User newUser2 = userRepository.save(
+                    User.builder()
+                            .role(Role.MEMBER)
+                            .email("tes11t@test")
+                            .password(passwordEncoder.encode("test1234"))
+                            .name("오득춘")
+                            .build());
+
+            for (int i = 0; i < 50; i++) {
+                for (int j = 0; j < 3; j++) {
+                    albumArtLicenseCreateRequestDtos.add(
+                            new AlbumArtLicenseInfoCreateRequestDto(
+                                    10,
+                                    1000,
+                                    "servedFile" + i,
+                                    3,
+                                    null,
+                                    3,
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                            ));
+                }
+
+                AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto(
+                        "serviceName" + i,
+                        "serviceExplain",
+                        10,
+                        "editInfo",
+                        albumArtLicenseCreateRequestDtos,
+                        true
+                );
+
+                AlbumArtInfo albumArtInfo = albumArtCreateRequestDto.toEntity(newUser2);
+                List<AlbumArtLicenseInfo> licenses = albumArtCreateRequestDto.getAlbumArtLicenseInfo().stream()
+                        .map(license -> AlbumArtLicenseInfo.from(license, albumArtInfo))
+                        .toList();
+                albumArtInfo.setAlbumArtLicenseInfo(licenses);
+                albumArtRepository.save(albumArtInfo);
+                albumArtLicenseCreateRequestDtos.clear();
+            }
+
+            for (int i = 0; i < 20; i++) {
+                Random random = new Random();
+                int randomValue = random.nextInt(100000 - 2000) + 2000;
+                int randomValue2 = random.nextInt(20 - 1) + 1;
+                UUID serviceId = albumArtRepository.findByServiceName("serviceName" + randomValue2).getId();
+                ServiceType type = ServiceType.ALBUM_ART;
+
+                ServiceProgressInfo serviceProgressInfo = ServiceProgressInfo.builder()
+                        .serviceType(type)
+                        .serviceId(serviceId)
+                        .licenseType(1)
+                        .price(randomValue)
+                        .startDate(LocalDateTime.now())
+                        .dueDate(LocalDateTime.now())
+                        .endDate(LocalDateTime.now())
+                        .workProgress(1)
+                        .isComplete(true)
+                        .completeComment("완료")
+                        .status(true)
+                        .refundComment(null)
+                        .createdAt(LocalDateTime.now())
+                        .serviceProgressFile(null)
+                        .build();
+
+                serviceProgressInfoRepository.save(serviceProgressInfo);
+            }
         }
 
     }
