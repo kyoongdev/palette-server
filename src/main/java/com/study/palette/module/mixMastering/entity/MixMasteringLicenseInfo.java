@@ -18,38 +18,39 @@ import java.util.UUID;
 @Builder
 public class MixMasteringLicenseInfo {
 
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private UUID id;
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(length = 24)
+  private UUID id;
 
-    private int licenseType;
+  //라이센스 유형
+  private int licenseType;
+  //가격
+  private int price;
+  //제공 파일
+  @Column(length = 20)
+  private String servedType;
+  //수정 횟수
+  private int updateCount;
+  //작업기간
+  private int period;
+  //시안 개수
+  private int draftCount;
+  //저작권 양도
+  private boolean isAssign;
+  //상업적 사용 가능 여부
+  private boolean isUseCommercial;
+  //원본 파일 제공
+  private boolean isServeOriginFile;
+  //응용 활용 여부
+  private boolean isOtherUseApproved;
 
-    private int price;
+  @CreationTimestamp
+  private LocalDate createdAt;
 
-    @Column(length = 20)
-    private String servedType;
-
-    private int updateCount;
-
-    private LocalDate period;
-
-    private int draftCount;
-
-    private boolean isAssign;
-
-    private boolean isUseCommercial;
-
-    private boolean isServeOriginFile;
-
-    private boolean isOtherUseApproved;
-
-    @CreationTimestamp
-    private LocalDate createdAt;
-    
-    @ManyToOne
-    @JoinColumn(name = "mixMasteringInfoId")
-    private MixMasteringInfo mixMasteringInfo;
+  @ManyToOne
+  @JoinColumn(name = "mixMasteringInfoId")
+  private MixMasteringInfo mixMasteringInfo;
 
 }

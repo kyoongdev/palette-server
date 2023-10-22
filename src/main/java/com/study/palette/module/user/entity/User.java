@@ -47,8 +47,11 @@ public class User {
   String name;
 
 
+  @Column(nullable = true)
+  String profileImage;
+
   //TODO: phone -> 11자리 (char(11))
-  @Column(columnDefinition = "varchar(100)")
+  @Column(columnDefinition = "char(11)")
   String phone;
 
   @Column(columnDefinition = "boolean default false")
