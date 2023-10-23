@@ -38,6 +38,7 @@ public class UserController {
   @GetMapping("me")
   @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
   public ResponseEntity<MyInfoResponseDto> getMyInfo(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+    log.info(myInfoResponseDto);
     return ResponseEntity.ok(myInfoResponseDto);
   }
 
