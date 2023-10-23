@@ -13,15 +13,15 @@ public enum MixMasteringGenre {
   private int genre;
 
   MixMasteringGenre(int genre) {
-      this.genre = genre;
+    this.genre = genre;
   }
 
-  public static MixMasteringGenre findMixMasteringGenre(int genre){
-    for(MixMasteringGenre mixMasteringGenre : MixMasteringGenre.values()){
-      if(mixMasteringGenre.genre == genre){
+  public static MixMasteringGenre findMixMasteringGenre(int genre) {
+    for (MixMasteringGenre mixMasteringGenre : MixMasteringGenre.values()) {
+      if (mixMasteringGenre.genre == genre) {
         return mixMasteringGenre;
       }
     }
-    throw new RuntimeException("MixMasteringGenre는 1 ~ 9까지 가능합니다.")
+    throw new RuntimeException("MixMasteringGenre는 1 ~ 9까지 가능합니다.");
   }
 }

@@ -1,5 +1,6 @@
 package com.study.palette.module.mixMastering.dto;
 
+import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
 import com.study.palette.module.mixMastering.dto.file.MixMasteringFileDto;
 import com.study.palette.module.mixMastering.dto.license.MixMasteringLicenseDto;
 import com.study.palette.module.mixMastering.dto.review.MixMasteringReviewDto;
@@ -29,7 +30,7 @@ public class MixMasteringDetailDto {
   @Schema(name = "작업 후 음원")
   private String afterJobMusic;
   @Schema(name = "장르")
-  private int genre;
+  private MixMasteringGenre genre;
   @Schema(name = "생성일자")
   private LocalDateTime createdAt;
   private CommonUserDto user;
@@ -50,7 +51,7 @@ public class MixMasteringDetailDto {
     this.beforeJobMusic = mixMasteringInfo.getBeforeJobMusic();
     this.afterJobMusic = mixMasteringInfo.getAfterJobMusic();
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
-    this.genre = mixMasteringInfo.getGenre();
+    this.genre = MixMasteringGenre.findMixMasteringGenre(mixMasteringInfo.getGenre());
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUser());
     this.reviews = mixMasteringInfo.getMixMasteringReviews().stream().map(MixMasteringReviewDto::new).collect(Collectors.toList());
