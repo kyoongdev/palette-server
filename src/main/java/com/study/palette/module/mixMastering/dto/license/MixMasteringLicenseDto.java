@@ -1,6 +1,7 @@
 package com.study.palette.module.mixMastering.dto.license;
 
 
+import com.study.palette.common.enums.LicenseType;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class MixMasteringLicenseDto {
   @Schema(name = "아이디")
   private String id;
   @Schema(name = "라이센스 유형")
-  private int licenseType;
+  private LicenseType licenseType;
   @Schema(name = "가격")
   private int price;
 
@@ -43,7 +44,7 @@ public class MixMasteringLicenseDto {
 
   public MixMasteringLicenseDto(MixMasteringLicenseInfo mixMasteringLicenseInfo) {
     this.id = mixMasteringLicenseInfo.getId().toString();
-    this.licenseType = mixMasteringLicenseInfo.getLicenseType();
+    this.licenseType = LicenseType.findLicenseType(mixMasteringLicenseInfo.getLicenseType());
     this.price = mixMasteringLicenseInfo.getPrice();
     this.servedType = mixMasteringLicenseInfo.getServedType();
     this.updateCount = mixMasteringLicenseInfo.getUpdateCount();

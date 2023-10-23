@@ -4,15 +4,14 @@ public enum LicenseType {
 
   BASIC(1),
   PREMIUM(2),
-  UNLIMITED(1);
-
+  UNLIMITED(3);
   private int licenseType;
 
   LicenseType(int licenseType) {
     this.licenseType = licenseType;
   }
 
-  public static LicenseType findContact(int licenseType) {
+  public static LicenseType findLicenseType(int licenseType) {
     for (LicenseType type : LicenseType.values()) {
       if (type.licenseType == licenseType) {
         return type;

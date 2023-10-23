@@ -1,14 +1,14 @@
 package com.study.palette.module.mixMastering.dto.license;
 
 
+import com.study.palette.common.enums.LicenseType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class CreateMixMasteringLicenseDto {
-
   @Schema(name = "라이센스 유형")
-  private int licenseType;
+  private LicenseType licenseType;
   @Schema(name = "가격")
   private int price;
 
@@ -33,4 +33,5 @@ public class CreateMixMasteringLicenseDto {
 
   @Schema(name = "응용 활용 여부")
   private boolean isOtherUseApproved;
+  
 }
