@@ -11,7 +11,7 @@ public class CreateMixMasteringFileDto {
   private String suffix;
   private boolean isThumbnail;
 
-  MixMasteringFile toEntity() {
+  public MixMasteringFile toEntity() {
     return MixMasteringFile.builder()
             .originFileName(this.originFileName)
             .uploadFileName(this.uploadFileName)

@@ -58,7 +58,7 @@ public class MixMasteringInfo {
   private List<MixMasteringLicenseInfo> mixMasteringLicenseInfos;
 
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-  private List<MixMasteringFile> mixMasteringFile = new ArrayList<>();
+  private List<MixMasteringFile> mixMasteringFiles = new ArrayList<>();
 
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<MixMasteringContact> mixMasteringContacts;

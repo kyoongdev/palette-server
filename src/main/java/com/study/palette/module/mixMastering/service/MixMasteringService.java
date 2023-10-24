@@ -45,7 +45,7 @@ public class MixMasteringService {
   public MixMasteringDetailDto getMixMastering(String id) {
     Optional<MixMasteringInfo> mixMasteringInfo = mixMasteringRepository.findById(id);
 
-    if (mixMasteringInfo.isEmpty()) {
+    if (!mixMasteringInfo.isPresent()) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND);
     }
 

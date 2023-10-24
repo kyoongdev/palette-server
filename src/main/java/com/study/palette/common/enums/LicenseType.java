@@ -11,6 +11,10 @@ public enum LicenseType {
     this.licenseType = licenseType;
   }
 
+  public int getLicenseType() {
+    return licenseType;
+  }
+
   public static LicenseType findLicenseType(int licenseType) {
     for (LicenseType type : LicenseType.values()) {
       if (type.licenseType == licenseType) {

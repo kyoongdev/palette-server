@@ -15,31 +15,31 @@ import java.util.stream.Collectors;
 
 @Data
 public class MixMasteringDetailDto {
-  @Schema(name = "아이디")
+  @Schema(description = "아이디")
   private String id;
-  @Schema(name = "서비스 제목")
+  @Schema(description = "서비스 제목")
   private String serviceName;
-  @Schema(name = "서비스 설명")
+  @Schema(description = "서비스 설명")
   private String serviceExplain;
-  @Schema(name = "수정 관련 안내")
+  @Schema(description = "수정 관련 안내")
   private String editInfo;
-  @Schema(name = "서비스 상태")
+  @Schema(description = "서비스 상태")
   private boolean sericeStatus;
-  @Schema(name = "작업 전 음원")
+  @Schema(description = "작업 전 음원")
   private String beforeJobMusic;
-  @Schema(name = "작업 후 음원")
+  @Schema(description = "작업 후 음원")
   private String afterJobMusic;
-  @Schema(name = "장르")
+  @Schema(description = "장르")
   private MixMasteringGenre genre;
-  @Schema(name = "생성일자")
+  @Schema(description = "생성일자")
   private LocalDateTime createdAt;
   private CommonUserDto user;
-  @Schema(name = "리뷰")
+  @Schema(description = "리뷰")
   private List<MixMasteringReviewDto> reviews;
-  @Schema(name = "라이센스 정보")
+  @Schema(description = "라이센스 정보")
   private List<MixMasteringLicenseDto> mixMasteringLicenseInfos;
 
-  @Schema(name = "이미지들")
+  @Schema(description = "이미지들")
   private List<MixMasteringFileDto> mixMasteringFile;
 
 
@@ -56,6 +56,6 @@ public class MixMasteringDetailDto {
     this.user = new CommonUserDto(mixMasteringInfo.getUser());
     this.reviews = mixMasteringInfo.getMixMasteringReviews().stream().map(MixMasteringReviewDto::new).collect(Collectors.toList());
     this.mixMasteringLicenseInfos = mixMasteringInfo.getMixMasteringLicenseInfos().stream().map(MixMasteringLicenseDto::new).collect(Collectors.toList());
-    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFile().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
+    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
   }
 }

@@ -12,33 +12,33 @@ import java.time.LocalDate;
 public class MixMasteringLicenseDto {
 
 
-  @Schema(name = "아이디")
+  @Schema(description = "아이디")
   private String id;
-  @Schema(name = "라이센스 유형")
+  @Schema(description = "라이센스 유형")
   private LicenseType licenseType;
-  @Schema(name = "가격")
+  @Schema(description = "가격")
   private int price;
 
-  @Schema(name = "제공 파일")
+  @Schema(description = "제공 파일")
   private String servedType;
 
-  @Schema(name = "수정 횟수")
+  @Schema(description = "수정 횟수")
   private int updateCount;
 
-  @Schema(name = "작업 기간")
+  @Schema(description = "작업 기간")
   private int period;
 
-  @Schema(name = "시안 개수")
+  @Schema(description = "시안 개수")
   private int draftCount;
 
-  @Schema(name = "저작권 양도 여부")
+  @Schema(description = "저작권 양도 여부")
   private boolean isAssign;
-  @Schema(name = "성업적 사용 가능 여부")
+  @Schema(description = "성업적 사용 가능 여부")
   private boolean isUseCommercial;
-  @Schema(name = "원본 파일 제공 여부")
+  @Schema(description = "원본 파일 제공 여부")
   private boolean isServeOriginFile;
 
-  @Schema(name = "응용 활용 여부")
+  @Schema(description = "응용 활용 여부")
   private boolean isOtherUseApproved;
   private LocalDate createdAt;
 

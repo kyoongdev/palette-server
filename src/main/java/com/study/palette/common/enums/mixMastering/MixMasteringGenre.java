@@ -16,6 +16,10 @@ public enum MixMasteringGenre {
     this.genre = genre;
   }
 
+  public int getGenre() {
+    return this.genre;
+  }
+
   public static MixMasteringGenre findMixMasteringGenre(int genre) {
     for (MixMasteringGenre mixMasteringGenre : MixMasteringGenre.values()) {
       if (mixMasteringGenre.genre == genre) {

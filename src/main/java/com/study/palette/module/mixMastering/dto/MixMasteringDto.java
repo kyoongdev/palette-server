@@ -14,29 +14,29 @@ import java.util.stream.Collectors;
 @Data
 public class MixMasteringDto {
 
-  @Schema(name = "아이디")
+  @Schema(description = "아이디")
   private String id;
-  @Schema(name = "서비스 제목")
+  @Schema(description = "서비스 제목")
   private String serviceName;
 
-  @Schema(name = "서비스 설명")
+  @Schema(description = "서비스 설명")
   private String serviceExplain;
 
-  @Schema(name = "수정 관련 안내")
+  @Schema(description = "수정 관련 안내")
   private String editInfo;
 
-  @Schema(name = "서비스 제목")
+  @Schema(description = "서비스 제목")
   private boolean sericeStatus;
-  @Schema(name = "작업 전 음원")
+  @Schema(description = "작업 전 음원")
   private String beforeJobMusic;
-  @Schema(name = "작업 후 음원")
+  @Schema(description = "작업 후 음원")
   private String afterJobMusic;
-  @Schema(name = "장르")
+  @Schema(description = "장르")
   private MixMasteringGenre genre;
-  @Schema(name = "생성일자")
+  @Schema(description = "생성일자")
   private LocalDateTime createdAt;
   private CommonUserDto user;
-  @Schema(name = "이미지들")
+  @Schema(description = "이미지들")
   private List<MixMasteringFileDto> mixMasteringFile;
 
 
@@ -51,7 +51,7 @@ public class MixMasteringDto {
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUser());
-    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFile().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
+    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
   }
 
 }

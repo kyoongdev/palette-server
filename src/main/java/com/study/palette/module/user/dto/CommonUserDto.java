@@ -8,15 +8,15 @@ import lombok.Data;
 // user relation에 사용하는 dto(기본 유저)
 @Data
 public class CommonUserDto {
-  @Schema(name = "아이디")
+  @Schema(description = "아이디")
   private String id;
-  @Schema(name = "이메일")
+  @Schema(description = "이메일")
   private String email;
-  @Schema(name = "이름")
+  @Schema(description = "이름")
   private String name;
-  @Schema(name = "핸드폰 번호")
+  @Schema(description = "핸드폰 번호")
   private String phone;
-  @Schema(name = "프로필 이미지", nullable = true)
+  @Schema(description = "프로필 이미지", nullable = true)
   private String profileImage;
 
   public CommonUserDto(User user) {

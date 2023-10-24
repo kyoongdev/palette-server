@@ -13,6 +13,10 @@ public enum Contact {
     this.type = type;
   }
 
+  public int getContact() {
+    return this.type;
+  }
+
   public static Contact findContact(int type) {
     for (Contact contact : Contact.values()) {
       if (contact.type == type) {
