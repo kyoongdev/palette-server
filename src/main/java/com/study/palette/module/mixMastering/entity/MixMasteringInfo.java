@@ -63,7 +63,7 @@ public class MixMasteringInfo {
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<MixMasteringContact> mixMasteringContacts;
 
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name = "userId")
   @JsonIgnore
   private User user;

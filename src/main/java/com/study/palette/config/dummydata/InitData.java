@@ -154,9 +154,10 @@ public class InitData implements ApplicationRunner {
               .serviceExplain("")
               .editInfo("")
               .serviceStatus(true)
-              .genre(i % 5)
+              .genre((i % 5) + 1)
               .mixMasteringLicenseInfos(mixMasteringLicenseInfos)
               .mixMasteringContacts(mixMasteringContacts)
+              .user(artist)
               .build());
     }
 
