@@ -9,7 +9,9 @@ import com.study.palette.module.filter.entity.FilterInfo;
 import com.study.palette.module.filter.entity.FilterMaster;
 import com.study.palette.module.filter.repository.FilterInfoRepository;
 import com.study.palette.module.filter.repository.FilterMasterRepository;
+import com.study.palette.module.mixMastering.entity.MixMasteringContact;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
+import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
 import com.study.palette.module.user.entity.Role;
 import com.study.palette.module.user.entity.User;
@@ -103,10 +105,62 @@ public class InitData implements ApplicationRunner {
     List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
 
     for (int i = 1; i < 50; i++) {
-//      mixMasteringInfos.add(new MixMasteringInfo(UUID.randomUUID(),"믹스마스터링" + i,"","","","",false,1, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+      List<MixMasteringLicenseInfo> mixMasteringLicenseInfos = new ArrayList<>();
+
+      mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
+              .licenseType(1)
+              .price(10000)
+              .servedType("mp3")
+              .period(0)
+              .draftCount(1)
+              .isAssign(true)
+              .isUseCommercial(true)
+              .isServeOriginFile(false)
+              .isOtherUseApproved(false)
+              .build());
+      mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
+              .licenseType(2)
+              .price(15000)
+              .servedType("mp3")
+              .period(0)
+              .draftCount(1)
+              .isAssign(true)
+              .isUseCommercial(true)
+              .isServeOriginFile(true)
+              .isOtherUseApproved(false)
+              .build());
+      mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
+              .licenseType(3)
+              .price(20000)
+              .servedType("mp3")
+              .period(0)
+              .draftCount(1)
+              .isAssign(true)
+              .isUseCommercial(true)
+              .isServeOriginFile(true)
+              .isOtherUseApproved(true)
+              .build());
+
+      List<MixMasteringContact> mixMasteringContacts = new ArrayList<>();
+
+      mixMasteringContacts.add(MixMasteringContact.builder()
+              .type(1)
+              .content("010-1234-1234")
+              .build());
+      mixMasteringInfos.add(MixMasteringInfo.builder()
+              .serviceName("믹스 마스터링" + Integer.toString(i))
+              .beforeJobMusic("")
+              .afterJobMusic("")
+              .serviceExplain("")
+              .editInfo("")
+              .serviceStatus(true)
+              .genre(i % 5)
+              .mixMasteringLicenseInfos(mixMasteringLicenseInfos)
+              .mixMasteringContacts(mixMasteringContacts)
+              .build());
     }
 
-//    mixMasteringRepository.save()
+    mixMasteringRepository.saveAll(mixMasteringInfos);
 
 
   }
