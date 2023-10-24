@@ -105,7 +105,29 @@ public class InitData implements ApplicationRunner {
     List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
 
     for (int i = 1; i < 50; i++) {
+
+      List<MixMasteringContact> mixMasteringContacts = new ArrayList<>();
       List<MixMasteringLicenseInfo> mixMasteringLicenseInfos = new ArrayList<>();
+
+      MixMasteringInfo mixMasteringInfo = MixMasteringInfo.builder()
+              .serviceName("믹스 마스터링" + Integer.toString(i))
+              .beforeJobMusic("")
+              .afterJobMusic("")
+              .serviceExplain("")
+              .editInfo("")
+              .serviceStatus(true)
+              .genre((i % 5) + 1)
+              .mixMasteringLicenseInfos(mixMasteringLicenseInfos)
+              .mixMasteringContacts(mixMasteringContacts)
+              .user(artist)
+              .build();
+
+      mixMasteringContacts.add(MixMasteringContact.builder()
+              .type(1)
+              .content("010-1234-1234")
+              .mixMasteringInfo(mixMasteringInfo)
+              .build());
+
 
       mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
               .licenseType(1)
@@ -117,6 +139,7 @@ public class InitData implements ApplicationRunner {
               .isUseCommercial(true)
               .isServeOriginFile(false)
               .isOtherUseApproved(false)
+              .mixMasteringInfo(mixMasteringInfo)
               .build());
       mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
               .licenseType(2)
@@ -128,6 +151,7 @@ public class InitData implements ApplicationRunner {
               .isUseCommercial(true)
               .isServeOriginFile(true)
               .isOtherUseApproved(false)
+              .mixMasteringInfo(mixMasteringInfo)
               .build());
       mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
               .licenseType(3)
@@ -139,26 +163,11 @@ public class InitData implements ApplicationRunner {
               .isUseCommercial(true)
               .isServeOriginFile(true)
               .isOtherUseApproved(true)
+              .mixMasteringInfo(mixMasteringInfo)
               .build());
 
-      List<MixMasteringContact> mixMasteringContacts = new ArrayList<>();
 
-      mixMasteringContacts.add(MixMasteringContact.builder()
-              .type(1)
-              .content("010-1234-1234")
-              .build());
-      mixMasteringInfos.add(MixMasteringInfo.builder()
-              .serviceName("믹스 마스터링" + Integer.toString(i))
-              .beforeJobMusic("")
-              .afterJobMusic("")
-              .serviceExplain("")
-              .editInfo("")
-              .serviceStatus(true)
-              .genre((i % 5) + 1)
-              .mixMasteringLicenseInfos(mixMasteringLicenseInfos)
-              .mixMasteringContacts(mixMasteringContacts)
-              .user(artist)
-              .build());
+      mixMasteringInfos.add(mixMasteringInfo);
     }
 
     mixMasteringRepository.saveAll(mixMasteringInfos);

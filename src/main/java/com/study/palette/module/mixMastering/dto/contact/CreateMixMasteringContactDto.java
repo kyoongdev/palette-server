@@ -3,6 +3,7 @@ package com.study.palette.module.mixMastering.dto.contact;
 
 import com.study.palette.common.enums.Contact;
 import com.study.palette.module.mixMastering.entity.MixMasteringContact;
+import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -15,10 +16,11 @@ public class CreateMixMasteringContactDto {
   private String content;
 
 
-  public MixMasteringContact toEntity() {
+  public MixMasteringContact toEntity(MixMasteringInfo mixMastering) {
     return MixMasteringContact.builder()
             .type(this.type.getContact())
             .content(this.content)
+            .mixMasteringInfo(mixMastering)
             .build();
   }
 }

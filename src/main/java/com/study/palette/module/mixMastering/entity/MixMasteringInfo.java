@@ -3,10 +3,7 @@ package com.study.palette.module.mixMastering.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,13 +17,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 public class MixMasteringInfo {
 
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(length = 24)
+  @Column(columnDefinition = "BINARY(16)")
   private UUID id;
   //서비스 이름
   @Column(length = 50)
@@ -54,7 +52,7 @@ public class MixMasteringInfo {
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY)
   private List<MixMasteringReview> mixMasteringReviews;
 
-  @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MixMasteringLicenseInfo> mixMasteringLicenseInfos;
 
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

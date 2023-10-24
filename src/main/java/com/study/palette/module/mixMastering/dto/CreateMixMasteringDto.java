@@ -37,7 +37,7 @@ public class CreateMixMasteringDto {
 
 
   public MixMasteringInfo toEntity() {
-    return MixMasteringInfo.builder()
+    MixMasteringInfo mixMastering = MixMasteringInfo.builder()
             .serviceName(this.serviceName)
             .beforeJobMusic(this.beforeJobMusic)
             .afterJobMusic(this.afterJobMusic)
@@ -45,9 +45,11 @@ public class CreateMixMasteringDto {
             .editInfo(this.editInfo)
             .serviceStatus(this.sericeStatus)
             .genre(this.genre.getGenre())
-            .mixMasteringLicenseInfos(this.licenses.stream().map(CreateMixMasteringLicenseDto::toEntity).toList())
-            .mixMasteringFiles(this.mixMasteringFiles.stream().map(CreateMixMasteringFileDto::toEntity).toList())
-            .mixMasteringContacts(this.contacts.stream().map(CreateMixMasteringContactDto::toEntity).toList())
             .build();
+    mixMastering.setMixMasteringLicenseInfos(this.licenses.stream().map(license -> license.toEntity(mixMastering)).toList());
+    mixMastering.setMixMasteringFiles(this.mixMasteringFiles.stream().map(file -> file.toEntity(mixMastering)).toList());
+    mixMastering.setMixMasteringContacts(this.contacts.stream().map(contact -> contact.toEntity(mixMastering)).toList());
+
+    return mixMastering;
   }
 }

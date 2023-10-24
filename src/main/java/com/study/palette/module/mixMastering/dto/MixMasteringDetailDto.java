@@ -1,6 +1,7 @@
 package com.study.palette.module.mixMastering.dto;
 
 import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
+import com.study.palette.module.mixMastering.dto.contact.MixMasteringContactDto;
 import com.study.palette.module.mixMastering.dto.file.MixMasteringFileDto;
 import com.study.palette.module.mixMastering.dto.license.MixMasteringLicenseDto;
 import com.study.palette.module.mixMastering.dto.review.MixMasteringReviewDto;
@@ -11,7 +12,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class MixMasteringDetailDto {
@@ -42,6 +42,9 @@ public class MixMasteringDetailDto {
   @Schema(description = "이미지들")
   private List<MixMasteringFileDto> mixMasteringFile;
 
+  @Schema(description = "연락처")
+  private List<MixMasteringContactDto> contacts;
+
 
   public MixMasteringDetailDto(MixMasteringInfo mixMasteringInfo) {
     this.id = mixMasteringInfo.getId().toString();
@@ -54,8 +57,9 @@ public class MixMasteringDetailDto {
     this.genre = MixMasteringGenre.findMixMasteringGenre(mixMasteringInfo.getGenre());
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUser());
-    this.reviews = mixMasteringInfo.getMixMasteringReviews().stream().map(MixMasteringReviewDto::new).collect(Collectors.toList());
-    this.mixMasteringLicenseInfos = mixMasteringInfo.getMixMasteringLicenseInfos().stream().map(MixMasteringLicenseDto::new).collect(Collectors.toList());
-    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
+    this.reviews = mixMasteringInfo.getMixMasteringReviews().stream().map(MixMasteringReviewDto::new).toList();
+    this.mixMasteringLicenseInfos = mixMasteringInfo.getMixMasteringLicenseInfos().stream().map(MixMasteringLicenseDto::new).toList();
+    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).toList();
+    this.contacts = mixMasteringInfo.getMixMasteringContacts().stream().map(MixMasteringContactDto::new).toList();
   }
 }

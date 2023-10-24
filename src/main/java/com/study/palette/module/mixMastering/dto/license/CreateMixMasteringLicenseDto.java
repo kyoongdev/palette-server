@@ -2,6 +2,7 @@ package com.study.palette.module.mixMastering.dto.license;
 
 
 import com.study.palette.common.enums.LicenseType;
+import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -35,7 +36,7 @@ public class CreateMixMasteringLicenseDto {
   @Schema(description = "응용 활용 여부")
   private boolean isOtherUseApproved;
 
-  public MixMasteringLicenseInfo toEntity() {
+  public MixMasteringLicenseInfo toEntity(MixMasteringInfo mixMasteringInfo) {
     return MixMasteringLicenseInfo.builder()
             .licenseType(this.licenseType.getLicenseType())
             .price(this.price)
@@ -47,6 +48,7 @@ public class CreateMixMasteringLicenseDto {
             .isUseCommercial(this.isUseCommercial)
             .isServeOriginFile(this.isServeOriginFile)
             .isOtherUseApproved(this.isOtherUseApproved)
+            .mixMasteringInfo(mixMasteringInfo)
             .build();
 
   }

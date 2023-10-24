@@ -9,6 +9,7 @@ import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.exception.MixMasteringErrorCode;
 import com.study.palette.module.mixMastering.exception.MixMasteringException;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class MixMasteringService {
 
   private final MixMasteringRepository mixMasteringRepository;
@@ -43,11 +46,12 @@ public class MixMasteringService {
 
   @Transactional(readOnly = true)
   public MixMasteringDetailDto getMixMastering(String id) {
-    Optional<MixMasteringInfo> mixMasteringInfo = mixMasteringRepository.findById(id);
-
-    if (!mixMasteringInfo.isPresent()) {
+    Optional<MixMasteringInfo> mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id));
+    if (mixMasteringInfo.isEmpty()) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND);
     }
+    log.info("*MixMastering* : " + mixMasteringInfo.get().getMixMasteringLicenseInfos());
+
 
     return new MixMasteringDetailDto(mixMasteringInfo.get());
   }

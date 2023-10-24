@@ -23,7 +23,7 @@ public class MixMasteringReview {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(length = 24)
+  @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
   @Column(precision = 1, scale = 1)
