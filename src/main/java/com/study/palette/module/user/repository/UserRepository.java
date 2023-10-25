@@ -1,5 +1,6 @@
 package com.study.palette.module.user.repository;
 
+import com.study.palette.module.user.entity.SocialType;
 import com.study.palette.module.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAll(Pageable pageable);
 
     void deleteById(UUID id);
+
+    Optional<User> findBySocialTypeAndSocialId(SocialType socialType, String id);
 }

@@ -18,6 +18,10 @@ import com.study.palette.module.filter.repository.FilterInfoRepository;
 import com.study.palette.module.filter.repository.FilterMasterRepository;
 import com.study.palette.module.serviceProgress.entity.ServiceProgressInfo;
 import com.study.palette.module.serviceProgress.repository.ServiceProgressInfoRepository;
+import com.study.palette.module.mixMastering.entity.MixMasteringContact;
+import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
+import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
+import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
 import com.study.palette.module.user.entity.Role;
 import com.study.palette.module.user.entity.User;
 import com.study.palette.module.user.repository.UserRepository;
@@ -45,16 +49,29 @@ public class InitData implements ApplicationRunner {
     private final AlbumArtService albumArtService;
     private final AlbumArtRepository albumArtRepository;
     private final ServiceProgressInfoRepository serviceProgressInfoRepository;
+  private final FilterMasterRepository filterMasterRepository;
+  private final FilterInfoRepository filterInfoRepository;
 
-    /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
+  private final ArtistRepository artistRepository;
+
+  private final UserRepository userRepository;
+
+  private final PasswordEncoder passwordEncoder;
+  private final MixMasteringRepository mixMasteringRepository;
+
+
+  /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
+  @Override
+  public void run(ApplicationArguments args) throws Exception {
 
         /* 연관관계 확인 후 save */
         FilterMaster filterMaster = new FilterMaster(1, "아티스트", true, LocalDate.now(), "234234");
         filterMasterRepository.save(filterMaster);
         filterMaster = new FilterMaster(2, "앨범아트 판매유형", true, LocalDate.now(), "234234");
         filterMasterRepository.save(filterMaster);
+    /* 연관관계 확인 후 save */
+    FilterMaster filterMaster = new FilterMaster(1, "아티스트", true, LocalDate.now(), "234234");
+    filterMasterRepository.save(filterMaster);
 
         List<FilterInfo> filterInfoList = new ArrayList<>();
 
@@ -80,29 +97,32 @@ public class InitData implements ApplicationRunner {
 
         Optional<User> findUser = userRepository.findByEmail("test@test");
 
-        if (!findUser.isPresent()) {
+        if(!findUser.isPresent()) {
 
             User newUser = userRepository.save(
-                    User.builder()
-                            .role(Role.MUSICIAN)
-                            .email("test@test")
-                            .password(passwordEncoder.encode("test1234"))
-                            .name("홍길동")
-                            .build());
+                User.builder()
+                        .role(Role.MUSICIAN)
+                        .email("test@test")
+                        .password(passwordEncoder.encode("test1234"))
+                        .name("홍길동")
+                        .build());
 
-            /* Artist 관련 클래스 예시 */
-            ArtistFile artistFile = new ArtistFile();
+      /* Artist 관련 클래스 예시 */
+      ArtistFile artistFile = new ArtistFile();
 
-            ArtistLicenseInfo artistLicenseInfo = new ArtistLicenseInfo();
+      ArtistLicenseInfo artistLicenseInfo = new ArtistLicenseInfo();
 
-            ArtistReview artistReview = new ArtistReview();
+      ArtistReview artistReview = new ArtistReview();
 
-            ArtistInfo artistInfo = new ArtistInfo();
-            artistInfo.setArtistFile(artistFile);
-            artistInfo.setArtistLicenseInfo(artistLicenseInfo);
-            artistInfo.setArtistReview(artistReview);
-            artistInfo.setUser(newUser);
+      ArtistInfo artistInfo = new ArtistInfo();
+      artistInfo.setArtistFile(artistFile);
+      artistInfo.setArtistLicenseInfo(artistLicenseInfo);
+      artistInfo.setArtistReview(artistReview);
+      artistInfo.setUser(newUser);
 
+      /* 연관관계 확인 후 save*/
+      artistRepository.save(artistInfo);
+    }
             /* 연관관계 확인 후 save*/
             artistRepository.save(artistInfo);
 
@@ -180,4 +200,80 @@ public class InitData implements ApplicationRunner {
         }
 
     }
+
+    User artist = user.get();
+
+
+    List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
+
+    for (int i = 1; i < 50; i++) {
+
+      List<MixMasteringContact> mixMasteringContacts = new ArrayList<>();
+      List<MixMasteringLicenseInfo> mixMasteringLicenseInfos = new ArrayList<>();
+
+      MixMasteringInfo mixMasteringInfo = MixMasteringInfo.builder()
+              .serviceName("믹스 마스터링" + Integer.toString(i))
+              .beforeJobMusic("")
+              .afterJobMusic("")
+              .serviceExplain("")
+              .editInfo("")
+              .serviceStatus(true)
+              .genre((i % 5) + 1)
+              .mixMasteringLicenseInfos(mixMasteringLicenseInfos)
+              .mixMasteringContacts(mixMasteringContacts)
+              .user(artist)
+              .build();
+
+      mixMasteringContacts.add(MixMasteringContact.builder()
+              .type(1)
+              .content("010-1234-1234")
+              .mixMasteringInfo(mixMasteringInfo)
+              .build());
+
+
+      mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
+              .licenseType(1)
+              .price(10000)
+              .servedType("mp3")
+              .period(0)
+              .draftCount(1)
+              .isAssign(true)
+              .isUseCommercial(true)
+              .isServeOriginFile(false)
+              .isOtherUseApproved(false)
+              .mixMasteringInfo(mixMasteringInfo)
+              .build());
+      mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
+              .licenseType(2)
+              .price(15000)
+              .servedType("mp3")
+              .period(0)
+              .draftCount(1)
+              .isAssign(true)
+              .isUseCommercial(true)
+              .isServeOriginFile(true)
+              .isOtherUseApproved(false)
+              .mixMasteringInfo(mixMasteringInfo)
+              .build());
+      mixMasteringLicenseInfos.add(MixMasteringLicenseInfo.builder()
+              .licenseType(3)
+              .price(20000)
+              .servedType("mp3")
+              .period(0)
+              .draftCount(1)
+              .isAssign(true)
+              .isUseCommercial(true)
+              .isServeOriginFile(true)
+              .isOtherUseApproved(true)
+              .mixMasteringInfo(mixMasteringInfo)
+              .build());
+
+
+      mixMasteringInfos.add(mixMasteringInfo);
+    }
+
+    mixMasteringRepository.saveAll(mixMasteringInfos);
+
+
+  }
 }

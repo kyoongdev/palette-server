@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -16,42 +19,39 @@ import java.time.LocalDate;
 @Builder
 public class MixMasteringFile {
 
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
-    @Column(length = 256)
-    private String originFileName;
+  @Column(length = 256)
+  private String originFileName;
 
-    @Column(length = 256)
-    private String uploadFileName;
+  @Column(length = 256)
+  private String uploadFileName;
 
-    private int uploadFileSize;
+  private int uploadFileSize;
 
-    @Column(length = 256)
-    private String uploadFilePath;
+  @Column(length = 256)
+  private String url;
 
-    private int fileType;
 
-    @Column(length = 24)
-    private String targetId;
+  private boolean isThumbnail;
 
-    @Column(length = 4)
-    private String suffix;
 
-    private boolean isUse;
+  @Column(length = 4)
+  private String suffix;
 
-    private LocalDate createdAt;
 
-    @Column(length = 24)
-    private String userId;
+  @CreationTimestamp
+  @CreatedDate
+  private LocalDate createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "mixMasteringInfoId")
-    private MixMasteringInfo mixMasteringInfo;
 
+  @ManyToOne
+  @JoinColumn(name = "mixMasteringInfoId")
+  private MixMasteringInfo mixMasteringInfo;
 
 
 }
