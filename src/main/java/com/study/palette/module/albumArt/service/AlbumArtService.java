@@ -68,20 +68,7 @@ public class AlbumArtService {
     /* AlbumArt 등록*/
     @Transactional
     public AlbumArtCreateResponseDto createAlbumArt(AlbumArtCreateRequestDto albumArtCreateRequestDto, User user) {
-        AlbumArtInfo albumArtInfo = albumArtCreateRequestDto.toEntity(user);
-
-        //TODO 파일 구현 후 추가
-//        List<AlbumArtFile> files = albumArtCreateRequestDto.getAlbumArtFiles().stream()
-//                .map(file -> AlbumArtFile.from(file, albumArtInfo))
-//                .toList();
-        List<AlbumArtLicenseInfo> licenses = albumArtCreateRequestDto.getAlbumArtLicenseInfo().stream()
-                .map(license -> AlbumArtLicenseInfo.from(license, albumArtInfo))
-                .toList();
-
-        albumArtInfo.setAlbumArtLicenseInfo(licenses);
-//        albumArtInfo.setAlbumArtFile(files);
-
-        return new AlbumArtCreateResponseDto(albumArtRepository.save(albumArtInfo));
+        return new AlbumArtCreateResponseDto(albumArtRepository.save(albumArtCreateRequestDto.toEntity(user)));
     }
 
     /* AlbumArt 수정*/
