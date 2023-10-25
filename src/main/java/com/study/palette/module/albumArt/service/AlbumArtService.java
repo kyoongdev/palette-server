@@ -62,17 +62,7 @@ public class AlbumArtService {
     public AlbumArtDetailResponseDto getAlbumArtWithDto(String id) {
         AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
-
-        List<AlbumArtLicenseInfoWithIdDto> licenses = albumArtInfo.getAlbumArtLicenseInfo().stream()
-                .map(license -> modelMapper.map(license, AlbumArtLicenseInfoWithIdDto.class)).toList();
-
-//        List<AlbumArtFileResponseDto> albumArtFiles = albumArtInfo.getAlbumArtFile().stream()
-//                .map(data -> modelMapper.map(data, AlbumArtFileResponseDto.class)).toList();
-
-        return new AlbumArtDetailResponseDto(
-                albumArtInfo,
-//                albumArtFiles,
-                licenses);
+        return new AlbumArtDetailResponseDto(albumArtInfo);
     }
 
     /* AlbumArt 등록*/

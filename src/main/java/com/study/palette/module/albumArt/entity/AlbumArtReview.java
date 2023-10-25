@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -24,7 +25,7 @@ public class AlbumArtReview {
     @Column(length = 24)
     private String id;
 
-    private int rating;
+    private BigDecimal rating;
 
     @Column(length = 50)
     private String review;
@@ -40,16 +41,6 @@ public class AlbumArtReview {
     @JoinColumn(name = "albumArtInfoId")
     @JsonIgnore
     private AlbumArtInfo albumArtInfo;
-
-    public static AlbumArtReview from(AlbumArtReviewCreateRequestDto albumArtReviewCreateDto, AlbumArtInfo albumArtInfo) {
-        return builder()
-                .rating(albumArtReviewCreateDto.getRating())
-                .review(albumArtReviewCreateDto.getReview())
-                .createdAt(albumArtReviewCreateDto.getCreatedAt())
-                .user(albumArtInfo.getUser())
-                .albumArtInfo(albumArtInfo)
-                .build();
-    }
 
     public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
         this.albumArtInfo = albumArtInfo;

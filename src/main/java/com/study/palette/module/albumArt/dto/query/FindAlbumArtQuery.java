@@ -2,7 +2,7 @@ package com.study.palette.module.albumArt.dto.query;
 
 
 import com.querydsl.core.types.OrderSpecifier;
-import com.study.palette.common.constants.CustomSort;
+import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.exception.CustomException;
 import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;

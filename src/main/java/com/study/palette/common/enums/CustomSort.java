@@ -1,4 +1,4 @@
-package com.study.palette.common.constants;
+package com.study.palette.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

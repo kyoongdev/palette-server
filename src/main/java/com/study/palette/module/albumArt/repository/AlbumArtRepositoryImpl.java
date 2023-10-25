@@ -1,17 +1,11 @@
 package com.study.palette.module.albumArt.repository;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAQueryMixin;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.study.palette.common.constants.CustomSort;
-import com.study.palette.common.constants.ServiceType;
-import com.study.palette.common.exception.CustomException;
+import com.study.palette.common.enums.albumArt.AlbumArtServiceType;
 import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.entity.*;
-import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
 import com.study.palette.module.serviceProgress.entity.QServiceProgressInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,7 +46,7 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
                 .leftJoin(serviceProgressInfo)
                 .on(albumArtInfo.id.eq(serviceProgressInfo.serviceId)
                         .and(serviceProgressInfo.isComplete.isTrue()
-                                .and(serviceProgressInfo.serviceType.eq(ServiceType.ALBUM_ART))))
+                                .and(serviceProgressInfo.serviceType.eq(AlbumArtServiceType.ALBUM_ART))))
                 .leftJoin(albumArtFile)
                 .on(albumArtInfo.id.eq(albumArtFile.albumArt.id)
                         .and(albumArtFile.isThumbnail.isTrue()))
@@ -72,10 +66,4 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
 
         return new PageImpl<>(result, pageable, result.size());
     }
-
-//    @Override
-//    public Page<AlbumArtResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable) {
-//
-//        return null;
-//    }
 }

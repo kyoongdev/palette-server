@@ -1,5 +1,6 @@
 package com.study.palette.module.albumArt.dto.license;
 
+import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,18 @@ public class AlbumArtLicenseInfoWithIdDto {
     private boolean isUseCommercial;
     private boolean isServeOriginFile;
     private boolean isOtherUseApproved;
+
+    public AlbumArtLicenseInfoWithIdDto(AlbumArtLicenseInfo albumArtLicenseInfo) {
+        this.id = albumArtLicenseInfo.getId().toString();
+        this.licenseType = albumArtLicenseInfo.getLicenseType();
+        this.price = albumArtLicenseInfo.getPrice();
+        this.servedFile = albumArtLicenseInfo.getServedFile();
+        this.updateCount = albumArtLicenseInfo.getUpdateCount();
+        this.period = albumArtLicenseInfo.getPeriod();
+        this.draftCount = albumArtLicenseInfo.getDraftCount();
+        this.isAssign = albumArtLicenseInfo.isAssign();
+        this.isUseCommercial = albumArtLicenseInfo.isUseCommercial();
+        this.isServeOriginFile = albumArtLicenseInfo.isServeOriginFile();
+        this.isOtherUseApproved = albumArtLicenseInfo.isOtherUseApproved();
+    }
 }
