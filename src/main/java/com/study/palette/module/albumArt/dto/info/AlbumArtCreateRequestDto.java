@@ -2,6 +2,7 @@ package com.study.palette.module.albumArt.dto.info;
 
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
+import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,15 +32,19 @@ public class AlbumArtCreateRequestDto {
     public boolean serviceStatus;
 
     public AlbumArtInfo toEntity(User user) {
-        return AlbumArtInfo.builder()
+        AlbumArtInfo albumArtInfo = AlbumArtInfo.builder()
                 .serviceName(this.getServiceName())
                 .serviceExplain(this.getServiceExplain())
                 .serviceStatus(this.isServiceStatus())
                 .salesType(this.getSalesType())
                 .editInfo(this.getEditInfo())
                 .user(user)
-                .albumArtLicenseInfo(new ArrayList<>())
-//                .albumArtFile(new ArrayList<>()) //TODO 파일 구현 후 추가
                 .build();
+
+        albumArtInfo.setAlbumArtLicenseInfo(this.getAlbumArtLicenseInfo().stream()
+                .map(dto -> AlbumArtLicenseInfo.from(dto, albumArtInfo))
+                .toList());
+
+        return albumArtInfo;
     }
 }
