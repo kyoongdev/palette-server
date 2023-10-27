@@ -53,38 +53,25 @@ public class RecordingService {
     @Transactional(readOnly = true)
     public RecordingDetailResponseDto getRecordingWithDto(String id) {
         RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
+                .orElseThrow(() -> new RecordingException(RecordingErrorCode.ALBUM_ART_NOT_FOUND));
         return new RecordingDetailResponseDto(recordingInfo);
     }
 
     /* Recording 등록*/
     @Transactional
     public RecordingCreateResponseDto createRecording(RecordingCreateRequestDto recordingCreateRequestDto, User user) {
-        RecordingInfo recordingInfo = recordingCreateRequestDto.toEntity(user);
-
-        //TODO 파일 구현 후 추가
-//        List<RecordingFile> files = recordingCreateRequestDto.getRecordingFiles().stream()
-//                .map(file -> RecordingFile.from(file, recordingInfo))
-//                .toList();
-        List<RecordingLicenseInfo> licenses = recordingCreateRequestDto.getRecordingLicenseInfo().stream()
-                .map(license -> RecordingLicenseInfo.from(license, recordingInfo))
-                .toList();
-
-        recordingInfo.setRecordingLicenseInfo(licenses);
-//        recordingInfo.setRecordingFile(files);
-
-        return new RecordingCreateResponseDto(recordingRepository.save(recordingInfo));
+        return new RecordingCreateResponseDto(recordingRepository.save(recordingCreateRequestDto.toEntity(user)));
     }
 
     /* Recording 수정*/
     @Transactional
     public void updateRecording(String id, RecordingUpdateReqeustDto recordingUpdateReqeustDto, User user) {
         RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
+                .orElseThrow(() -> new RecordingException(RecordingErrorCode.ALBUM_ART_NOT_FOUND));
 
         //본인이 작성한 글인지 체크
         if (!recordingInfo.getUser().getId().equals(user.getId())) {
-            throw new RecordingException(RecordingErrorCode.RECORDING_NOT_YOURS);
+            throw new RecordingException(RecordingErrorCode.ALBUM_ART_NOT_YOURS);
         }
 
         PaletteUtils.myCopyProperties(recordingUpdateReqeustDto, recordingInfo);
@@ -109,7 +96,7 @@ public class RecordingService {
     @Transactional
     public void deleteRecording(String id) {
         RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
+                .orElseThrow(() -> new RecordingException(RecordingErrorCode.ALBUM_ART_NOT_FOUND));
         recordingRepository.delete(recordingInfo);
     }
 }
