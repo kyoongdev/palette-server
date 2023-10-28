@@ -1,4 +1,4 @@
-package com.study.palette.module.user;
+package com.study.palette.module.user.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -11,6 +11,8 @@ import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDt
 import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateReqeustDto;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
+import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
+import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.user.entity.User;
 import org.modelmapper.ModelMapper;
@@ -39,9 +41,15 @@ public class AlbumArtService {
     @Transactional(readOnly = true)
     public PaginationDto<AlbumArtResponseDto> getAlbumArts(Pageable pageable) {
         Long count = albumArtRepository.count();
+
+        if (count == 0) {
+            return PaginationDto.of(new PagingDto(pageable, count), List.of());
+        }
+
         List<AlbumArtResponseDto> artists = albumArtRepository.findAll(pageable).stream()
                 .map(AlbumArtResponseDto::new).collect(Collectors.toList());
         PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count), artists);
+
         return row;
     }
 
@@ -49,20 +57,16 @@ public class AlbumArtService {
     @Transactional(readOnly = true)
     public AlbumArtDetailResponseDto getAlbumArtWithDto(String id) {
         AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new IllegalArgumentException("해당 앨범아트가 없습니다. id=" + id));
+                .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
         List<AlbumArtLicenseInfoWithIdDto> licenses = albumArtInfo.getAlbumArtLicenseInfo().stream()
                 .map(license -> modelMapper.map(license, AlbumArtLicenseInfoWithIdDto.class)).toList();
-
-//        List<AlbumArtReviewResponseDto> albumArtReviews = albumArtInfo.getAlbumArtReview().stream()
-//                .map(review -> modelMapper.map(review, AlbumArtReviewResponseDto.class)).toList();
 
 //        List<AlbumArtFileResponseDto> albumArtFiles = albumArtInfo.getAlbumArtFile().stream()
 //                .map(data -> modelMapper.map(data, AlbumArtFileResponseDto.class)).toList();
 
         return new AlbumArtDetailResponseDto(
                 albumArtInfo,
-//                albumArtReviews,
 //                albumArtFiles,
                 licenses);
     }
@@ -88,8 +92,14 @@ public class AlbumArtService {
 
     /* AlbumArt 수정*/
     @Transactional
-    public void updateAlbumArt(String id, AlbumArtUpdateReqeustDto albumArtUpdateReqeustDto) {
-        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id)).orElseThrow(() -> new IllegalArgumentException("해당 앨범아트가 없습니다. id=" + id));
+    public void updateAlbumArt(String id, AlbumArtUpdateReqeustDto albumArtUpdateReqeustDto, User user) {
+        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+
+        //본인이 작성한 글인지 체크
+        if (!albumArtInfo.getUser().getId().equals(user.getId())) {
+            throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
+        }
 
         PaletteUtils.myCopyProperties(albumArtUpdateReqeustDto, albumArtInfo);
 
@@ -112,7 +122,8 @@ public class AlbumArtService {
     /* AlbumArt 삭제*/
     @Transactional
     public void deleteAlbumArt(String id) {
-        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id)).orElseThrow(() -> new IllegalArgumentException("해당 앨범아트가 없습니다. id=" + id));
+        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
         albumArtRepository.delete(albumArtInfo);
     }
 }

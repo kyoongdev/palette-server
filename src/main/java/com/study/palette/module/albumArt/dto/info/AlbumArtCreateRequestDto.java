@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +20,10 @@ public class AlbumArtCreateRequestDto {
     public String serviceName;
     @NotBlank(message = "서비스 설명을 입력해주세요.")
     public String serviceExplain;
-    @NotBlank(message = "판매 유형을 입력해주세요.")
     public int salesType;
     @NotBlank(message = "수정관련 안내를 입력해주세요.")
     public String editInfo;
-    @NotBlank(message = "라이센스 정보를 입력해주세요.")
+    @NotNull(message = "라이센스 정보를 입력해주세요.")
     public List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseInfo = new ArrayList<>();
 
     //TODO 파일 구현 후 추가
