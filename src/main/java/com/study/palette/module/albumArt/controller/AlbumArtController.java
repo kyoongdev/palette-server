@@ -3,10 +3,10 @@ package com.study.palette.module.albumArt.controller;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.albumArt.dto.info.*;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.user.annotation.GetUserInfo;
 import com.study.palette.module.user.dto.MyInfoResponseDto;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -75,7 +74,6 @@ public class AlbumArtController {
     }
 
     //앨범아트 수정
-    //TODO: ROLE_MUSICIAN만 가능하게 + 본인의 앨범아트만 수정
     @Operation(summary = "앨범아트 수정", description = "앨범아트 수정 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtCreateRequestDto.class))),
@@ -88,8 +86,20 @@ public class AlbumArtController {
         albumArtService.updateAlbumArt(id, albumArtCreateRequestDto, myInfoResponseDto.getUser());
     }
 
+    //구매의뢰하기
+    @Operation(summary = "앨범아트 구매의뢰", description = "앨범아트 구매의뢰 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "구매의뢰 성공", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Bad Request")
+    })
+    @PostMapping("/{id}/request")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
+    public void createAlbumArtRequest(@PathVariable String id, @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+        albumArtService.createAlbumArtRequest(id, myInfoResponseDto.getUser());
+    }
+
     //앨범아트 삭제
-    //TODO: ROLE_MUSICIAN만 가능하게 + 본인의 앨범아트만 삭제
     @Operation(summary = "앨범아트 삭제", description = "앨범아트 삭제 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtCreateRequestDto.class))),
@@ -97,7 +107,7 @@ public class AlbumArtController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAlbumArt(@PathVariable String id) {
-        albumArtService.deleteAlbumArt(id);
+    public void deleteAlbumArt(@PathVariable String id, @Parameter(hidden = false) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+        albumArtService.deleteAlbumArt(id, myInfoResponseDto.getUser());
     }
 }
