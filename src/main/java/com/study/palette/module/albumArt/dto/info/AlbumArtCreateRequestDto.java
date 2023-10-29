@@ -1,6 +1,8 @@
 package com.study.palette.module.albumArt.dto.info;
 
+import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
+import com.study.palette.module.albumArt.entity.AlbumArtContact;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.user.entity.User;
@@ -26,6 +28,8 @@ public class AlbumArtCreateRequestDto {
     public String editInfo;
     @NotNull(message = "라이센스 정보를 입력해주세요.")
     public List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseInfo = new ArrayList<>();
+    @NotNull(message = "연락수단을 하나이상 기재해 주세요.")
+    public List<AlbumArtContactCreateDto> albumArtContact = new ArrayList<>();
 
     //TODO 파일 구현 후 추가
 //    public List<MultipartFile> albumArtFiles = new ArrayList<>();
@@ -43,6 +47,10 @@ public class AlbumArtCreateRequestDto {
 
         albumArtInfo.setAlbumArtLicenseInfo(this.getAlbumArtLicenseInfo().stream()
                 .map(dto -> AlbumArtLicenseInfo.from(dto, albumArtInfo))
+                .toList());
+
+        albumArtInfo.setAlbumArtContact(this.getAlbumArtContact().stream()
+                .map(dto -> AlbumArtContact.from(dto, albumArtInfo))
                 .toList());
 
         return albumArtInfo;
