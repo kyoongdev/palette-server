@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -49,7 +50,7 @@ public class AlbumArtFile {
 
     private boolean isThumbnail;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -73,7 +74,7 @@ public class AlbumArtFile {
         this.suffix = albumArtFile.getContentType();
         this.isUse = true;
         this.isThumbnail = false;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
 
         if (albumArtInfo != null) {
             setAlbumArt(albumArtInfo);

@@ -1,10 +1,9 @@
 package com.study.palette.module.albumArt.dto.file;
 
 import com.study.palette.module.albumArt.entity.AlbumArtFile;
-import com.study.palette.module.mixMastering.entity.MixMasteringFile;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class AlbumArtFileResponseDto {
@@ -14,7 +13,7 @@ public class AlbumArtFileResponseDto {
     private int uploadfileSize;
     private String suffix;
     private boolean isThumbnail;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     public AlbumArtFileResponseDto(AlbumArtFile albumArtFile) {
         this.id = albumArtFile.getId().toString();

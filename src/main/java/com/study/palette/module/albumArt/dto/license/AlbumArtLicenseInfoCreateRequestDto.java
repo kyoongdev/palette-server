@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +15,7 @@ public class AlbumArtLicenseInfoCreateRequestDto {
     private int price;
     private String servedFile;
     private int updateCount;
-    private LocalDate period;
+    private LocalDateTime period;
     private int draftCount;
     private boolean isAssign;
     private boolean isUseCommercial;
