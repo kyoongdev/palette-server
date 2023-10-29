@@ -5,8 +5,9 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.exception.CustomException;
+import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
+import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
 import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
-import com.study.palette.module.serviceProgress.entity.QServiceProgressInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class FindAlbumArtQuery extends PageDto {
         판매유형
         전체, 사진편집, 일러스트, 그래픽아트, 그외 장르
      */
-    private String saleType;
+    private int saleType;
 
     /*
     인기순 = 매출액 순(매출액이 같은 경우 판매량 순)
@@ -34,25 +35,18 @@ public class FindAlbumArtQuery extends PageDto {
 
     신규등록 순 = 판매글 등록이 완료된 최신순
 */
-    @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW", "POPULAR", "RECOMMEND", "SCORE"})
+    @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW", "POPULAR"})
     private CustomSort sort;
 
     public OrderSpecifier<?>[] getSort() {
-        QServiceProgressInfo q = QServiceProgressInfo.serviceProgressInfo;
-
         if (this.sort == null) {
             throw new CustomException(AlbumArtErrorCode.ALBUM_ART_NOT_SORT);
         }
 
         if (this.sort == CustomSort.POPULAR) {
-            return new OrderSpecifier[]{q.price.sum().desc()};
-        } else if (this.sort == CustomSort.RECOMMEND) {
-            return new OrderSpecifier[]{q.id.count().desc(), q.price.sum().desc()};
-        } else if (this.sort == CustomSort.SCORE) {
-//            return new OrderSpecifier[]{}; TODO review 구현후 테스트
-            return null;
+            return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
         } else { // 신규등록
-            return new OrderSpecifier[]{q.createdAt.desc()};
+            return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
         }
     }
 }

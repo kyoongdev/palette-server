@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -16,7 +18,11 @@ import java.time.LocalDate;
 public class FilterInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
+
     private int code;
 
     @Column(length = 40)
@@ -30,15 +36,16 @@ public class FilterInfo {
     private String userId;
 
     @ManyToOne
-    @JoinColumn(name = "filterMasterKey")
-    private FilterMaster key;
+    @JoinColumn(name = "filterMasterId")
+    private FilterMaster filterMaster;
 
     @Builder
-    public FilterInfo(String codeName, boolean isUse, LocalDate createdAt, String userId, FilterMaster key) {
+    public FilterInfo(int code, String codeName, boolean isUse, LocalDate createdAt, String userId, FilterMaster filterMaster) {
+        this.code = code;
         this.codeName = codeName;
         this.isUse = isUse;
         this.createdAt = createdAt;
         this.userId = userId;
-        this.key = key;
+        this.filterMaster = filterMaster;
     }
 }
