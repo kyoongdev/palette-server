@@ -158,8 +158,8 @@ public class InitData implements ApplicationRunner {
             for (int j = 0; j < 5; j++) {
                 AlbumArtContactCreateDtos.add(//앨범아트 라이센스 생성
                         new AlbumArtContactCreateDto(
-                                Contact.findContact(i + 1),
-                                "content" + i
+                                Contact.findContact(j + 1),
+                                "content" + j
                         ));
             }
 
