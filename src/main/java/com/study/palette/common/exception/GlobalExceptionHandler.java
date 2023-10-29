@@ -4,7 +4,6 @@ import com.study.palette.common.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -40,6 +39,13 @@ public class GlobalExceptionHandler {
 //                getUri(), INTERNAL_SERVER_ERROR.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
 
+    //유효성 검사 예외처리 추가 OJH
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    protected ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        return new ResponseEntity(new ErrorDto(HttpStatus.BAD_REQUEST.value(), new Timestamp(System.currentTimeMillis()).toString(),
+                getUri(), ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({ConstraintViolationException.class})
     protected ResponseEntity handleServerException(ConstraintViolationException ex) {
         return new ResponseEntity(new ErrorDto(INTERNAL_SERVER_ERROR.getStatus(), new Timestamp(System.currentTimeMillis()).toString(),
@@ -47,11 +53,5 @@ public class GlobalExceptionHandler {
                 HttpStatus.valueOf(INTERNAL_SERVER_ERROR.getStatus()));
     }
 
-    //유효성 검사 예외처리 추가 OJH
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    protected ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return new ResponseEntity(new ErrorDto(HttpStatus.BAD_REQUEST.value(), new Timestamp(System.currentTimeMillis()).toString(),
-                getUri(), ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
-    }
 
 }
