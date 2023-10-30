@@ -31,7 +31,7 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
         QAlbumArtInfo albumArtInfo = QAlbumArtInfo.albumArtInfo;
         QAlbumArtFile albumArtFile = QAlbumArtFile.albumArtFile;
         QAlbumArtLicenseInfo albumArtLicenseInfo = QAlbumArtLicenseInfo.albumArtLicenseInfo;
-        QServiceProgressInfo serviceProgressInfo = QServiceProgressInfo.serviceProgressInfo;
+        QAlbumArtRequest albumArtRequest = QAlbumArtRequest.albumArtRequest;
 
         List<AlbumArtResponseDto> result = queryFactory
                 .select(Projections.constructor(AlbumArtResponseDto.class,
@@ -41,20 +41,19 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
                         albumArtInfo.user.name.as("userName"),
                         albumArtFile.upoladFilePath.as("fileUrl"),
                         albumArtLicenseInfo.price.as("price"),
-                        serviceProgressInfo.price.sum().as("totalPrice")))
+                        albumArtRequest.id.count().as("requestCount")))
                 .from(albumArtInfo)
-                .leftJoin(serviceProgressInfo)
-                .on(albumArtInfo.id.eq(serviceProgressInfo.serviceId)
-                        .and(serviceProgressInfo.isComplete.isTrue()
-                                .and(serviceProgressInfo.serviceType.eq(AlbumArtServiceType.ALBUM_ART))))
+                .leftJoin(albumArtRequest)
+                .on(albumArtInfo.id.eq(albumArtRequest.albumArtInfo.id))
                 .leftJoin(albumArtFile)
-                .on(albumArtInfo.id.eq(albumArtFile.albumArt.id)
+                .on(albumArtInfo.id.eq(albumArtFile.albumArtInfo.id)
                         .and(albumArtFile.isThumbnail.isTrue()))
                 .leftJoin(albumArtLicenseInfo)
                 .on(albumArtInfo.id.eq(albumArtLicenseInfo.albumArtInfo.id)
                         .and(albumArtLicenseInfo.licenseType.eq(10)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .where(albumArtInfo.salesType.eq(query.getSaleType()))
                 .groupBy(albumArtInfo.id,
                         albumArtInfo.serviceName,
                         albumArtInfo.salesType,

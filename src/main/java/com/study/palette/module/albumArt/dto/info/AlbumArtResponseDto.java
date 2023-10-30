@@ -17,7 +17,7 @@ public class AlbumArtResponseDto {
     private String userName;
     private String fileUrl;
     private int price;
-    private int totalPrice;
+    private long requestCount;
 
     public AlbumArtResponseDto(AlbumArtInfo albumArtInfo) {
         this.id = albumArtInfo.getId().toString();
@@ -28,13 +28,13 @@ public class AlbumArtResponseDto {
 //        this.price = albumArtInfo.getAlbumArtLicenseInfo().get(0).getPrice();
     }
 
-    public AlbumArtResponseDto(UUID id, String serviceName, int salesType, String userName, String fileUrl, int price, int totalPrice) {
+    public AlbumArtResponseDto(UUID id, String serviceName, int salesType, String userName, String fileUrl, int price, long requestCount) {
         this.id = id.toString();
         this.serviceName = serviceName;
         this.salesType = salesType;
         this.userName = userName;
 //        this.fileUrl = fileUrl;
         this.price = price;
-        this.totalPrice = totalPrice;//TODO 추후 삭제 확인용
+        this.requestCount = requestCount;//TODO 추후 삭제 확인용
     }
 }

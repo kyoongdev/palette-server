@@ -1,11 +1,16 @@
 package com.study.palette.config.dummydata;
 
+import com.study.palette.common.enums.Contact;
 import com.study.palette.common.enums.albumArt.AlbumArtServiceType;
+import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
+import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
+import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
+import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
@@ -48,6 +53,7 @@ public class InitData implements ApplicationRunner {
     private final PasswordEncoder passwordEncoder;
     private final AlbumArtService albumArtService;
     private final AlbumArtRepository albumArtRepository;
+    private final AlbumArtRequestRepository albumArtRequestRepository;
     private final ServiceProgressInfoRepository serviceProgressInfoRepository;
     private final MixMasteringRepository mixMasteringRepository;
 
@@ -57,63 +63,72 @@ public class InitData implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         /* 연관관계 확인 후 save */
-        FilterMaster filterMaster = new FilterMaster(1, "아티스트", true, LocalDate.now(), "234234");
-        filterMasterRepository.save(filterMaster);
-        filterMaster = new FilterMaster(2, "앨범아트 판매유형", true, LocalDate.now(), "234234");
-        filterMasterRepository.save(filterMaster);
+        FilterMaster filterMaster1 = FilterMaster.builder()
+                .code(1)
+                .codeName("아티스트")
+                .isUse(true)
+                .createdAt(LocalDate.now())
+                .userId("1234")
+                .build();
+        filterMasterRepository.save(filterMaster1);
+        FilterMaster filterMaster2 = FilterMaster.builder()
+                .code(2)
+                .codeName("앨범아트판매유형")
+                .isUse(true)
+                .createdAt(LocalDate.now())
+                .userId("1234")
+                .build();
+        filterMasterRepository.save(filterMaster2);
 
         List<FilterInfo> filterInfoList = new ArrayList<>();
 
-        new FilterInfo(1, "작사", true, LocalDate.now(), "234234", filterMaster);
-        filterInfoList.add(new FilterInfo(1, "작사", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(2, "피처링", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(3, "가이드 녹음", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(4, "악기 녹음", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(5, "레코드 엔지니어", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(6, "그 외 서비스", true, LocalDate.now(), "234234", filterMaster));
+        new FilterInfo(1, "작사", true, LocalDate.now(), "234234", filterMaster1);
+        filterInfoList.add(new FilterInfo(1, "작사", true, LocalDate.now(), "234234", filterMaster1));
+        filterInfoList.add(new FilterInfo(2, "피처링", true, LocalDate.now(), "234234", filterMaster1));
+        filterInfoList.add(new FilterInfo(3, "가이드 녹음", true, LocalDate.now(), "234234", filterMaster1));
+        filterInfoList.add(new FilterInfo(4, "악기 녹음", true, LocalDate.now(), "234234", filterMaster1));
+        filterInfoList.add(new FilterInfo(5, "레코드 엔지니어", true, LocalDate.now(), "234234", filterMaster1));
+        filterInfoList.add(new FilterInfo(6, "그 외 서비스", true, LocalDate.now(), "234234", filterMaster1));
+
         /*save 메소드 사용해 저장 */
         filterInfoRepository.saveAll(filterInfoList);
 
         filterInfoList = new ArrayList<>();
 
-        filterInfoList.add(new FilterInfo(7, "사진편집", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(8, "일러스트", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(9, "그래픽아트", true, LocalDate.now(), "234234", filterMaster));
-        filterInfoList.add(new FilterInfo(10, "그외장르", true, LocalDate.now(), "234234", filterMaster));
+        filterInfoList.add(new FilterInfo(1, "사진편집", true, LocalDate.now(), "234234", filterMaster2));
+        filterInfoList.add(new FilterInfo(2, "일러스트", true, LocalDate.now(), "234234", filterMaster2));
+        filterInfoList.add(new FilterInfo(3, "그래픽아트", true, LocalDate.now(), "234234", filterMaster2));
+        filterInfoList.add(new FilterInfo(4, "그외장르", true, LocalDate.now(), "234234", filterMaster2));
 
         /*save 메소드 사용해 저장 */
         filterInfoRepository.saveAll(filterInfoList);
 
-        Optional<User> findUser = userRepository.findByEmail("test@test");
+        User newUser = userRepository.save(
+                User.builder()
+                        .role(Role.MUSICIAN)
+                        .email("test@test")
+                        .password(passwordEncoder.encode("test1234"))
+                        .name("홍길동")
+                        .build());
 
-        if (!findUser.isPresent()) {
+        /* Artist 관련 클래스 예시 */
+        ArtistFile artistFile = new ArtistFile();
 
-            User newUser = userRepository.save(
-                    User.builder()
-                            .role(Role.MUSICIAN)
-                            .email("test@test")
-                            .password(passwordEncoder.encode("test1234"))
-                            .name("홍길동")
-                            .build());
+        ArtistLicenseInfo artistLicenseInfo = new ArtistLicenseInfo();
 
-            /* Artist 관련 클래스 예시 */
-            ArtistFile artistFile = new ArtistFile();
+        ArtistReview artistReview = new ArtistReview();
 
-            ArtistLicenseInfo artistLicenseInfo = new ArtistLicenseInfo();
+        ArtistInfo artistInfo = new ArtistInfo();
+        artistInfo.setArtistFile(artistFile);
+        artistInfo.setArtistLicenseInfo(artistLicenseInfo);
+        artistInfo.setArtistReview(artistReview);
+        artistInfo.setUser(newUser);
 
-            ArtistReview artistReview = new ArtistReview();
-
-            ArtistInfo artistInfo = new ArtistInfo();
-            artistInfo.setArtistFile(artistFile);
-            artistInfo.setArtistLicenseInfo(artistLicenseInfo);
-            artistInfo.setArtistReview(artistReview);
-            artistInfo.setUser(newUser);
-
-            /* 연관관계 확인 후 save*/
-            artistRepository.save(artistInfo);
-        }
+        /* 연관관계 확인 후 save*/
+        artistRepository.save(artistInfo);
 
         List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseCreateRequestDtos = new ArrayList<>();
+        List<AlbumArtContactCreateDto> AlbumArtContactCreateDtos = new ArrayList<>();
 
         User newUser2 = userRepository.save(
                 User.builder()
@@ -122,10 +137,10 @@ public class InitData implements ApplicationRunner {
                         .password(passwordEncoder.encode("test1234"))
                         .name("오득춘")
                         .build());
-
+        //앨범아트 더미데이터 생성
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 3; j++) {
-                albumArtLicenseCreateRequestDtos.add(
+                albumArtLicenseCreateRequestDtos.add(//앨범아트 라이센스 생성
                         new AlbumArtLicenseInfoCreateRequestDto(
                                 10,
                                 1000,
@@ -140,12 +155,21 @@ public class InitData implements ApplicationRunner {
                         ));
             }
 
+            for (int j = 0; j < 5; j++) {
+                AlbumArtContactCreateDtos.add(//앨범아트 라이센스 생성
+                        new AlbumArtContactCreateDto(
+                                Contact.findContact(j + 1),
+                                "content" + j
+                        ));
+            }
+
             AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto(
                     "serviceName" + i,
                     "serviceExplain",
-                    10,
+                    2,
                     "editInfo",
                     albumArtLicenseCreateRequestDtos,
+                    AlbumArtContactCreateDtos,
                     true
             );
 
@@ -158,33 +182,28 @@ public class InitData implements ApplicationRunner {
             albumArtLicenseCreateRequestDtos.clear();
         }
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {// 앨범아트 구매의뢰 더미데이터 생성
             Random random = new Random();
             int randomValue = random.nextInt(100000 - 2000) + 2000;
             int randomValue2 = random.nextInt(20 - 1) + 1;
             UUID serviceId = albumArtRepository.findByServiceName("serviceName" + randomValue2).getId();
-            AlbumArtServiceType type = AlbumArtServiceType.ALBUM_ART;
 
-            ServiceProgressInfo serviceProgressInfo = ServiceProgressInfo.builder()
-                    .serviceType(type)
-                    .serviceId(serviceId)
-                    .licenseType(1)
-                    .price(randomValue)
-                    .startDate(LocalDateTime.now())
-                    .dueDate(LocalDateTime.now())
-                    .endDate(LocalDateTime.now())
-                    .workProgress(1)
-                    .isComplete(true)
-                    .completeComment("완료")
-                    .status(true)
-                    .refundComment(null)
-                    .createdAt(LocalDateTime.now())
-                    .serviceProgressFile(null)
+            AlbumArtRequest albumArtRequest = AlbumArtRequest.builder()
+                    .albumArtInfo(albumArtRepository.findById(serviceId).get())
+                    .user(newUser2)
+                    .createAt(LocalDate.now())
                     .build();
 
-            serviceProgressInfoRepository.save(serviceProgressInfo);
+            albumArtRequestRepository.save(albumArtRequest);
         }
-        User artist = findUser.get();
+
+        User newUser3 = userRepository.save(
+                User.builder()
+                        .role(Role.MUSICIAN)
+                        .email("tes11t@test222")
+                        .password(passwordEncoder.encode("test1234"))
+                        .name("용준팍")
+                        .build());
 
         List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
 
@@ -203,7 +222,7 @@ public class InitData implements ApplicationRunner {
                     .genre((i % 5) + 1)
                     .mixMasteringLicenseInfos(mixMasteringLicenseInfos)
                     .mixMasteringContacts(mixMasteringContacts)
-                    .user(artist)
+                    .user(newUser3)
                     .build();
 
             mixMasteringContacts.add(MixMasteringContact.builder()

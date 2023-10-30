@@ -8,13 +8,14 @@ import com.study.palette.module.user.entity.User;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class AlbumArtReviewResponseDto {
     private String id;
     private int rating;
     private String review;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private CommonUserDto user;
 
     public AlbumArtReviewResponseDto(AlbumArtReview albumArtReview) {

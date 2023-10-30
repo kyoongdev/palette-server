@@ -13,20 +13,21 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @Autowired
-    public WebConfig(UserService userService) {
-        this.userService = userService;
-    }
 
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(getUserInfoArgumentResolver());
-    }
+  @Autowired
+  public WebConfig(UserService userService) {
+    this.userService = userService;
+  }
 
-    @Bean
-    public GetUserInfoArgumentResolver getUserInfoArgumentResolver() {
-        return new GetUserInfoArgumentResolver(userService);
-    }
+  @Override
+  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    resolvers.add(getUserInfoArgumentResolver());
+  }
+
+  @Bean
+  public GetUserInfoArgumentResolver getUserInfoArgumentResolver() {
+    return new GetUserInfoArgumentResolver(userService);
+  }
 }

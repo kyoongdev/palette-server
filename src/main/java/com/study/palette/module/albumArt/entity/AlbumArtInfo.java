@@ -58,11 +58,17 @@ public class AlbumArtInfo {
     @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY)
     private List<AlbumArtReview> albumArtReview = new ArrayList<>();
 
-    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AlbumArtLicenseInfo> albumArtLicenseInfo = new ArrayList<>();
+
+    @OneToMany(mappedBy = "albumArtInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<AlbumArtContact> albumArtContact = new ArrayList<>();
 
     public void setAlbumArtLicenseInfo(List<AlbumArtLicenseInfo> albumArtLicenseInfos) {
         this.albumArtLicenseInfo = albumArtLicenseInfos;
     }
 
+    public void setAlbumArtContact(List<AlbumArtContact> albumArtContacts) {
+        this.albumArtContact = albumArtContacts;
+    }
 }

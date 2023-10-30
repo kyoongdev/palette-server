@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -36,7 +37,7 @@ public class AlbumArtLicenseInfo {
 
     private int updateCount;
 
-    private LocalDate period;
+    private LocalDateTime period;
 
     private int draftCount;
 
@@ -48,7 +49,7 @@ public class AlbumArtLicenseInfo {
 
     private boolean isOtherUseApproved;
 
-    private LocalDate createAt;
+    private LocalDateTime createAt;
 
     @ManyToOne
     @JoinColumn(name = "userId")
