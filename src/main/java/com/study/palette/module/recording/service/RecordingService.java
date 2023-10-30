@@ -40,9 +40,7 @@ public class RecordingService {
         }
 
         List<RecordingResponseDto> artists = recordingRepository.findAll(query, pageable)
-                .stream()
-                .map(data -> modelMapper.map(data, RecordingResponseDto.class))
-                .collect(Collectors.toList());
+                .stream().map(data -> modelMapper.map(data, RecordingResponseDto.class)).collect(Collectors.toList());
 
         PaginationDto<RecordingResponseDto> row = PaginationDto.of(new PagingDto(pageable, count), artists);
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public enum Address2 {
+
     //    서울
     JONGNO(1, 1, "종로구"),
     JUNG(1, 2, "중구"),

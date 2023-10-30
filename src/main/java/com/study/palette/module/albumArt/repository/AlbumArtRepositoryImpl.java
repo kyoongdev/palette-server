@@ -6,7 +6,7 @@ import com.study.palette.common.enums.albumArt.AlbumArtServiceType;
 import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.entity.*;
-import com.study.palette.module.serviceProgress.entity.QServiceProgressInfo;
+//import com.study.palette.module.serviceProgress.entity.QServiceProgressInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

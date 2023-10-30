@@ -1,11 +1,11 @@
 package com.study.palette.module.recording.dto.query;
 
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.study.palette.common.dto.PageDto;
-import com.study.palette.common.enums.CustomSort;
+import com.study.palette.common.enums.recording.RecordingSort;
 import com.study.palette.common.exception.CustomException;
-import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
-import com.study.palette.module.serviceProgress.entity.QServiceProgressInfo;
+import com.study.palette.module.recording.entity.QRecordingInfo;
+import com.study.palette.module.recording.exception.RecordingErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FindRecordingQuery extends PageDto {
-    private String saleType;
+    private int saleType;
 
     /*
     인기순 = 매출액 순(매출액이 같은 경우 판매량 순)
@@ -29,25 +29,20 @@ public class FindRecordingQuery extends PageDto {
 
     신규등록 순 = 판매글 등록이 완료된 최신순
 */
-    @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW", "POPULAR", "RECOMMEND", "SCORE"})
-    private CustomSort sort;
+    @Schema(description = "정렬", defaultValue = "ALL", type = "int", allowableValues = {"ALL", "ENGINEERING", "NOT_ENGINEERING"})
+    private RecordingSort sort;
 
-    public OrderSpecifier<?>[] getSort() {
-        QServiceProgressInfo q = QServiceProgressInfo.serviceProgressInfo;
-
+    public BooleanExpression getSort() {
         if (this.sort == null) {
-            throw new CustomException(AlbumArtErrorCode.ALBUM_ART_NOT_SORT);
+            throw new CustomException(RecordingErrorCode.RECORDING_NOT_SORT);
         }
-
-        if (this.sort == CustomSort.POPULAR) {
-            return new OrderSpecifier[]{q.price.sum().desc()};
-        } else if (this.sort == CustomSort.RECOMMEND) {
-            return new OrderSpecifier[]{q.id.count().desc(), q.price.sum().desc()};
-        } else if (this.sort == CustomSort.SCORE) {
-//            return new OrderSpecifier[]{}; TODO review 구현후 테스트
+        if (this.sort == RecordingSort.ALL) {
             return null;
-        } else { // 신규등록
-            return new OrderSpecifier[]{q.createdAt.desc()};
+        } else if (this.sort == RecordingSort.ENGINEERING) {
+            return QRecordingInfo.recordingInfo.isRecordingEngineering.eq(true);
+        } else if (this.sort == RecordingSort.NOT_ENGINEERING) {
+            return QRecordingInfo.recordingInfo.isRecordingEngineering.eq(false);
         }
+        return null;
     }
 }
