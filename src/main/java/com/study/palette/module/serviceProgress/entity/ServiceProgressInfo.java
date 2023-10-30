@@ -1,5 +1,7 @@
 package com.study.palette.module.serviceProgress.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.albumArt.AlbumArtServiceType;
 import com.study.palette.module.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +10,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -22,21 +25,25 @@ public class ServiceProgressInfo {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @Column(length = 50)
-    private String serviceName;
+    private AlbumArtServiceType serviceType; // 인기순 집계를 위해 추가
+
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID serviceId; // service 구분을 위해 추가
 
     private int licenseType;
 
     private int price;
 
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     private int workProgress;
 
@@ -50,15 +57,14 @@ public class ServiceProgressInfo {
     @Column(length = 200)
     private String refundComment;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-    @Column(length = 24)
-    private String userId;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "userId")
+    @JsonIgnore
+    private User user;
 
-    @OneToMany(mappedBy = "serviceProgressInfo", fetch = FetchType.LAZY)
-    private List<ServiceProgressFile> ServiceProgressFile = new ArrayList<>();
-
-
-
+    @OneToMany(mappedBy = "serviceProgressInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<ServiceProgressFile> serviceProgressFile = new ArrayList<>();
 
 }

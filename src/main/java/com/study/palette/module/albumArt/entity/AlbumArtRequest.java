@@ -1,6 +1,7 @@
-package com.study.palette.module.filter.entity;
+package com.study.palette.module.albumArt.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.module.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,24 +17,22 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Builder
-public class FilterMaster {
-
+public class AlbumArtRequest {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private int code;
+    private LocalDate createAt;
 
-    @Column(length = 40)
-    private String codeName;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    @JsonIgnore
+    private User user;
 
-    private boolean isUse;
-
-    private LocalDate createdAt;
-
-    @Column(length = 24)
-    private String userId;
-
+    @ManyToOne
+    @JoinColumn(name = "albumArtInfoId")
+    @JsonIgnore
+    private AlbumArtInfo albumArtInfo;
 }

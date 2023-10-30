@@ -1,8 +1,8 @@
 package com.study.palette.module.user.controller;
 
 import com.study.palette.module.user.annotation.GetUserInfo;
-import com.study.palette.module.user.dto.*;
 import com.study.palette.module.user.service.UserService;
+import com.study.palette.module.user.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
