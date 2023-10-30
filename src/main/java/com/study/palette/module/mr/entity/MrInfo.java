@@ -1,7 +1,6 @@
 package com.study.palette.module.mr.entity;
 
-import com.study.palette.module.user.entity.User;
-import com.study.palette.module.user.entity.UserArtist;
+import com.study.palette.module.musician.entity.UserMusician;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,7 +47,7 @@ public class MrInfo {
 
     @ManyToOne
     @JoinColumn(name = "artistId")
-    private UserArtist userArtist;
+    private UserMusician userMusician;
 
     @OneToMany(mappedBy = "mrInfo", fetch = FetchType.LAZY)
     private List<MrLicenseInfo> mrLicenseInfo = new ArrayList<>();

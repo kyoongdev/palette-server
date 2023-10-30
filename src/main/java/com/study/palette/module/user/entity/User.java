@@ -1,5 +1,6 @@
 package com.study.palette.module.user.entity;
 
+import com.study.palette.module.musician.entity.UserMusician;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ public class User {
   private Role role;
 
   @Enumerated(EnumType.STRING)
-  private SocialType socialType;    //소셜 로그인한 소셜 타입 식별자(Naver, Google)
+  private SocialType socialType;    //소셜 로그인한 소셜 타입 식별자(Naver, Google, Kakao)
 
   private String socialId;          // 로그인한 소셜 타입 식별자(일반 로그인인 경우 null)
 
@@ -87,7 +88,7 @@ public class User {
   }
 
   @Builder
-  public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt, SocialType socialType, String socialId) {
+  public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt, SocialType socialType, String socialId, UserMusician userMusician) {
     this.role = role;
     this.email = email;
     this.password = password;
@@ -96,11 +97,12 @@ public class User {
     this.isAlarmAccept = isAlarmAccept;
     this.socialType = socialType;
     this.socialId = socialId;
+    this.userMusician = userMusician;
   }
 
   @OneToOne
-  @JoinColumn(name = "userId")
-  private UserArtist userArtist;
+  @JoinColumn(name = "userMusician")
+  private UserMusician userMusician;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<UserFile> userFile = new ArrayList<>();
