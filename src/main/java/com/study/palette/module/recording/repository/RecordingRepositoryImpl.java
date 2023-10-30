@@ -7,17 +7,17 @@ import com.study.palette.module.recording.dto.query.FindRecordingQuery;
 import com.study.palette.module.recording.entity.QRecordingFile;
 import com.study.palette.module.recording.entity.QRecordingInfo;
 import com.study.palette.module.recording.entity.QRecordingLicenseInfo;
+import java.util.List;
+import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
 @Repository
 public class RecordingRepositoryImpl implements RecordingCustomRepository {
+
     private final JPAQueryFactory queryFactory;
 
     @Autowired

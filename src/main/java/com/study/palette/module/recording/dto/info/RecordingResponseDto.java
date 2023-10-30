@@ -2,14 +2,14 @@ package com.study.palette.module.recording.dto.info;
 
 
 import com.study.palette.module.recording.entity.RecordingInfo;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecordingResponseDto {
+
     private String id;
     private String serviceName;
     private int salesType;
@@ -27,7 +27,8 @@ public class RecordingResponseDto {
 //        this.price = recordingInfo.getRecordingLicenseInfo().get(0).getPrice();
     }
 
-    public RecordingResponseDto(UUID id, String serviceName, int salesType, String userName, String fileUrl, int price, long requestCount) {
+    public RecordingResponseDto(UUID id, String serviceName, int salesType, String userName,
+            String fileUrl, int price, long requestCount) {
         this.id = id.toString();
         this.serviceName = serviceName;
         this.salesType = salesType;

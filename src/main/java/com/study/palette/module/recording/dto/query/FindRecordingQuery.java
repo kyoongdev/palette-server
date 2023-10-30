@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FindRecordingQuery extends PageDto {
+
     private int saleType;
 
     /*
@@ -28,8 +29,9 @@ public class FindRecordingQuery extends PageDto {
     평점 순 = 서비스 후기 10개 이상인 서비스 중 서비스후기 평점이 가장 좋은 순서(평점이 같은 경우 매출액 순 다음 판매량 순)
 
     신규등록 순 = 판매글 등록이 완료된 최신순
-*/
-    @Schema(description = "정렬", defaultValue = "ALL", type = "int", allowableValues = {"ALL", "ENGINEERING", "NOT_ENGINEERING"})
+  */
+    @Schema(description = "정렬", defaultValue = "ALL", type = "int", allowableValues = {"ALL",
+            "ENGINEERING", "NOT_ENGINEERING"})
     private RecordingSort sort;
 
     public BooleanExpression getSort() {
