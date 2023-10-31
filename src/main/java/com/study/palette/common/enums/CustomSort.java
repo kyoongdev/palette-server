@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum CustomSort {
-    POPULAR("인기순"),
-    NEW("신규등록순");
+  POPULAR("인기순"),
+  NEW("신규등록순");
 
-    private final String name;
+  private final String name;
 }

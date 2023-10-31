@@ -8,7 +8,8 @@ import lombok.Data;
 //TODO: 필터 + 정렬 추가
 @Data
 public class FindUserQuery extends PageDto {
-    private String name;
+
+  private String name;
 
 
 }

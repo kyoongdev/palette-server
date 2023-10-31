@@ -6,7 +6,14 @@ import com.study.palette.module.user.entity.RefreshToken;
 import com.study.palette.module.user.entity.User;
 import com.study.palette.module.user.repository.RefreshTokenRepository;
 import com.study.palette.module.user.repository.UserRepository;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.UUID;
 
 
 @Component
@@ -37,7 +40,8 @@ public class JwtTokenProvider {
   private long refreshExpirationTime;
 
   @Autowired
-  public JwtTokenProvider(UserDetailsServiceImpl userDetailsService, RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+  public JwtTokenProvider(UserDetailsServiceImpl userDetailsService,
+      RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
     this.userDetailsService = userDetailsService;
     this.refreshTokenRepository = refreshTokenRepository;
     this.userRepository = userRepository;
@@ -48,49 +52,48 @@ public class JwtTokenProvider {
    */
   public TokenDto createToken(Authentication authentication) {
     User user = userRepository.findById(UUID.fromString(authentication.getName()))
-            .orElseThrow(() -> {
-              return new RuntimeException("로그인에러");//TODO 추후 에러처리
-            });
+        .orElseThrow(() -> {
+          return new RuntimeException("로그인에러");//TODO 추후 에러처리
+        });
 
     Claims claims = Jwts.claims().setSubject(user.getId().toString());
     Date now = new Date();
     Date expireDate = new Date(now.getTime() + accessExpirationTime);
 
     String accessToken = Jwts.builder()
-            .setClaims(claims)
-            .claim("ROLE", user.getRole())
-            .setIssuedAt(now)
-            .setExpiration(expireDate)
-            .signWith(SignatureAlgorithm.HS256, secretKey)
-            .compact();
+        .setClaims(claims)
+        .claim("ROLE", user.getRole())
+        .setIssuedAt(now)
+        .setExpiration(expireDate)
+        .signWith(SignatureAlgorithm.HS256, secretKey)
+        .compact();
 
     String refreshToken = Jwts.builder()
-            .setClaims(claims)
-            .claim("ROLE", user.getRole())
-            .setIssuedAt(now)
-            .setExpiration(expireDate)
-            .signWith(SignatureAlgorithm.HS256, secretKey)
-            .compact();
+        .setClaims(claims)
+        .claim("ROLE", user.getRole())
+        .setIssuedAt(now)
+        .setExpiration(expireDate)
+        .signWith(SignatureAlgorithm.HS256, secretKey)
+        .compact();
 
     //TODO refresh token 저장 전에 기존 refresh token 삭제
     refreshTokenRepository.deleteByUserId(UUID.fromString(authentication.getName()));
 
     //refresh token 저장
     refreshTokenRepository.save(
-            RefreshToken.builder()
-                    .user(user)
-                    .refreshToken(refreshToken)
-                    .refreshExpirationTime(refreshExpirationTime)
-                    .issuedAt(now)
-                    .build()
+        RefreshToken.builder()
+            .user(user)
+            .refreshToken(refreshToken)
+            .refreshExpirationTime(refreshExpirationTime)
+            .issuedAt(now)
+            .build()
     );
 
     return new TokenDto(accessToken, refreshToken);
   }
 
   /**
-   * Access 토큰을 검증
-   * 검증 완료시 클레임을 반환하는 메서드로 변경
+   * Access 토큰을 검증 검증 완료시 클레임을 반환하는 메서드로 변경
    */
   public Claims validateToken(String token) {
     try {
@@ -129,8 +132,7 @@ public class JwtTokenProvider {
   }
 
   /**
-   * 토큰으로부터 클레임을 만들고, 이를 통해 User 객체 생성해 Authentication 객체 반환
-   * 토큰 검증단게를 뛰어넘고 검증된 토큰의 클레임을 받는 메서드로 변경
+   * 토큰으로부터 클레임을 만들고, 이를 통해 User 객체 생성해 Authentication 객체 반환 토큰 검증단게를 뛰어넘고 검증된 토큰의 클레임을 받는 메서드로 변경
    */
   public Authentication getAuthentication(String subject) throws RuntimeException {
     UserDetails userDetails = userDetailsService.loadUserByUsername(subject);

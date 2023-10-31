@@ -1,10 +1,11 @@
 package com.study.palette.module.user.dto;
 
-import com.study.palette.common.PaletteUtils;
 import com.study.palette.module.user.entity.User;
-import lombok.*;
-
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,9 +14,9 @@ import java.util.UUID;
 @Getter
 public class MyInfoResponseDto {
 
-    User user;
+  User user;
 
-    // TODO 서비스 구현시 추가
+  // TODO 서비스 구현시 추가
 //    Musician musician;
 
 }

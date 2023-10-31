@@ -1,18 +1,20 @@
 package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.albumArt.dto.review.AlbumArtReviewCreateRequestDto;
 import com.study.palette.module.user.entity.User;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -20,30 +22,31 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class AlbumArtReview {
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
 
-    private BigDecimal rating;
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(length = 24)
+  private String id;
 
-    @Column(length = 50)
-    private String review;
+  private BigDecimal rating;
 
-    private LocalDateTime createdAt;
+  @Column(length = 50)
+  private String review;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    @JsonIgnore
-    private User user;
+  private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "albumArtInfoId")
-    @JsonIgnore
-    private AlbumArtInfo albumArtInfo;
+  @ManyToOne
+  @JoinColumn(name = "userId")
+  @JsonIgnore
+  private User user;
 
-    public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
-        this.albumArtInfo = albumArtInfo;
-    }
+  @ManyToOne
+  @JoinColumn(name = "albumArtInfoId")
+  @JsonIgnore
+  private AlbumArtInfo albumArtInfo;
+
+  public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
+    this.albumArtInfo = albumArtInfo;
+  }
 }

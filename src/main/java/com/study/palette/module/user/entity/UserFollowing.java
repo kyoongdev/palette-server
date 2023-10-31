@@ -1,13 +1,17 @@
 package com.study.palette.module.user.entity;
 
+import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
@@ -16,19 +20,19 @@ import java.time.LocalDate;
 @Builder
 public class UserFollowing {
 
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(length = 24)
+  private String id;
 
-    private LocalDate createdAt;
-    @Column(length = 24)
-    private String followingId;
+  private LocalDate createdAt;
+  @Column(length = 24)
+  private String followingId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "userId")
+  private User user;
 
 
 }

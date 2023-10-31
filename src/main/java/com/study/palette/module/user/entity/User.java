@@ -1,18 +1,26 @@
 package com.study.palette.module.user.entity;
 
 import com.study.palette.module.musician.entity.UserMusician;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 
 //TODO: user socialId랑 socialType
@@ -88,7 +96,9 @@ public class User {
   }
 
   @Builder
-  public User(Role role, String email, String password, String name, String phone, boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt, SocialType socialType, String socialId, UserMusician userMusician) {
+  public User(Role role, String email, String password, String name, String phone,
+      boolean isAlarmAccept, int loginFailCount, boolean isLocked, LocalDateTime createdAt,
+      SocialType socialType, String socialId, UserMusician userMusician) {
     this.role = role;
     this.email = email;
     this.password = password;
