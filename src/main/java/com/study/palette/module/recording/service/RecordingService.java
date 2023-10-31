@@ -58,7 +58,7 @@ public class RecordingService {
     @Transactional(readOnly = true)
     public RecordingDetailResponseDto getRecordingWithDto(String id) {
         RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
-            .orElseThrow(() -> new RecordingException(RecordingErrorCode.ALBUM_ART_NOT_FOUND));
+            .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
         return new RecordingDetailResponseDto(recordingInfo);
     }
 

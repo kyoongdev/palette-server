@@ -34,7 +34,6 @@ public class RecordingLicenseInfo {
 
   private int price;
 
-
   private int useTime;
 
   private LocalDate createAt;
