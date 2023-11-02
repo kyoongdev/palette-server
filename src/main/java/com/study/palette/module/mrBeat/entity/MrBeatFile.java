@@ -1,5 +1,6 @@
-package com.study.palette.module.mr.entity;
+package com.study.palette.module.mrBeat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Builder
-public class MrFile {
+public class MrBeatFile {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -49,8 +50,9 @@ public class MrFile {
     private String userId;
 
     @ManyToOne
-    @JoinColumn(name = "mrInfoId")
-    private MrInfo mrInfo;
+    @JoinColumn(name = "mrBeatInfo")
+    @JsonIgnore
+    private MrBeatInfo mrBeatInfo;
 
 
 }
