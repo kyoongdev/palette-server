@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FileUploadDto {
+
   String url;
   String originFileName;
   String uploadFileName;

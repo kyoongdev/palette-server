@@ -1,8 +1,13 @@
 package com.study.palette.module.user.controller;
 
 import com.study.palette.module.user.annotation.GetUserInfo;
+import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.user.dto.UserCreateRequestDto;
+import com.study.palette.module.user.dto.UserEmailDto;
+import com.study.palette.module.user.dto.UserFindEmailDto;
+import com.study.palette.module.user.dto.UserProfileDto;
+import com.study.palette.module.user.dto.UserUpdateDto;
 import com.study.palette.module.user.service.UserService;
-import com.study.palette.module.user.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,13 +20,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "User", description = "유저 API")
 @Log4j2
 public class UserController {
+
   public final UserService userService;
 
   @Autowired
@@ -34,12 +48,13 @@ public class UserController {
    */
   @Operation(summary = "내 정보 조회", description = "내 정보를 조회 합니다. 요청한 유저 권한이 MUSICIAN 일 경우, 음악인 정보도 함께 조회됩니다.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MyInfoResponseDto.class))),
-          @ApiResponse(responseCode = "400", description = "Bad Request")
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MyInfoResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("me")
   @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-  public ResponseEntity<MyInfoResponseDto> getMyInfo(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+  public ResponseEntity<MyInfoResponseDto> getMyInfo(
+      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
     log.info(myInfoResponseDto);
     return ResponseEntity.ok(myInfoResponseDto);
   }
@@ -51,12 +66,13 @@ public class UserController {
    */
   @Operation(summary = "email 조회", description = "이름과 휴대전화 번호로 email을 조회 합니다.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserEmailDto.class))),
-          @ApiResponse(responseCode = "400", description = "Bad Request")
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserEmailDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PostMapping("find-email")
   public UserEmailDto findUserByName(@RequestBody UserFindEmailDto userFindIdDto) {
-    return userService.getUserByNameAndPhoneWithDto(userFindIdDto.getName(), userFindIdDto.getPhone());
+    return userService.getUserByNameAndPhoneWithDto(userFindIdDto.getName(),
+        userFindIdDto.getPhone());
   }
 
   /**
@@ -64,8 +80,8 @@ public class UserController {
    */
   @Operation(summary = "회원 생성", description = "회원 생성 입니다.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "201", description = "생성 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class))),
-          @ApiResponse(responseCode = "400", description = "Bad Request")
+      @ApiResponse(responseCode = "201", description = "생성 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
@@ -78,8 +94,8 @@ public class UserController {
    */
   @Operation(summary = "회원 수정", description = "회원 수정 입니다.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "204", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserUpdateDto.class))),
-          @ApiResponse(responseCode = "400", description = "Bad Request")
+      @ApiResponse(responseCode = "204", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserUpdateDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PatchMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -93,8 +109,8 @@ public class UserController {
    */
   @Operation(summary = "회원 탈퇴 - soft", description = "회원 탈퇴 입니다. 회원 탈퇴 시, 회원 정보는 삭제되지 않고, 삭제된 시간이 기록됩니다.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "204", description = "탈퇴 성공"),
-          @ApiResponse(responseCode = "400", description = "Bad Request")
+      @ApiResponse(responseCode = "204", description = "탈퇴 성공"),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @DeleteMapping("{id}/soft")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -108,8 +124,8 @@ public class UserController {
    */
   @Operation(summary = "회원 영구 삭제 - hard", description = "회원 영구 삭제 입니다. 회원 영구 삭제 시, 회원 정보는 삭제됩니다.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "204", description = "삭제 성공"),
-          @ApiResponse(responseCode = "400", description = "Bad Request")
+      @ApiResponse(responseCode = "204", description = "삭제 성공"),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @DeleteMapping("{id}/hard")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -117,5 +133,6 @@ public class UserController {
   void hardDelete(@PathVariable("id") String id) {
     userService.deleteUser(id);
   }
+
 
 }

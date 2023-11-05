@@ -48,8 +48,7 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
             .and(recordingLicenseInfo.licenseType.eq(10)))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(recordingInfo.salesType.eq(query.getSaleType())
-            .and(query.getSort()))
+        .where(query.getRecordingSort())
         .groupBy(recordingInfo.id,
             recordingInfo.serviceName,
             recordingInfo.salesType,
