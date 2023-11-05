@@ -34,7 +34,7 @@ public class TokenGenerator implements CommandLineRunner {
         User data = User.builder()
                 .email("testEmail")
                 .password(passwordEncoder.encode("testPassword"))
-                .role(Role.MEMBER)
+                .role(Role.MUSICIAN)
                 .name("testName")
                 .phone("testPhone")
                 .isAlarmAccept(true)

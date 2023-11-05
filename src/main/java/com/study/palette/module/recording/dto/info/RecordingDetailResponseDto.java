@@ -1,5 +1,7 @@
 package com.study.palette.module.recording.dto.info;
 
+import com.study.palette.common.enums.recording.Address1;
+import com.study.palette.common.enums.recording.Address2;
 import com.study.palette.module.recording.entity.RecordingFile;
 import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.recording.entity.RecordingLicenseInfo;
@@ -15,8 +17,8 @@ public class RecordingDetailResponseDto {
   private String id;
   private String serviceName;
   private String studioName;
-  private String studioAddress1;
-  private String studioAddress2;
+  private Address1 studioAddress1;
+  private Address2 studioAddress2;
   private boolean isRecordingEngineering;
   private String serviceExplain;
   private LocalDateTime createdAt;

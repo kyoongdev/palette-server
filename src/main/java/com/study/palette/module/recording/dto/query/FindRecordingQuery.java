@@ -8,41 +8,29 @@ import com.study.palette.module.recording.entity.QRecordingInfo;
 import com.study.palette.module.recording.exception.RecordingErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class FindRecordingQuery extends PageDto {
 
-  private int saleType;
+  @Schema(description = "엔지니어링 제공 여부", type = "string", allowableValues = {"ALL", "ENGINEERING",
+      "NOT_ENGINEERING"})
+  public RecordingSort recordingSort;
 
-  /*
-  인기순 = 매출액 순(매출액이 같은 경우 판매량 순)
-    → 매출액은 ‘작업 완료’(페이지명 :
-         chat-seller-작업완료 전송_클릭)
-         까지 완료된거래에 한해 선정
-
-  판매량 순 = 판매량이 가장 많은 순서(판매량이 같은 경우 매출액 순)
-
-  평점 순 = 서비스 후기 10개 이상인 서비스 중 서비스후기 평점이 가장 좋은 순서(평점이 같은 경우 매출액 순 다음 판매량 순)
-
-  신규등록 순 = 판매글 등록이 완료된 최신순
-*/
-  @Schema(description = "정렬", defaultValue = "ALL", type = "int", allowableValues = {"ALL",
-      "ENGINEERING", "NOT_ENGINEERING"})
-  private RecordingSort sort;
-
-  public BooleanExpression getSort() {
-    if (this.sort == null) {
+  public BooleanExpression getRecordingSort() {
+    if (this.recordingSort == null) {
       throw new CustomException(RecordingErrorCode.RECORDING_NOT_SORT);
     }
-    if (this.sort == RecordingSort.ALL) {
+    if (this.recordingSort == RecordingSort.ALL) {
       return null;
-    } else if (this.sort == RecordingSort.ENGINEERING) {
+    } else if (this.recordingSort == RecordingSort.ENGINEERING) {
       return QRecordingInfo.recordingInfo.isRecordingEngineering.eq(true);
-    } else if (this.sort == RecordingSort.NOT_ENGINEERING) {
+    } else if (this.recordingSort == RecordingSort.NOT_ENGINEERING) {
       return QRecordingInfo.recordingInfo.isRecordingEngineering.eq(false);
     }
     return null;

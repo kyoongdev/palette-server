@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface RecordingCustomRepository {
 
-    Page<RecordingResponseDto> findAll(FindRecordingQuery query, Pageable pageable);
+  Page<RecordingResponseDto> findAll(FindRecordingQuery query, Pageable pageable);
 }

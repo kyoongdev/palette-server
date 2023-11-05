@@ -2,6 +2,8 @@ package com.study.palette.module.recording.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.recording.Address1;
+import com.study.palette.common.enums.recording.Address2;
 import com.study.palette.module.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,6 +35,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Setter
 @Builder
 public class RecordingInfo {
+
   /*
    *
    * 스튜디오명
@@ -40,10 +45,7 @@ public class RecordingInfo {
    * 스튜디오 예약링크
    * 스튜디오 이용시간 별 가격 license
    * 서비스 설명
-   *
    */
-
-
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -57,10 +59,12 @@ public class RecordingInfo {
   private String studioName;
 
   @Column(length = 100)
-  private String studioAddress1;
+  @Enumerated(EnumType.STRING)
+  private Address1 studioAddress1;
 
   @Column(length = 100)
-  private String studioAddress2;
+  @Enumerated(EnumType.STRING)
+  private Address2 studioAddress2;
 
   //녹음 엔지니어링 제공 여부
   @Column(columnDefinition = "boolean default false")

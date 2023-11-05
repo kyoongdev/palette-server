@@ -5,7 +5,7 @@ import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
 import com.study.palette.module.recording.dto.info.RecordingCreateResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingDetailResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingResponseDto;
-import com.study.palette.module.recording.dto.info.RecordingUpdateReqeustDto;
+import com.study.palette.module.recording.dto.info.RecordingUpdateRequestDto;
 import com.study.palette.module.recording.dto.query.FindRecordingQuery;
 import com.study.palette.module.recording.service.RecordingService;
 import com.study.palette.module.user.annotation.GetUserInfo;
@@ -75,7 +75,7 @@ public class RecordingController {
   //레코딩 등록
   @Operation(summary = "레코딩 등록", description = "레코딩 등록 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "등록 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecordingCreateRequestDto.class))),
+      @ApiResponse(responseCode = "200", description = "등록 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecordingCreateResponseDto.class))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PostMapping
@@ -90,24 +90,22 @@ public class RecordingController {
   }
 
   //레코딩 수정
-  //TODO: ROLE_MUSICIAN만 가능하게 + 본인의 레코딩만 수정
   @Operation(summary = "레코딩 수정", description = "레코딩 수정 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecordingCreateRequestDto.class))),
+      @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PatchMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MUSICIAN')")
   public void updateRecording(@PathVariable String id,
-      @RequestBody RecordingUpdateReqeustDto recordingCreateRequestDto,
-      @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+      @RequestBody RecordingUpdateRequestDto recordingCreateRequestDto,
+      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
     recordingService.updateRecording(id, recordingCreateRequestDto,
         myInfoResponseDto.getUser());
   }
 
   //레코딩 삭제
-  //TODO: ROLE_MUSICIAN만 가능하게 + 본인의 레코딩만 삭제
   @Operation(summary = "레코딩 삭제", description = "레코딩 삭제 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecordingCreateRequestDto.class))),

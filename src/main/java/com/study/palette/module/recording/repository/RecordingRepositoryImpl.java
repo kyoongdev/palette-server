@@ -18,47 +18,47 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RecordingRepositoryImpl implements RecordingCustomRepository {
 
-    private final JPAQueryFactory queryFactory;
+  private final JPAQueryFactory queryFactory;
 
-    @Autowired
-    public RecordingRepositoryImpl(EntityManager entityManager) {
-        this.queryFactory = new JPAQueryFactory(entityManager);
-    }
+  @Autowired
+  public RecordingRepositoryImpl(EntityManager entityManager) {
+    this.queryFactory = new JPAQueryFactory(entityManager);
+  }
 
-    @Override
-    public Page<RecordingResponseDto> findAll(FindRecordingQuery query, Pageable pageable) {
-        QRecordingInfo recordingInfo = QRecordingInfo.recordingInfo;
-        QRecordingFile recordingFile = QRecordingFile.recordingFile;
-        QRecordingLicenseInfo recordingLicenseInfo = QRecordingLicenseInfo.recordingLicenseInfo;
+  @Override
+  public Page<RecordingResponseDto> findAll(FindRecordingQuery query, Pageable pageable) {
+    QRecordingInfo recordingInfo = QRecordingInfo.recordingInfo;
+    QRecordingFile recordingFile = QRecordingFile.recordingFile;
+    QRecordingLicenseInfo recordingLicenseInfo = QRecordingLicenseInfo.recordingLicenseInfo;
 
-        List<RecordingResponseDto> result = queryFactory
-                .select(Projections.constructor(RecordingResponseDto.class,
-                        recordingInfo.id,
-                        recordingInfo.serviceName,
-                        recordingInfo.salesType,
-                        recordingInfo.user.name.as("userName"),
-                        recordingFile.upoladFilePath.as("fileUrl"),
-                        recordingLicenseInfo.price.as("price")))
-                .from(recordingInfo)
-                .leftJoin(recordingFile)
-                .on(recordingInfo.id.eq(recordingFile.recordingInfo.id)
-                        .and(recordingFile.isThumbnail.isTrue()))
-                .leftJoin(recordingLicenseInfo)
-                .on(recordingInfo.id.eq(recordingLicenseInfo.recordingInfo.id)
-                        .and(recordingLicenseInfo.licenseType.eq(10)))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .where(recordingInfo.salesType.eq(query.getSaleType())
-                        .and(query.getSort()))
-                .groupBy(recordingInfo.id,
-                        recordingInfo.serviceName,
-                        recordingInfo.salesType,
-                        recordingInfo.user.name,
-                        recordingFile.upoladFilePath,
-                        recordingLicenseInfo.price)
-                .orderBy(recordingInfo.createdAt.desc())
-                .fetch();
+    List<RecordingResponseDto> result = queryFactory
+        .select(Projections.constructor(RecordingResponseDto.class,
+            recordingInfo.id,
+            recordingInfo.serviceName,
+            recordingInfo.salesType,
+            recordingInfo.user.name.as("userName"),
+            recordingFile.upoladFilePath.as("fileUrl"),
+            recordingLicenseInfo.price.as("price")))
+        .from(recordingInfo)
+        .leftJoin(recordingFile)
+        .on(recordingInfo.id.eq(recordingFile.recordingInfo.id)
+            .and(recordingFile.isThumbnail.isTrue()))
+        .leftJoin(recordingLicenseInfo)
+        .on(recordingInfo.id.eq(recordingLicenseInfo.recordingInfo.id)
+            .and(recordingLicenseInfo.licenseType.eq(10)))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .where(recordingInfo.salesType.eq(query.getSaleType())
+            .and(query.getSort()))
+        .groupBy(recordingInfo.id,
+            recordingInfo.serviceName,
+            recordingInfo.salesType,
+            recordingInfo.user.name,
+            recordingFile.upoladFilePath,
+            recordingLicenseInfo.price)
+        .orderBy(recordingInfo.createdAt.desc())
+        .fetch();
 
-        return new PageImpl<>(result, pageable, result.size());
-    }
+    return new PageImpl<>(result, pageable, result.size());
+  }
 }
