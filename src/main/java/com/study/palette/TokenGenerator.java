@@ -29,20 +29,20 @@ public class TokenGenerator implements CommandLineRunner {
     this.passwordEncoder = passwordEncoder;
   }
 
-  @Override
-  public void run(String... args) throws Exception {
-    // 여기에 초기 데이터 생성 로직을 작성
-    User data = User.builder()
-        .email("testEmail")
-        .password(passwordEncoder.encode("testPassword"))
-        .role(Role.MEMBER)
-        .name("testName")
-        .phone("testPhone")
-        .isAlarmAccept(true)
-        .loginFailCount(0)
-        .isLocked(false)
-        .build();
-    userRepository.save(data);
+    @Override
+    public void run(String... args) throws Exception {
+        // 여기에 초기 데이터 생성 로직을 작성
+        User data = User.builder()
+                .email("testEmail")
+                .password(passwordEncoder.encode("testPassword"))
+                .role(Role.MUSICIAN)
+                .name("testName")
+                .phone("testPhone")
+                .isAlarmAccept(true)
+                .loginFailCount(0)
+                .isLocked(false)
+                .build();
+        userRepository.save(data);
 
     Authentication authentication = jwtTokenProvider.getAuthentication(data.getId().toString());
     log.info("\n" + jwtTokenProvider.createToken(authentication).getAccessToken());
