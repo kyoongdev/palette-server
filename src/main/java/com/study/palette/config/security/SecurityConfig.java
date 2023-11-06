@@ -1,5 +1,6 @@
 package com.study.palette.config.security;
 
+import com.study.palette.module.socialLogin.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ public class SecurityConfig {
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+  private final CustomOAuth2UserService customOAuth2UserService;
+
   @Bean
   public PasswordEncoder getPasswordEncoder() {
     return new BCryptPasswordEncoder();
@@ -30,7 +33,7 @@ public class SecurityConfig {
 
   @Bean
   public AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration
+          AuthenticationConfiguration authenticationConfiguration
   ) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
@@ -43,15 +46,19 @@ public class SecurityConfig {
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt token으로 인증 > 세션 필요없음
 
-        .and()
-        .authorizeRequests()    // 다음 리퀘스트에 대한 사용권한 체크
-        .antMatchers("/**").permitAll() // 모든 주소 허용
-        .anyRequest().authenticated() // Authentication 필요한 주소
+            .and()
+            .authorizeRequests()    // 다음 리퀘스트에 대한 사용권한 체크
+            .antMatchers("/**").permitAll() // 모든 주소 허용
+            .anyRequest().authenticated() // Authentication 필요한 주소
 
-        .and()                  // exception handling for jwt
-        .exceptionHandling()
-        .accessDeniedHandler(jwtAccessDeniedHandler)
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()                  // exception handling for jwt
+            .exceptionHandling()
+            .accessDeniedHandler(jwtAccessDeniedHandler)
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
+            .and()
+            .oauth2Login()
+            .userInfoEndpoint().userService(customOAuth2UserService);
     ;
 
     // jwt 적용
