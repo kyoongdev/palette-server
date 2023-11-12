@@ -6,6 +6,7 @@ import com.study.palette.module.mixMastering.dto.contact.CreateMixMasteringConta
 import com.study.palette.module.mixMastering.dto.file.CreateMixMasteringFileDto;
 import com.study.palette.module.mixMastering.dto.license.CreateMixMasteringLicenseDto;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
+import com.study.palette.module.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -35,8 +36,7 @@ public class CreateMixMasteringDto {
   @Schema(description = "SNS 주소들")
   private List<CreateMixMasteringContactDto> contacts;
 
-
-  public MixMasteringInfo toEntity() {
+  public MixMasteringInfo toEntity(User user) {
     MixMasteringInfo mixMastering = MixMasteringInfo.builder()
             .serviceName(this.serviceName)
             .beforeJobMusic(this.beforeJobMusic)
@@ -45,6 +45,7 @@ public class CreateMixMasteringDto {
             .editInfo(this.editInfo)
             .serviceStatus(this.sericeStatus)
             .genre(this.genre.getGenre())
+            .user(user)
             .build();
     mixMastering.setMixMasteringLicenseInfos(this.licenses.stream().map(license -> license.toEntity(mixMastering)).toList());
     mixMastering.setMixMasteringFiles(this.mixMasteringFiles.stream().map(file -> file.toEntity(mixMastering)).toList());
