@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlbumArtRepository extends JpaRepository<AlbumArtInfo, String>,
-        AlbumArtCustomRepository {
+    AlbumArtCustomRepository {
 
-    Optional<AlbumArtInfo> findById(UUID id);
+  Optional<AlbumArtInfo> findById(UUID id);
 
-    AlbumArtInfo findByServiceName(String serviceName);
+  AlbumArtInfo findByServiceName(String serviceName);
 }

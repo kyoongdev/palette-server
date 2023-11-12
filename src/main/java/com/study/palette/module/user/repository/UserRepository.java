@@ -2,27 +2,27 @@ package com.study.palette.module.user.repository;
 
 import com.study.palette.module.user.entity.SocialType;
 import com.study.palette.module.user.entity.User;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
 
-    Optional<User> findById(UUID id);
+  Optional<User> findByEmail(String email);
 
-    boolean existsByEmail(String email);
+  Optional<User> findById(UUID id);
 
-    Optional<User> findByNameAndPhone(String email, String phone);
+  boolean existsByEmail(String email);
 
-    Page<User> findAll(Pageable pageable);
+  Optional<User> findByNameAndPhone(String email, String phone);
 
-    void deleteById(UUID id);
+  Page<User> findAll(Pageable pageable);
 
-    Optional<User> findBySocialTypeAndSocialId(SocialType socialType, String id);
+  void deleteById(UUID id);
+
+  Optional<User> findBySocialTypeAndSocialId(SocialType socialType, String id);
 }

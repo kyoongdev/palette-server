@@ -8,6 +8,7 @@ import lombok.Data;
 // user relation에 사용하는 dto(기본 유저)
 @Data
 public class CommonUserDto {
+
   @Schema(description = "아이디")
   private String id;
   @Schema(description = "이메일")

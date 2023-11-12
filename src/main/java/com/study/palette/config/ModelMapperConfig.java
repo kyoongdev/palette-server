@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ModelMapperConfig {
 
-    /* entity <-> dto 간 데이터 변한 */
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+  /* entity <-> dto 간 데이터 변한 */
+  @Bean
+  public ModelMapper modelMapper() {
+    return new ModelMapper();
+  }
 }

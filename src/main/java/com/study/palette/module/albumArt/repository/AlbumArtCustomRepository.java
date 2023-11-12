@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface AlbumArtCustomRepository {
 
-    Page<AlbumArtResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable);
+  Page<AlbumArtResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable);
 }

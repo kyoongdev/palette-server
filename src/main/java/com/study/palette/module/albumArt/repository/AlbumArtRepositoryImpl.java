@@ -19,50 +19,50 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
 
-    private final JPAQueryFactory queryFactory;
+  private final JPAQueryFactory queryFactory;
 
-    @Autowired
-    public AlbumArtRepositoryImpl(EntityManager entityManager) {
-        this.queryFactory = new JPAQueryFactory(entityManager);
-    }
+  @Autowired
+  public AlbumArtRepositoryImpl(EntityManager entityManager) {
+    this.queryFactory = new JPAQueryFactory(entityManager);
+  }
 
-    @Override
-    public Page<AlbumArtResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable) {
-        QAlbumArtInfo albumArtInfo = QAlbumArtInfo.albumArtInfo;
-        QAlbumArtFile albumArtFile = QAlbumArtFile.albumArtFile;
-        QAlbumArtLicenseInfo albumArtLicenseInfo = QAlbumArtLicenseInfo.albumArtLicenseInfo;
-        QAlbumArtRequest albumArtRequest = QAlbumArtRequest.albumArtRequest;
+  @Override
+  public Page<AlbumArtResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable) {
+    QAlbumArtInfo albumArtInfo = QAlbumArtInfo.albumArtInfo;
+    QAlbumArtFile albumArtFile = QAlbumArtFile.albumArtFile;
+    QAlbumArtLicenseInfo albumArtLicenseInfo = QAlbumArtLicenseInfo.albumArtLicenseInfo;
+    QAlbumArtRequest albumArtRequest = QAlbumArtRequest.albumArtRequest;
 
-        List<AlbumArtResponseDto> result = queryFactory
-            .select(Projections.constructor(AlbumArtResponseDto.class,
-                albumArtInfo.id,
-                albumArtInfo.serviceName,
-                albumArtInfo.salesType,
-                albumArtInfo.user.name.as("userName"),
-                albumArtFile.upoladFilePath.as("fileUrl"),
-                albumArtLicenseInfo.price.as("price"),
-                albumArtRequest.id.count().as("requestCount")))
-            .from(albumArtInfo)
-            .leftJoin(albumArtRequest)
-            .on(albumArtInfo.id.eq(albumArtRequest.albumArtInfo.id))
-            .leftJoin(albumArtFile)
-            .on(albumArtInfo.id.eq(albumArtFile.albumArtInfo.id)
-                .and(albumArtFile.isThumbnail.isTrue()))
-            .leftJoin(albumArtLicenseInfo)
-            .on(albumArtInfo.id.eq(albumArtLicenseInfo.albumArtInfo.id)
-                .and(albumArtLicenseInfo.licenseType.eq(10)))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .where(albumArtInfo.salesType.eq(query.getSaleType()))
-            .groupBy(albumArtInfo.id,
-                albumArtInfo.serviceName,
-                albumArtInfo.salesType,
-                albumArtInfo.user.name,
-                albumArtFile.upoladFilePath,
-                albumArtLicenseInfo.price)
-            .orderBy(query.getSort())
-            .fetch();
+    List<AlbumArtResponseDto> result = queryFactory
+        .select(Projections.constructor(AlbumArtResponseDto.class,
+            albumArtInfo.id,
+            albumArtInfo.serviceName,
+            albumArtInfo.salesType,
+            albumArtInfo.user.name.as("userName"),
+            albumArtFile.upoladFilePath.as("fileUrl"),
+            albumArtLicenseInfo.price.as("price"),
+            albumArtRequest.id.count().as("requestCount")))
+        .from(albumArtInfo)
+        .leftJoin(albumArtRequest)
+        .on(albumArtInfo.id.eq(albumArtRequest.albumArtInfo.id))
+        .leftJoin(albumArtFile)
+        .on(albumArtInfo.id.eq(albumArtFile.albumArtInfo.id)
+            .and(albumArtFile.isThumbnail.isTrue()))
+        .leftJoin(albumArtLicenseInfo)
+        .on(albumArtInfo.id.eq(albumArtLicenseInfo.albumArtInfo.id)
+            .and(albumArtLicenseInfo.licenseType.eq(10)))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .where(albumArtInfo.salesType.eq(query.getSaleType()))
+        .groupBy(albumArtInfo.id,
+            albumArtInfo.serviceName,
+            albumArtInfo.salesType,
+            albumArtInfo.user.name,
+            albumArtFile.upoladFilePath,
+            albumArtLicenseInfo.price)
+        .orderBy(query.getSort())
+        .fetch();
 
-        return new PageImpl<>(result, pageable, result.size());
-    }
+    return new PageImpl<>(result, pageable, result.size());
+  }
 }

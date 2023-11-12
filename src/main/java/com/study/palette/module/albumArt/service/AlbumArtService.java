@@ -32,127 +32,125 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AlbumArtService {
 
-    private final AlbumArtRepository albumArtRepository;
-    private final AlbumArtRequestRepository albumArtRequestRepository;
-    private final ModelMapper modelMapper;
+  private final AlbumArtRepository albumArtRepository;
+  private final AlbumArtRequestRepository albumArtRequestRepository;
+  private final ModelMapper modelMapper;
 
-    @Autowired
-    public AlbumArtService(AlbumArtRepository albumArtRepository,
-        AlbumArtRequestRepository albumArtRequestRepository, ModelMapper modelMapper) {
-        this.albumArtRepository = albumArtRepository;
-        this.albumArtRequestRepository = albumArtRequestRepository;
-        this.modelMapper = modelMapper;
+  @Autowired
+  public AlbumArtService(AlbumArtRepository albumArtRepository,
+      AlbumArtRequestRepository albumArtRequestRepository, ModelMapper modelMapper) {
+    this.albumArtRepository = albumArtRepository;
+    this.albumArtRequestRepository = albumArtRequestRepository;
+    this.modelMapper = modelMapper;
+  }
+
+  /* AlbumArt 필터 포함 조회*/
+  @Transactional(readOnly = true)
+  public PaginationDto<AlbumArtResponseDto> getAlbumArts(FindAlbumArtQuery query,
+      Pageable pageable) {
+    Long count = albumArtRepository.count();
+
+    if (count == 0) {
+      return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    /* AlbumArt 필터 포함 조회*/
-    @Transactional(readOnly = true)
-    public PaginationDto<AlbumArtResponseDto> getAlbumArts(FindAlbumArtQuery query,
-        Pageable pageable) {
-        Long count = albumArtRepository.count();
+    List<AlbumArtResponseDto> artists = albumArtRepository.findAll(query, pageable)
+        .stream()
+        .map(data -> modelMapper.map(data, AlbumArtResponseDto.class))
+        .collect(Collectors.toList());
 
-        if (count == 0) {
-            return PaginationDto.of(new PagingDto(pageable, count), List.of());
-        }
+    PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
+        artists);
 
-        List<AlbumArtResponseDto> artists = albumArtRepository.findAll(query, pageable)
-            .stream()
-            .map(data -> modelMapper.map(data, AlbumArtResponseDto.class))
-            .collect(Collectors.toList());
+    return row;
+  }
 
-        PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
-            artists);
+  /* AlbumArt 상세 조회*/
+  @Transactional(readOnly = true)
+  public AlbumArtDetailResponseDto getAlbumArtWithDto(String id) {
+    AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+    return new AlbumArtDetailResponseDto(albumArtInfo);
+  }
 
-        return row;
+  /* AlbumArt 등록*/
+  @Transactional
+  public AlbumArtCreateResponseDto createAlbumArt(AlbumArtCreateRequestDto albumArtCreateRequestDto,
+      User user) {
+    return new AlbumArtCreateResponseDto(
+        albumArtRepository.save(albumArtCreateRequestDto.toEntity(user)));
+  }
+
+  /* AlbumArt 수정*/
+  @Transactional
+  public void updateAlbumArt(String id, AlbumArtUpdateReqeustDto albumArtUpdateReqeustDto,
+      User user) {
+    AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+
+    //본인이 작성한 글인지 체크
+    if (!albumArtInfo.getUser().getId().equals(user.getId())) {
+      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
-    /* AlbumArt 상세 조회*/
-    @Transactional(readOnly = true)
-    public AlbumArtDetailResponseDto getAlbumArtWithDto(String id) {
-        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
-            .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
-        return new AlbumArtDetailResponseDto(albumArtInfo);
-    }
+    PaletteUtils.myCopyProperties(albumArtUpdateReqeustDto, albumArtInfo);
 
-    /* AlbumArt 등록*/
-    @Transactional
-    public AlbumArtCreateResponseDto createAlbumArt(
-        AlbumArtCreateRequestDto albumArtCreateRequestDto,
-        User user) {
-        return new AlbumArtCreateResponseDto(
-            albumArtRepository.save(albumArtCreateRequestDto.toEntity(user)));
-    }
-
-    /* AlbumArt 수정*/
-    @Transactional
-    public void updateAlbumArt(String id, AlbumArtUpdateReqeustDto albumArtUpdateReqeustDto,
-        User user) {
-        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
-            .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
-
-        //본인이 작성한 글인지 체크
-        if (!albumArtInfo.getUser().getId().equals(user.getId())) {
-            throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
-        }
-
-        PaletteUtils.myCopyProperties(albumArtUpdateReqeustDto, albumArtInfo);
-
-        // update 전 초기화
-        albumArtInfo.getAlbumArtLicenseInfo().clear();
-        albumArtInfo.getAlbumArtContact().clear();
+    // update 전 초기화
+    albumArtInfo.getAlbumArtLicenseInfo().clear();
+    albumArtInfo.getAlbumArtContact().clear();
 //        albumArtInfo.getAlbumArtFile().clear(); TODO 파일 구현 후 추가
 
-        albumArtUpdateReqeustDto.getAlbumArtLicenseInfo().stream().forEach(license -> {
-            albumArtInfo.getAlbumArtLicenseInfo()
-                .add(AlbumArtLicenseInfo.from(license, albumArtInfo));
-        });
+    albumArtUpdateReqeustDto.getAlbumArtLicenseInfo().stream().forEach(license -> {
+      albumArtInfo.getAlbumArtLicenseInfo().add(AlbumArtLicenseInfo.from(license, albumArtInfo));
+    });
 
-        albumArtUpdateReqeustDto.getAlbumArtContact().stream().forEach(contact -> {
-            albumArtInfo.getAlbumArtContact().add(AlbumArtContact.from(contact, albumArtInfo));
-        });
+    albumArtUpdateReqeustDto.getAlbumArtContact().stream().forEach(contact -> {
+      albumArtInfo.getAlbumArtContact().add(AlbumArtContact.from(contact, albumArtInfo));
+    });
 
-        //TODO 파일 구현 후 추가
+    //TODO 파일 구현 후 추가
 //        albumArtUpdateReqeustDto.getAlbumArtLicenseInfo().stream().forEach(license -> {
 //            albumArtInfo.getAlbumArtLicenseInfo().add(AlbumArtLicenseInfo.from(license, albumArtInfo));
 //        });
 
-        albumArtRepository.save(albumArtInfo);
+    albumArtRepository.save(albumArtInfo);
+  }
+
+  /*
+  AlbumArt 구매의뢰 하루에 한번만 가능
+  */
+  @Transactional
+  public void createAlbumArtRequest(String id, User user) {
+    AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+
+    //오늘 이미 구매의뢰를 했는지 체크
+    Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUserAndCreatedAt(
+        user, albumArtInfo, LocalDate.now());
+
+    if (albumArtRequest.isPresent()) {
+      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_REQUEST_ALREADY_EXISTS);
     }
 
-    /*
-    AlbumArt 구매의뢰 하루에 한번만 가능
-    */
-    @Transactional
-    public void createAlbumArtRequest(String id, User user) {
-        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
-            .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+    albumArtRequestRepository.save(AlbumArtRequest.builder()
+        .albumArtInfo(albumArtInfo)
+        .user(user)
+        .createAt(LocalDate.now())
+        .build()
+    );
+  }
 
-        //오늘 이미 구매의뢰를 했는지 체크
-        Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUserAndCreatedAt(
-            user, albumArtInfo, LocalDate.now());
+  /* AlbumArt 삭제*/
+  @Transactional
+  public void deleteAlbumArt(String id, User user) {
+    AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
-        if (albumArtRequest.isPresent()) {
-            throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_REQUEST_ALREADY_EXISTS);
-        }
-
-        albumArtRequestRepository.save(AlbumArtRequest.builder()
-            .albumArtInfo(albumArtInfo)
-            .user(user)
-            .createAt(LocalDate.now())
-            .build()
-        );
+    //본인이 작성한 글인지 체크
+    if (!albumArtInfo.getUser().getId().equals(user.getId())) {
+      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
-    /* AlbumArt 삭제*/
-    @Transactional
-    public void deleteAlbumArt(String id, User user) {
-        AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
-            .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
-
-        //본인이 작성한 글인지 체크
-        if (!albumArtInfo.getUser().getId().equals(user.getId())) {
-            throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
-        }
-
-        albumArtRepository.delete(albumArtInfo);
-    }
+    albumArtRepository.delete(albumArtInfo);
+  }
 }
