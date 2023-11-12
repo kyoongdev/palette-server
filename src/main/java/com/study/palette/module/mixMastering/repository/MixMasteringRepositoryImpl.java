@@ -8,6 +8,7 @@ import com.study.palette.module.mixMastering.entity.QMixMasteringFile;
 import com.study.palette.module.mixMastering.entity.QMixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringRequest;
+import com.study.palette.module.musician.entity.QUserMusician;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
