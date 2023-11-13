@@ -1,10 +1,14 @@
 package com.study.palette.module.user.controller;
 
+import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.user.annotation.GetUserInfo;
+import com.study.palette.module.user.dto.FindUserQuery;
 import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.user.dto.UserChangePasswordDto;
 import com.study.palette.module.user.dto.UserCreateRequestDto;
 import com.study.palette.module.user.dto.UserEmailDto;
 import com.study.palette.module.user.dto.UserFindEmailDto;
+import com.study.palette.module.user.dto.UserFindPasswordDto;
 import com.study.palette.module.user.dto.UserProfileDto;
 import com.study.palette.module.user.dto.UserUpdateDto;
 import com.study.palette.module.user.service.UserService;
@@ -15,15 +19,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.Valid;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,13 +58,11 @@ public class UserController {
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("me")
-  @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
+  @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   public ResponseEntity<MyInfoResponseDto> getMyInfo(
       @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    log.info(myInfoResponseDto);
     return ResponseEntity.ok(myInfoResponseDto);
   }
-
 
   /**
    * 회원 조회 By Email
@@ -70,10 +74,26 @@ public class UserController {
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PostMapping("find-email")
-  public UserEmailDto findUserByName(@RequestBody UserFindEmailDto userFindIdDto) {
+  public UserEmailDto findUserByName(@Valid @RequestBody UserFindEmailDto userFindIdDto) {
     return userService.getUserByNameAndPhoneWithDto(userFindIdDto.getName(),
         userFindIdDto.getPhone());
   }
+
+  /**
+   * 비밀번호 찾기
+   */
+  @Operation(summary = "비밀번호 찾기", description = "email이 유효하면 해당 이메일로 임시 비밀번호를 발송합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "204", description = "발송 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserFindPasswordDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @PostMapping("find-password")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public UserFindPasswordDto findPassword(
+      @Valid @RequestBody UserFindPasswordDto userFindPasswordDto) {
+    return userService.findPassword(userFindPasswordDto.getEmail());
+  }
+
 
   /**
    * 회원 생성
@@ -85,8 +105,22 @@ public class UserController {
   })
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  UserProfileDto createUser(@RequestBody UserCreateRequestDto user) {
+  UserProfileDto createUser(@Valid @RequestBody UserCreateRequestDto user) {
     return userService.createUser(user);
+  }
+
+  /**
+   * 회원 목록 조회
+   */
+  @Operation(summary = "회원 목록 조회", description = "회원 목록 조회 입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
+  PaginationDto<UserProfileDto> getUserList(@ParameterObject FindUserQuery query) {
+    return userService.getUserList(query.toPageable(Sort.by(Sort.Direction.DESC, "createdAt")));
   }
 
   /**
@@ -97,11 +131,12 @@ public class UserController {
       @ApiResponse(responseCode = "204", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserUpdateDto.class))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
-  @PatchMapping("{id}")
+  @PatchMapping("")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-  void updateUser(@PathVariable("id") String id, @RequestBody UserUpdateDto user) {
-    userService.updateUser(id, user);
+  @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
+  void updateUser(@RequestBody UserUpdateDto user,
+      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+    userService.updateUser(myInfoResponseDto.getId(), user);
   }
 
   /**
@@ -112,11 +147,11 @@ public class UserController {
       @ApiResponse(responseCode = "204", description = "탈퇴 성공"),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
-  @DeleteMapping("{id}/soft")
+  @DeleteMapping("soft")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('ROLE_MEMBER') or hasRole('ROLE_MUSICIAN')")
-  void softDelete(@PathVariable("id") String id) {
-    userService.generateDeletedAt(id);
+  @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
+  void softDelete(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+    userService.generateDeletedAt(myInfoResponseDto.getId());
   }
 
   /**
@@ -127,12 +162,26 @@ public class UserController {
       @ApiResponse(responseCode = "204", description = "삭제 성공"),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
-  @DeleteMapping("{id}/hard")
+  @DeleteMapping("hard")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  void hardDelete(@PathVariable("id") String id) {
-    userService.deleteUser(id);
+  @PreAuthorize("hasRole('ADMIN')")
+  void hardDelete(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+    userService.deleteUser(myInfoResponseDto.getId());
   }
 
-
+  /**
+   * 비밀번호 변경
+   */
+  @Operation(summary = "비밀번호 변경", description = "비밀번호 변경 입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "204", description = "변경 성공"),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @PatchMapping("password")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
+  void changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto,
+      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+    userService.updatePassword(userChangePasswordDto, myInfoResponseDto.getId());
+  }
 }

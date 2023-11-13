@@ -23,7 +23,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
 
-//TODO: user socialId랑 socialType
 @Entity
 @Getter
 @Setter     // TODO dto <--> entity 전환을 copyProperty 로 하기위해 추가함--> 추후 좀더 다른 방법 알아보면 될듯
@@ -34,7 +33,6 @@ public class User {
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
   @Column(columnDefinition = "BINARY(16)")
-//    @Type(type = "org.hibernate.type.BinaryType")
   private UUID id;
 
   @Column(nullable = false)
@@ -47,37 +45,38 @@ public class User {
   private String socialId;          // 로그인한 소셜 타입 식별자(일반 로그인인 경우 null)
 
   @Column(columnDefinition = "varchar(255)")
-  String email;
+  private String email;
 
   @Column(columnDefinition = "varchar(255)")
-  String password;
+  private String password;
 
   @Column(columnDefinition = "varchar(100)")
-  String name;
+  private String name;
 
+  @Column(columnDefinition = "varchar(100)")
+  private String nickname;
 
   @Column(nullable = true)
-  String profileImage;
+  private String profileImage;
 
-  //TODO: phone -> 11자리 (char(11))
   @Column(columnDefinition = "char(11)")
-  String phone;
+  private String phone;
 
   @Column(columnDefinition = "boolean default false")
-  boolean isAlarmAccept;
+  private boolean isAlarmAccept;
 
   @Column(columnDefinition = "int default 0")
-  int loginFailCount;
+  private int loginFailCount;
 
   @Column(columnDefinition = "boolean default false")
-  boolean isLocked;
+  private boolean isLocked;
 
   @Column(columnDefinition = "datetime default now()")
   @CreatedDate
-  LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
   @Column(columnDefinition = "datetime")
-  LocalDateTime deletedAt;
+  private LocalDateTime deletedAt;
 
   public void updateLoginFailCount(int loginFailCount) {
     this.loginFailCount = loginFailCount;

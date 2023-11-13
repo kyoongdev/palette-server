@@ -14,7 +14,6 @@ public class WebConfig implements WebMvcConfigurer {
 
   private final UserService userService;
 
-
   @Autowired
   public WebConfig(UserService userService) {
     this.userService = userService;

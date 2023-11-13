@@ -10,6 +10,4 @@ import lombok.Data;
 public class FindUserQuery extends PageDto {
 
   private String name;
-
-
 }
