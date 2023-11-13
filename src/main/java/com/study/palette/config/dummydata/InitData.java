@@ -1,11 +1,9 @@
 package com.study.palette.config.dummydata;
 
 import com.study.palette.common.enums.Contact;
-import com.study.palette.common.enums.albumArt.AlbumArtServiceType;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
-import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
@@ -21,25 +19,25 @@ import com.study.palette.module.filter.entity.FilterInfo;
 import com.study.palette.module.filter.entity.FilterMaster;
 import com.study.palette.module.filter.repository.FilterInfoRepository;
 import com.study.palette.module.filter.repository.FilterMasterRepository;
-import com.study.palette.module.serviceProgress.entity.ServiceProgressInfo;
-import com.study.palette.module.serviceProgress.repository.ServiceProgressInfoRepository;
 import com.study.palette.module.mixMastering.entity.MixMasteringContact;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
+import com.study.palette.module.serviceProgress.repository.ServiceProgressInfoRepository;
 import com.study.palette.module.user.entity.Role;
 import com.study.palette.module.user.entity.User;
 import com.study.palette.module.user.repository.UserRepository;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -138,17 +136,17 @@ public class InitData implements ApplicationRunner {
                         .name("오득춘")
                         .build());
         //앨범아트 더미데이터 생성
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 3; j++) {
                 albumArtLicenseCreateRequestDtos.add(//앨범아트 라이센스 생성
-                        new AlbumArtLicenseInfoCreateRequestDto(
-                                10,
-                                1000,
-                                "servedFile" + i,
-                                3,
-                                null,
-                                3,
-                                true,
+                    new AlbumArtLicenseInfoCreateRequestDto(
+                        10,
+                        1000,
+                        "servedFile" + i,
+                        3,
+                        null,
+                        3,
+                        true,
                                 true,
                                 true,
                                 true
@@ -207,17 +205,17 @@ public class InitData implements ApplicationRunner {
 
         List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
 
-        for (int i = 1; i < 50; i++) {
+        for (int i = 1; i < 20; i++) {
 
             List<MixMasteringContact> mixMasteringContacts = new ArrayList<>();
             List<MixMasteringLicenseInfo> mixMasteringLicenseInfos = new ArrayList<>();
 
             MixMasteringInfo mixMasteringInfo = MixMasteringInfo.builder()
-                    .serviceName("믹스 마스터링" + Integer.toString(i))
-                    .beforeJobMusic("")
-                    .afterJobMusic("")
-                    .serviceExplain("")
-                    .editInfo("")
+                .serviceName("믹스 마스터링" + Integer.toString(i))
+                .beforeJobMusic("")
+                .afterJobMusic("")
+                .serviceExplain("")
+                .editInfo("")
                     .serviceStatus(true)
                     .genre((i % 5) + 1)
                     .mixMasteringLicenseInfos(mixMasteringLicenseInfos)

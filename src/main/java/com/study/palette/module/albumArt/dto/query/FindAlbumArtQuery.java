@@ -4,6 +4,7 @@ package com.study.palette.module.albumArt.dto.query;
 import com.querydsl.core.types.OrderSpecifier;
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.enums.CustomSort;
+import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.common.exception.CustomException;
 import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
@@ -22,7 +23,8 @@ public class FindAlbumArtQuery extends PageDto {
       판매유형
       전체, 사진편집, 일러스트, 그래픽아트, 그외 장르
    */
-  private int saleType;
+  @Schema(description = "판매유형", defaultValue = "")
+  private AlbumArtSaleType saleType;
 
   /*
   인기순 = 매출액 순(매출액이 같은 경우 판매량 순)
@@ -36,8 +38,7 @@ public class FindAlbumArtQuery extends PageDto {
 
   신규등록 순 = 판매글 등록이 완료된 최신순
 */
-  @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
-      "POPULAR"})
+  @Schema(description = "정렬", defaultValue = "")
   private CustomSort sort;
 
   public OrderSpecifier<?>[] getSort() {
