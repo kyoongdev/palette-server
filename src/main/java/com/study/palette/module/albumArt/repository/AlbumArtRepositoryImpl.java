@@ -38,7 +38,7 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
             albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,
-            albumArtInfo.user.name.as("userName"),
+            albumArtInfo.users.name.as("userName"),
             albumArtFile.upoladFilePath.as("fileUrl"),
             albumArtLicenseInfo.price.as("price"),
             albumArtRequest.id.count().as("requestCount")))
@@ -53,11 +53,11 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
             .and(albumArtLicenseInfo.licenseType.eq(10)))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(albumArtInfo.salesType.eq(query.getSaleType()))
+//        .where(albumArtInfo.salesType.eq(query.getSaleType()))
         .groupBy(albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,
-            albumArtInfo.user.name,
+            albumArtInfo.users.name,
             albumArtFile.upoladFilePath,
             albumArtLicenseInfo.price)
         .orderBy(query.getSort())

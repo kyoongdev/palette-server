@@ -1,7 +1,7 @@
 package com.study.palette.module.mixMastering.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -34,7 +34,7 @@ public class MixMasteringRequest {
   @ManyToOne
   @JoinColumn(name = "userId")
   @JsonIgnore
-  private User user;
+  private Users users;
 
   @ManyToOne
   @JoinColumn(name = "mixMasteringInfoId")

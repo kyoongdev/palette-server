@@ -1,7 +1,7 @@
 package com.study.palette.module.albumArt.dto.review;
 
 import com.study.palette.module.albumArt.entity.AlbumArtReview;
-import com.study.palette.module.user.dto.CommonUserDto;
+import com.study.palette.module.users.dto.CommonUserDto;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -19,6 +19,6 @@ public class AlbumArtReviewResponseDto {
     this.rating = albumArtReview.getRating().intValue();
     this.review = albumArtReview.getReview();
     this.createdAt = albumArtReview.getCreatedAt();
-    this.user = new CommonUserDto(albumArtReview.getUser());
+    this.user = new CommonUserDto(albumArtReview.getUsers());
   }
 }

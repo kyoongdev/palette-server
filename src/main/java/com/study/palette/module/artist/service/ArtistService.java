@@ -13,21 +13,19 @@ import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
 import com.study.palette.module.artist.repository.ArtistRepository;
 import com.study.palette.module.artist.repository.ArtistReviewRepository;
-import com.study.palette.module.filter.entity.FilterInfo;
 import com.study.palette.module.filter.repository.FilterInfoRepository;
-import com.study.palette.module.user.entity.User;
-import com.study.palette.module.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import com.study.palette.module.users.entity.Users;
+import com.study.palette.module.users.repository.UsersRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ArtistService {
@@ -37,15 +35,15 @@ public class ArtistService {
   private ArtistReviewRepository artistReviewRepository;
   private FilterInfoRepository filterInfoRepository;
 
-  private UserRepository userRepository;
+  private UsersRepository usersRepository;
 
 
   @Autowired
-  public ArtistService(ArtistRepository artistRepository, FilterInfoRepository filterInfoRepository, ArtistReviewRepository artistReviewRepository, UserRepository userRepository) {
+  public ArtistService(ArtistRepository artistRepository, FilterInfoRepository filterInfoRepository, ArtistReviewRepository artistReviewRepository, UsersRepository usersRepository) {
     this.filterInfoRepository = filterInfoRepository;
     this.artistRepository = artistRepository;
     this.artistReviewRepository = artistReviewRepository;
-    this.userRepository = userRepository;
+    this.usersRepository = usersRepository;
 
   }
 
@@ -121,7 +119,7 @@ public class ArtistService {
   public ResponseWithIdDto createArtist(CreateArtistDto data) {
 
     /*User 정보 가져와서 artistInfo에 추가*/
-    User user = userRepository.findByEmail(data.getUserEmail()).orElse(null);
+    Users users = usersRepository.findByEmail(data.getUserEmail()).orElse(null);
 
     /* ArtistFile 정보 */
     String originFileName = "";
@@ -174,12 +172,12 @@ public class ArtistService {
 
 
     ArtistInfo createArtist = ArtistInfo.builder()
-            .serviceName(data.getServiceName())
-            .serviceInfo(data.getServiceInfo())
-            .editInfo(data.getEditInfo())
-            .filterInfo(data.getSalesType())
-            .serviceStatus(data.isServiceStatus())
-            .user(user)
+        .serviceName(data.getServiceName())
+        .serviceInfo(data.getServiceInfo())
+        .editInfo(data.getEditInfo())
+        .filterInfo(data.getSalesType())
+        .serviceStatus(data.isServiceStatus())
+        .users(users)
             .artistFile(new ArrayList<>())
             .artistLicenseInfo(new ArrayList<>()).build();
 
@@ -202,7 +200,7 @@ public class ArtistService {
 
   public ResponseWithIdDto updateArtist(UpdateArtistDto data) {
 
-    User user = userRepository.findByEmail(data.getUserEmail()).orElse(null);
+    Users users = usersRepository.findByEmail(data.getUserEmail()).orElse(null);
 
     /* ArtistFile 정보 */
     String originFileName = "";

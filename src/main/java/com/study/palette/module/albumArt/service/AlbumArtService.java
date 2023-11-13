@@ -17,8 +17,9 @@ import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
 import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -76,20 +77,20 @@ public class AlbumArtService {
   /* AlbumArt 등록*/
   @Transactional
   public AlbumArtCreateResponseDto createAlbumArt(AlbumArtCreateRequestDto albumArtCreateRequestDto,
-      User user) {
+      Users users) {
     return new AlbumArtCreateResponseDto(
-        albumArtRepository.save(albumArtCreateRequestDto.toEntity(user)));
+        albumArtRepository.save(albumArtCreateRequestDto.toEntity(users)));
   }
 
   /* AlbumArt 수정*/
   @Transactional
   public void updateAlbumArt(String id, AlbumArtUpdateReqeustDto albumArtUpdateReqeustDto,
-      User user) {
+      Users users) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!albumArtInfo.getUser().getId().equals(user.getId())) {
+    if (!albumArtInfo.getUsers().getId().equals(users.getId())) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
@@ -120,13 +121,13 @@ public class AlbumArtService {
   AlbumArt 구매의뢰 하루에 한번만 가능
   */
   @Transactional
-  public void createAlbumArtRequest(String id, User user) {
+  public void createAlbumArtRequest(String id, Users users) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //오늘 이미 구매의뢰를 했는지 체크
-    Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUserAndCreatedAt(
-        user, albumArtInfo, LocalDate.now());
+    Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUsersAndCreatedAt(
+        users, albumArtInfo, LocalDateTime.now());
 
     if (albumArtRequest.isPresent()) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_REQUEST_ALREADY_EXISTS);
@@ -134,7 +135,7 @@ public class AlbumArtService {
 
     albumArtRequestRepository.save(AlbumArtRequest.builder()
         .albumArtInfo(albumArtInfo)
-        .user(user)
+        .users(users)
         .createAt(LocalDate.now())
         .build()
     );
@@ -142,12 +143,12 @@ public class AlbumArtService {
 
   /* AlbumArt 삭제*/
   @Transactional
-  public void deleteAlbumArt(String id, User user) {
+  public void deleteAlbumArt(String id, Users users) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!albumArtInfo.getUser().getId().equals(user.getId())) {
+    if (!albumArtInfo.getUsers().getId().equals(users.getId())) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 

@@ -8,7 +8,7 @@ import com.study.palette.module.mixMastering.entity.QMixMasteringFile;
 import com.study.palette.module.mixMastering.entity.QMixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringRequest;
-import com.study.palette.module.musician.entity.QUserMusician;
+import com.study.palette.module.musician.entity.QUsersMusician;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
     QMixMasteringInfo mixMasteringInfo = QMixMasteringInfo.mixMasteringInfo;
     QMixMasteringFile mixMasteringFile = QMixMasteringFile.mixMasteringFile;
     QMixMasteringLicenseInfo mixMasteringLicenseInfo = QMixMasteringLicenseInfo.mixMasteringLicenseInfo;
-    QUserMusician userMusician = QUserMusician.userMusician;
+    QUsersMusician userMusician = QUsersMusician.usersMusician;
     QMixMasteringRequest mixMasteringRequest = QMixMasteringRequest.mixMasteringRequest;
 
     /*
@@ -66,7 +66,7 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
         .on(mixMasteringInfo.id.eq(mixMasteringLicenseInfo.mixMasteringInfo.id)
             .and(mixMasteringLicenseInfo.licenseType.eq(10)))
         .leftJoin(userMusician)
-        .on(mixMasteringInfo.user.id.eq(userMusician.user.id))
+        .on(mixMasteringInfo.users.id.eq(userMusician.users.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .where(mixMasteringInfo.genre.eq(query.getGenre().getGenre()))

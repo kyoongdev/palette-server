@@ -5,7 +5,7 @@ import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRe
 import com.study.palette.module.albumArt.entity.AlbumArtContact;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
@@ -35,14 +35,14 @@ public class AlbumArtCreateRequestDto {
 //    public List<MultipartFile> albumArtFiles = new ArrayList<>();
   public boolean serviceStatus;
 
-  public AlbumArtInfo toEntity(User user) {
+  public AlbumArtInfo toEntity(Users users) {
     AlbumArtInfo albumArtInfo = AlbumArtInfo.builder()
         .serviceName(this.getServiceName())
         .serviceExplain(this.getServiceExplain())
         .serviceStatus(this.isServiceStatus())
         .salesType(this.getSalesType())
         .editInfo(this.getEditInfo())
-        .user(user)
+        .users(users)
         .build();
 
     albumArtInfo.setAlbumArtLicenseInfo(this.getAlbumArtLicenseInfo().stream()

@@ -1,7 +1,7 @@
 package com.study.palette.module.recording.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -32,9 +32,9 @@ public class RecordingRequest {
   private LocalDate createAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
-  private User user;
+  private Users users;
 
   @ManyToOne
   @JoinColumn(name = "recordingInfoId")

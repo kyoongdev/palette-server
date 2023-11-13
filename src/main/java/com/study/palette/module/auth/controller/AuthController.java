@@ -2,8 +2,8 @@ package com.study.palette.module.auth.controller;
 
 import com.study.palette.common.dto.TokenDto;
 import com.study.palette.module.auth.service.AuthService;
-import com.study.palette.module.user.dto.CreateUserDto;
-import com.study.palette.module.user.dto.LoginRequest;
+import com.study.palette.module.users.dto.CreateUserDto;
+import com.study.palette.module.users.dto.LoginRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

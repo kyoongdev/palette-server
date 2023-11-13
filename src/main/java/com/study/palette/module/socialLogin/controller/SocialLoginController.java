@@ -2,7 +2,7 @@ package com.study.palette.module.socialLogin.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.study.palette.module.socialLogin.service.SocialLoginService;
-import com.study.palette.module.user.entity.SocialType;
+import com.study.palette.module.users.entity.SocialType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

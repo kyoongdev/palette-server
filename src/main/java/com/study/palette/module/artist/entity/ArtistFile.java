@@ -1,14 +1,18 @@
 package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.study.palette.module.filter.entity.FilterInfo;
-import com.study.palette.module.user.entity.User;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @NoArgsConstructor
