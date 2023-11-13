@@ -6,8 +6,8 @@ import com.study.palette.module.mixMastering.dto.MixMasteringDetailDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDto;
 import com.study.palette.module.mixMastering.dto.query.FindMixMasteringQuery;
 import com.study.palette.module.mixMastering.service.MixMasteringService;
-import com.study.palette.module.user.annotation.GetUserInfo;
-import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.users.annotation.GetUserInfo;
+import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -76,9 +76,9 @@ public class mixMasteringController {
   @PreAuthorize("hasRole('MUSICIAN')")
   public ResponseEntity<MixMasteringDto> createMixMastering(
       @Valid @RequestBody CreateMixMasteringDto createMixMasteringDto,
-      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     return ResponseEntity.ok(
-        mixMasteringService.createMixMastering(createMixMasteringDto, myInfoResponseDto.getUser()));
+        mixMasteringService.createMixMastering(createMixMasteringDto, users));
   }
 
   //믹스마스터링 수정
@@ -90,8 +90,8 @@ public class mixMasteringController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MUSICIAN')")
   public void updateMixMastering(@RequestBody MixMasteringDto mixMasteringDto,
-      @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    mixMasteringService.updateMixMastering(mixMasteringDto, myInfoResponseDto.getUser());
+      @GetUserInfo Users users) {
+    mixMasteringService.updateMixMastering(mixMasteringDto, users);
   }
 
   //믹스마스터링 삭제
@@ -102,8 +102,8 @@ public class mixMasteringController {
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteMixMastering(@PathVariable String id,
-      @Parameter(hidden = false) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    mixMasteringService.deleteMixMastering(id, myInfoResponseDto.getUser());
+      @Parameter(hidden = false) @GetUserInfo Users users) {
+    mixMasteringService.deleteMixMastering(id, users);
   }
 
   //믹스마스터링 구매의뢰
@@ -115,7 +115,7 @@ public class mixMasteringController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   public void createMixMasteringRequest(@PathVariable String id,
-      @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-//    mixMasteringService.createMixMasteringRequest(id, myInfoResponseDto.getUser());
+      @GetUserInfo Users users) {
+//    mixMasteringService.createMixMasteringRequest(id, users);
   }
 }

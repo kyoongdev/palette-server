@@ -93,9 +93,9 @@ public class MixMasteringService {
 
   /* MixMastering 수정*/
   @Transactional
-  public void updateMixMastering(String id, MixMasteringDto mixMasteringUpdateReqeustDto,
+  public void updateMixMastering(MixMasteringDto mixMasteringUpdateRequestDto,
       Users user) {
-    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
+    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(mixMasteringUpdateRequestDto.getId())
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
@@ -125,13 +125,13 @@ public class MixMasteringService {
 
   /* MixMastering 삭제*/
   @Transactional
-  public void deleteMixMastering(String id, User user) {
+  public void deleteMixMastering(String id, Users user) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUser().getId().equals(user.getId())) {
+    if (!mixMasteringInfo.getUsers().getId().equals(user.getId())) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
