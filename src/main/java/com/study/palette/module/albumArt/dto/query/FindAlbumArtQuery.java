@@ -5,18 +5,16 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
-import com.study.palette.common.exception.CustomException;
 import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
-import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class FindAlbumArtQuery extends PageDto {
 
   /*
@@ -39,14 +37,10 @@ public class FindAlbumArtQuery extends PageDto {
   신규등록 순 = 판매글 등록이 완료된 최신순
 */
   @Schema(description = "정렬", defaultValue = "")
-  private CustomSort sort;
+  private CustomSort customSort;
 
   public OrderSpecifier<?>[] getSort() {
-    if (this.sort == null) {
-      throw new CustomException(AlbumArtErrorCode.ALBUM_ART_NOT_SORT);
-    }
-
-    if (this.sort == CustomSort.POPULAR) {
+    if (this.customSort == CustomSort.POPULAR) {
       return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
     } else { // 신규등록
       return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
