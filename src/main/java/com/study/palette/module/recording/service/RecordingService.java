@@ -14,7 +14,7 @@ import com.study.palette.module.recording.entity.RecordingLicenseInfo;
 import com.study.palette.module.recording.exception.RecordingErrorCode;
 import com.study.palette.module.recording.exception.RecordingException;
 import com.study.palette.module.recording.repository.RecordingRepository;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -67,36 +67,36 @@ public class RecordingService {
   /* Recording 등록*/
   @Transactional
   public RecordingCreateResponseDto createRecording(
-      RecordingCreateRequestDto recordingCreateRequestDto, User user) {
+      RecordingCreateRequestDto recordingCreateRequestDto, Users users) {
     return new RecordingCreateResponseDto(
-        recordingRepository.save(recordingCreateRequestDto.toEntity(user)));
+        recordingRepository.save(recordingCreateRequestDto.toEntity(users)));
   }
 
   /* Recording 수정*/
   @Transactional
-  public void updateRecording(String id, RecordingUpdateRequestDto recordingUpdateReqeustDto,
-      User user) {
+  public void updateRecording(String id, RecordingUpdateRequestDto recordingUpdateRequestDto,
+      Users users) {
     RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!recordingInfo.getUser().getId().equals(user.getId())) {
+    if (!recordingInfo.getUsers().getId().equals(users.getId())) {
       throw new RecordingException(RecordingErrorCode.RECORDING_NOT_YOURS);
     }
 
-    PaletteUtils.myCopyProperties(recordingUpdateReqeustDto, recordingInfo);
+    PaletteUtils.myCopyProperties(recordingUpdateRequestDto, recordingInfo);
 
     // update 전 초기화
     recordingInfo.getRecordingLicenseInfo().clear();
 //        recordingInfo.getRecordingFile().clear(); TODO 파일 구현 후 추가
 
-    recordingUpdateReqeustDto.getRecordingLicenseInfo().stream().forEach(license -> {
+    recordingUpdateRequestDto.getRecordingLicenseInfo().stream().forEach(license -> {
       recordingInfo.getRecordingLicenseInfo()
           .add(RecordingLicenseInfo.from(license, recordingInfo));
     });
 
     //TODO 파일 구현 후 추가
-//        recordingUpdateReqeustDto.getRecordingLicenseInfo().stream().forEach(license -> {
+//        recordingUpdateRequestDto.getRecordingLicenseInfo().stream().forEach(license -> {
 //            recordingInfo.getRecordingLicenseInfo().add(RecordingLicenseInfo.from(license, recordingInfo));
 //        });
 

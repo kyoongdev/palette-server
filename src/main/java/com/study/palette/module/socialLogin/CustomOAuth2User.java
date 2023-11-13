@@ -1,6 +1,6 @@
 package com.study.palette.module.socialLogin;
 
-import com.study.palette.module.user.entity.Role;
+import com.study.palette.module.users.entity.Role;
 import java.util.Collection;
 import java.util.Map;
 import lombok.Getter;
@@ -18,9 +18,9 @@ public class CustomOAuth2User extends DefaultOAuth2User {
     /**
      * Constructs a {@code DefaultOAuth2User} using the provided parameters.
      *
-     * @param authorities      the authorities granted to the user
-     * @param attributes       the attributes about the user
-     * @param nameAttributeKey the key used to access the user's &quot;name&quot; from
+     * @param authorities      the authorities granted to the users
+     * @param attributes       the attributes about the users
+     * @param nameAttributeKey the key used to access the users's &quot;name&quot; from
      *                         {@link #getAttributes()}
      */
     public CustomOAuth2User(

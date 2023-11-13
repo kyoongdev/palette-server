@@ -5,7 +5,7 @@ import com.study.palette.common.enums.recording.Address2;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
 import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.recording.entity.RecordingLicenseInfo;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class RecordingCreateRequestDto {
   //    private List<RecordingFile> recordingFile = new ArrayList<>();
   private List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfo = new ArrayList<>();
 
-  public RecordingInfo toEntity(User user) {
+  public RecordingInfo toEntity(Users users) {
     RecordingInfo recordingInfo = RecordingInfo.builder()
         .serviceName(this.getServiceName())
         .studioName(this.getStudioName())
@@ -41,7 +41,7 @@ public class RecordingCreateRequestDto {
         .isRecordingEngineering(this.isRecordingEngineering())
         .studioReservationUrl(this.getStudioReservationUrl())
         .serviceExplain(this.getServiceExplain())
-        .user(user)
+        .users(users)
         .build();
 
     recordingInfo.setRecordingLicenseInfo(this.getRecordingLicenseInfo().stream()

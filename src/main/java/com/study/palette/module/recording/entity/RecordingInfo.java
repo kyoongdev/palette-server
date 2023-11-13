@@ -4,7 +4,7 @@ package com.study.palette.module.recording.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.enums.recording.Address1;
 import com.study.palette.common.enums.recording.Address2;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,9 +86,9 @@ public class RecordingInfo {
   private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
-  private User user;
+  private Users users;
 
   @OneToMany(mappedBy = "recordingInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private List<RecordingFile> recordingFile = new ArrayList<>();

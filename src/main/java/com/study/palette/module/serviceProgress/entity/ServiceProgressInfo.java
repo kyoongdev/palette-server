@@ -1,7 +1,8 @@
 package com.study.palette.module.serviceProgress.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.common.enums.albumArt.AlbumArtServiceType;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class ServiceProgressInfo {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private int serviceType;
+    private AlbumArtServiceType serviceType; // 인기순 집계를 위해 추가
 
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -66,9 +67,9 @@ public class ServiceProgressInfo {
     private LocalDateTime createdAt;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "usersId")
     @JsonIgnore
-    private User user;
+    private Users users;
 
     @OneToMany(mappedBy = "serviceProgressInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<ServiceProgressFile> serviceProgressFile = new ArrayList<>();

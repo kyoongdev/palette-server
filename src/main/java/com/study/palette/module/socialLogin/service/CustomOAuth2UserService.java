@@ -2,9 +2,9 @@ package com.study.palette.module.socialLogin.service;
 
 import com.study.palette.module.socialLogin.CustomOAuth2User;
 import com.study.palette.module.socialLogin.dto.OAuth2AttributesDto;
-import com.study.palette.module.user.entity.SocialType;
-import com.study.palette.module.user.entity.User;
-import com.study.palette.module.user.repository.UserRepository;
+import com.study.palette.module.users.entity.SocialType;
+import com.study.palette.module.users.entity.Users;
+import com.study.palette.module.users.repository.UsersRepository;
 import java.util.Collections;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
@@ -24,11 +24,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private static final String NAVER = "naver";
     private static final String KAKAO = "kakao";
 
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    public CustomOAuth2UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomOAuth2UserService(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
 
     @Override
@@ -54,25 +54,26 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         SocialType socialType = getSocialType(registrationId);
         String userNameAttributeName = userRequest.getClientRegistration()
-                .getProviderDetails().getUserInfoEndpoint()
-                .getUserNameAttributeName(); // OAuth2 로그인 시 키(PK)가 되는 값
+            .getProviderDetails().getUserInfoEndpoint()
+            .getUserNameAttributeName(); // OAuth2 로그인 시 키(PK)가 되는 값
         Map<String, Object> attributes = oAuth2User.getAttributes(); // 소셜 로그인에서 API가 제공하는 userInfo의 Json 값(유저 정보들)
 
         log.info("registrationId : " + registrationId);
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         OAuth2AttributesDto extractAttributes = OAuth2AttributesDto.of(socialType,
-                userNameAttributeName, attributes);
+            userNameAttributeName, attributes);
 
-        User createdUser = getUser(extractAttributes, socialType); // getUser() 메소드로 User 객체 생성 후 반환
+        Users createdUsers = getUser(extractAttributes,
+            socialType); // getUser() 메소드로 User 객체 생성 후 반환
 
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
         return new CustomOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(createdUser.getRole().getKey())),
-                attributes,
-                extractAttributes.getNameAttributeKey(),
-                createdUser.getEmail(),
-                createdUser.getRole()
+            Collections.singleton(new SimpleGrantedAuthority(createdUsers.getRole().getKey())),
+            attributes,
+            extractAttributes.getNameAttributeKey(),
+            createdUsers.getEmail(),
+            createdUsers.getRole()
         );
 
     }
@@ -88,25 +89,24 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     /**
-     * SocialType과 attributes에 들어있는 소셜 로그인의 식별값 id를 통해 회원을 찾아 반환하는 메소드 만약 찾은 회원이 있다면, 그대로 반환하고 없다면
-     * saveUser()를 호출하여 회원을 저장한다.
+     * SocialType과 attributes에 들어있는 소셜 로그인의 식별값 id를 통해 회원을 찾아 반환하는 메소드 만약 찾은 회원이 있다면, 그대로 반환하고 없다면 saveUser()를 호출하여 회원을 저장한다.
      */
-    private User getUser(OAuth2AttributesDto attributes, SocialType socialType) {
-        User findUser = userRepository.findBySocialTypeAndSocialId(socialType,
-                attributes.getOAuth2UserInfo().getId()).orElse(null);
+    private Users getUser(OAuth2AttributesDto attributes, SocialType socialType) {
+        Users findUsers = usersRepository.findBySocialTypeAndSocialId(socialType,
+            attributes.getOAuth2UserInfo().getId()).orElse(null);
 
-        if (findUser == null) {
+        if (findUsers == null) {
             return saveUser(attributes, socialType);
         }
-        return findUser;
+        return findUsers;
     }
 
     /**
      * OAuthAttributes의 toEntity() 메소드를 통해 빌더로 User 객체 생성 후 반환 생성된 User 객체를 DB에 저장 : socialType,
      * socialId, email, role 값만 있는 상태
      */
-    private User saveUser(OAuth2AttributesDto attributes, SocialType socialType) {
-        User createdUser = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
-        return userRepository.save(createdUser);
+    private Users saveUser(OAuth2AttributesDto attributes, SocialType socialType) {
+        Users createdUsers = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
+        return usersRepository.save(createdUsers);
     }
 }

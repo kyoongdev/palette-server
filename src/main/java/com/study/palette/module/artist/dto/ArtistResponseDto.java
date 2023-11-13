@@ -5,11 +5,9 @@ import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
 import com.study.palette.module.artist.entity.ArtistReview;
 import com.study.palette.module.filter.entity.FilterInfo;
-import com.study.palette.module.user.entity.User;
-import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
 
 
 @Data
@@ -39,7 +37,7 @@ public class ArtistResponseDto {
         this.editInfo = artistInfo.getEditInfo();
         this.serviceInfo = artistInfo.getServiceInfo();
         this.serviceStatus = artistInfo.isServiceStatus();
-        this.userName = artistInfo.getUser().getName();
+        this.userName = artistInfo.getUsers().getName();
         this.artistFile = artistInfo.getArtistFile();
         this.artistLicenseInfo = artistInfo.getArtistLicenseInfo();
         this.artistReview = artistInfo.getArtistReview();
