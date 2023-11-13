@@ -21,7 +21,7 @@ public class FindMixMasteringQuery extends PageDto {
 
   @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
       "POPULAR"})
-  private CustomSort sort;
+  private CustomSort customSort;
 
   public OrderSpecifier<?>[] getSort() {
     if (this.sort == null) {
