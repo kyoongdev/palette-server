@@ -24,14 +24,12 @@ spring: #공통환경
 
 ---
 
-#server:
-#  tomcat:
-#    connection-timeout: 5000
 
 springdoc:
   swagger-ui:
     #    path: /swagger-ui.html
     #    path: /test-swagger
+
     groups-order: asc
     operationsSorter: method
     #    disable-swagger-default-url: true

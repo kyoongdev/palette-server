@@ -1,16 +1,20 @@
 package com.study.palette.module.chat.entity;
 
-import com.study.palette.module.user.entity.User;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor

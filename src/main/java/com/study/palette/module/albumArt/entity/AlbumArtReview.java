@@ -1,16 +1,20 @@
 package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.albumArt.dto.review.AlbumArtReviewCreateRequestDto;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
@@ -18,40 +22,31 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class AlbumArtReview {
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
 
-    private int rating;
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(length = 24)
+  private String id;
 
-    @Column(length = 50)
-    private String review;
+  private BigDecimal rating;
 
-    private LocalDate createdAt;
+  @Column(length = 50)
+  private String review;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    @JsonIgnore
-    private User user;
+  private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "albumArtInfoId")
-    @JsonIgnore
-    private AlbumArtInfo albumArtInfo;
+  @ManyToOne
+  @JoinColumn(name = "usersId")
+  @JsonIgnore
+  private Users users;
 
-    public static AlbumArtReview from(AlbumArtReviewCreateRequestDto albumArtReviewCreateDto, AlbumArtInfo albumArtInfo) {
-        return builder()
-                .rating(albumArtReviewCreateDto.getRating())
-                .review(albumArtReviewCreateDto.getReview())
-                .createdAt(albumArtReviewCreateDto.getCreatedAt())
-                .user(albumArtInfo.getUser())
-                .albumArtInfo(albumArtInfo)
-                .build();
-    }
+  @ManyToOne
+  @JoinColumn(name = "albumArtInfoId")
+  @JsonIgnore
+  private AlbumArtInfo albumArtInfo;
 
-    public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
-        this.albumArtInfo = albumArtInfo;
-    }
+  public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
+    this.albumArtInfo = albumArtInfo;
+  }
 }

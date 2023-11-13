@@ -16,4 +16,5 @@ public class FileUploadDto {
   String uploadFileName;
   String uploadFileSize;
   String suffix;
+
 }

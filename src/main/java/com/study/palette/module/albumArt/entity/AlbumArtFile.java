@@ -2,7 +2,14 @@ package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.PaletteUtils;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,85 +17,83 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.*;
-import java.time.LocalDate;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
 public class AlbumArtFile {
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 24)
-    private String id;
 
-    @Column(length = 256)
-    private String originFileName;
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(length = 24)
+  private String id;
 
-    @Column(length = 256)
-    private String uploadFileName;
+  @Column(length = 256)
+  private String originFileName;
 
-    private int uploadFileSize;
+  @Column(length = 256)
+  private String uploadFileName;
 
-    @Column(length = 256)
-    private String upoladFilePath;
+  private int uploadFileSize;
 
-    private int fileMasterCode;
+  @Column(length = 256)
+  private String upoladFilePath;
 
-    @ManyToOne
-    @JoinColumn(name = "albumArtId")
-    private AlbumArtInfo albumArt;
+  private int fileMasterCode;
 
-    @Column(length = 4)
-    private String suffix;
+  @ManyToOne
+  @JoinColumn(name = "albumArtId")
+  private AlbumArtInfo albumArt;
 
-    private boolean isUse;
+  @Column(length = 4)
+  private String suffix;
 
-    private boolean isThumbnail;
+  private boolean isUse;
 
-    private LocalDate createdAt;
+  private boolean isThumbnail;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    @JsonIgnore
-    private User user;
+  private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "albumArtInfoId")
-    private AlbumArtInfo albumArtInfo;
+  @ManyToOne
+  @JoinColumn(name = "usersId")
+  @JsonIgnore
+  private Users users;
 
-    public static AlbumArtFile from(MultipartFile albumArtFiles, AlbumArtInfo albumArtInfo) {
-        return new AlbumArtFile(albumArtFiles, albumArtInfo);
+  @ManyToOne
+  @JoinColumn(name = "albumArtInfoId")
+  private AlbumArtInfo albumArtInfo;
+
+  public static AlbumArtFile from(MultipartFile albumArtFiles, AlbumArtInfo albumArtInfo) {
+    return new AlbumArtFile(albumArtFiles, albumArtInfo);
+  }
+
+  public AlbumArtFile(MultipartFile albumArtFile, AlbumArtInfo albumArtInfo) {
+    this.originFileName = albumArtFile.getOriginalFilename();
+    this.uploadFileName = PaletteUtils.generateUniqueName(albumArtFile.getOriginalFilename());
+    this.uploadFileSize = (int) albumArtFile.getSize();
+    this.upoladFilePath = "/upload"; //TODO 경로수정
+    this.fileMasterCode = 1; //TODO 코드수정
+    this.suffix = albumArtFile.getContentType();
+    this.isUse = true;
+    this.isThumbnail = false;
+    this.createdAt = LocalDateTime.now();
+
+    if (albumArtInfo != null) {
+      setAlbumArt(albumArtInfo);
+    }
+  }
+
+  public void setAlbumArt(AlbumArtInfo albumArtInfo) {
+    if (this.albumArtInfo != null) {
+      this.albumArtInfo.getAlbumArtFile().remove(this);
     }
 
-    public AlbumArtFile(MultipartFile albumArtFile, AlbumArtInfo albumArtInfo) {
-        this.originFileName = albumArtFile.getOriginalFilename();
-        this.uploadFileName = PaletteUtils.generateUniqueName(albumArtFile.getOriginalFilename());
-        this.uploadFileSize = (int) albumArtFile.getSize();
-        this.upoladFilePath = "/upload"; //TODO 경로수정
-        this.fileMasterCode = 1; //TODO 코드수정
-        this.suffix = albumArtFile.getContentType();
-        this.isUse = true;
-        this.isThumbnail = false;
-        this.createdAt = LocalDate.now();
+    this.albumArtInfo = albumArtInfo;
 
-        if (albumArtInfo != null) {
-            setAlbumArt(albumArtInfo);
-        }
-    }
-
-    public void setAlbumArt(AlbumArtInfo albumArtInfo) {
-        if (this.albumArtInfo != null) {
-            this.albumArtInfo.getAlbumArtFile().remove(this);
-        }
-
-        this.albumArtInfo = albumArtInfo;
-
-        albumArtInfo.getAlbumArtFile().add(this);
-    }
+    albumArtInfo.getAlbumArtFile().add(this);
+  }
 
 
 }
