@@ -1,16 +1,17 @@
 package com.study.palette.module.users.controller;
 
 import com.study.palette.common.dto.PaginationDto;
-import com.study.palette.module.user.dto.UserChangePasswordDto;
 import com.study.palette.module.users.annotation.GetUserInfo;
 import com.study.palette.module.users.dto.FindUserQuery;
 import com.study.palette.module.users.dto.MyInfoResponseDto;
+import com.study.palette.module.users.dto.UserChangePasswordDto;
 import com.study.palette.module.users.dto.UserCreateRequestDto;
 import com.study.palette.module.users.dto.UserEmailDto;
 import com.study.palette.module.users.dto.UserFindEmailDto;
 import com.study.palette.module.users.dto.UserFindPasswordDto;
 import com.study.palette.module.users.dto.UserProfileDto;
 import com.study.palette.module.users.dto.UserUpdateDto;
+import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -60,8 +61,8 @@ public class UserController {
   @GetMapping("me")
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   public ResponseEntity<MyInfoResponseDto> getMyInfo(
-      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    return ResponseEntity.ok(myInfoResponseDto);
+      @Parameter(hidden = true) @GetUserInfo Users users) {
+    return ResponseEntity.ok(userService.getUserByIdWithDto(users));
   }
 
   /**
@@ -135,8 +136,8 @@ public class UserController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   void updateUser(@RequestBody UserUpdateDto user,
-      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    userService.updateUser(myInfoResponseDto.getId(), user);
+      @Parameter(hidden = true) @GetUserInfo Users users) {
+    userService.updateUser(users.getId(), user);
   }
 
   /**
@@ -150,8 +151,8 @@ public class UserController {
   @DeleteMapping("soft")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
-  void softDelete(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    userService.generateDeletedAt(myInfoResponseDto.getId());
+  void softDelete(@Parameter(hidden = true) @GetUserInfo Users users) {
+    userService.generateDeletedAt(users.getId());
   }
 
   /**
@@ -165,8 +166,8 @@ public class UserController {
   @DeleteMapping("hard")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('ADMIN')")
-  void hardDelete(@Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    userService.deleteUser(myInfoResponseDto.getId());
+  void hardDelete(@Parameter(hidden = true) @GetUserInfo Users users) {
+    userService.deleteUser(users.getId());
   }
 
   /**
@@ -181,7 +182,7 @@ public class UserController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   void changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto,
-      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    userService.updatePassword(userChangePasswordDto, myInfoResponseDto.getId());
+      @Parameter(hidden = true) @GetUserInfo Users users) {
+    userService.updatePassword(userChangePasswordDto, users.getId());
   }
 }
