@@ -118,8 +118,8 @@ public class UsersService {
 
   //회원정보 수정
   @Transactional
-  public void updateUser(String id, UserUpdateDto userUpdateDto) {
-    Users users = usersRepository.findById(UUID.fromString(id))
+  public void updateUser(UUID id, UserUpdateDto userUpdateDto) {
+    Users users = usersRepository.findById(id)
         .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
     PaletteUtils.myCopyProperties(userUpdateDto, users);
@@ -129,8 +129,8 @@ public class UsersService {
 
   //삭제시간 생성 - soft
   @Transactional
-  public void generateDeletedAt(String id) {
-    Users users = usersRepository.findById(UUID.fromString(id))
+  public void generateDeletedAt(UUID id) {
+    Users users = usersRepository.findById(id)
         .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
     users.generateDeletedAt();
@@ -140,8 +140,8 @@ public class UsersService {
 
   //회원 영구 삭제 - hard
   @Transactional
-  public void deleteUser(String id) {
-    usersRepository.deleteById(UUID.fromString(id));
+  public void deleteUser(UUID id) {
+    usersRepository.deleteById(id);
   }
 
   //비밀번호 찾기
@@ -160,8 +160,8 @@ public class UsersService {
 
   //비밀번호 변경 = 현재비밀번호 입력하여 같은지 확인후 변경처리 한다
   @Transactional
-  public void updatePassword(UserChangePasswordDto userChangePasswordDto, String id) {
-    Users user = usersRepository.findById(UUID.fromString(id))
+  public void updatePassword(UserChangePasswordDto userChangePasswordDto, UUID id) {
+    Users user = usersRepository.findById(id)
         .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
     if (!passwordEncoder.matches(userChangePasswordDto.getPassword(), user.getPassword())) {
