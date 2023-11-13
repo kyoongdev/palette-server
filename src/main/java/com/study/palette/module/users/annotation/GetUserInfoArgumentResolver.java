@@ -22,7 +22,7 @@ public class GetUserInfoArgumentResolver implements HandlerMethodArgumentResolve
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    // 호출된 메서드 정보 검증 MyInfoResponseDto.class, GetUserInfo.class 인지 확인
+    // 호출된 메서드 정보 검증 Users.class, GetUserInfo.class 인지 확인
     return parameter.getParameterType().isAssignableFrom(Users.class)
         && parameter.hasParameterAnnotation(GetUserInfo.class);
   }
@@ -31,7 +31,7 @@ public class GetUserInfoArgumentResolver implements HandlerMethodArgumentResolve
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    //MyInfoResponseDto 타입으로 반환
+    //Users 타입으로 반환
     return usersService.getUserById(authentication.getName());
   }
 
