@@ -1,4 +1,4 @@
-package com.study.palette.module.user.dto;
+package com.study.palette.module.users.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,10 @@
 package com.study.palette.module.users.controller;
 
 import com.study.palette.common.dto.PaginationDto;
-import com.study.palette.module.user.dto.UserChangePasswordDto;
 import com.study.palette.module.users.annotation.GetUserInfo;
 import com.study.palette.module.users.dto.FindUserQuery;
 import com.study.palette.module.users.dto.MyInfoResponseDto;
+import com.study.palette.module.users.dto.UserChangePasswordDto;
 import com.study.palette.module.users.dto.UserCreateRequestDto;
 import com.study.palette.module.users.dto.UserEmailDto;
 import com.study.palette.module.users.dto.UserFindEmailDto;
