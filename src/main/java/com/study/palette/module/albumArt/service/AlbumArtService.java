@@ -19,6 +19,7 @@ import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -125,8 +126,8 @@ public class AlbumArtService {
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //오늘 이미 구매의뢰를 했는지 체크
-    Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUserAndCreatedAt(
-        users, albumArtInfo, LocalDate.now());
+    Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUsersAndCreatedAt(
+        users, albumArtInfo, LocalDateTime.now());
 
     if (albumArtRequest.isPresent()) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_REQUEST_ALREADY_EXISTS);

@@ -13,7 +13,7 @@ import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.exception.MixMasteringErrorCode;
 import com.study.palette.module.mixMastering.exception.MixMasteringException;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -86,21 +86,21 @@ public class MixMasteringService {
   /* MixMastering 등록*/
   @Transactional
   public MixMasteringDto createMixMastering(
-      CreateMixMasteringDto createMixMasteringDto, User user) {
+      CreateMixMasteringDto createMixMasteringDto, Users users) {
     return new MixMasteringDto(
-        mixMasteringRepository.save(createMixMasteringDto.toEntity(user)));
+        mixMasteringRepository.save(createMixMasteringDto.toEntity(users)));
   }
 
   /* MixMastering 수정*/
   @Transactional
   public void updateMixMastering(String id, MixMasteringDto mixMasteringUpdateReqeustDto,
-      User user) {
+      Users user) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUser().getId().equals(user.getId())) {
+    if (!mixMasteringInfo.getUsers().getId().equals(user.getId())) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
