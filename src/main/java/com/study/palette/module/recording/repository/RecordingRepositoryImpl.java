@@ -36,7 +36,7 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
             recordingInfo.id,
             recordingInfo.serviceName,
             recordingInfo.salesType,
-            recordingInfo.user.name.as("userName"),
+            recordingInfo.users.name.as("userName"),
             recordingFile.upoladFilePath.as("fileUrl"),
             recordingLicenseInfo.price.as("price")))
         .from(recordingInfo)
@@ -52,7 +52,7 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
         .groupBy(recordingInfo.id,
             recordingInfo.serviceName,
             recordingInfo.salesType,
-            recordingInfo.user.name,
+            recordingInfo.users.name,
             recordingFile.upoladFilePath,
             recordingLicenseInfo.price)
         .orderBy(recordingInfo.createdAt.desc())

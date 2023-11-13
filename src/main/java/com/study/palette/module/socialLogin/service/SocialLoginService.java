@@ -1,12 +1,19 @@
 package com.study.palette.module.socialLogin.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.study.palette.module.socialLogin.*;
-import com.study.palette.module.socialLogin.dto.*;
-import com.study.palette.module.user.entity.Role;
-import com.study.palette.module.user.entity.SocialType;
-import com.study.palette.module.user.entity.User;
-import com.study.palette.module.user.repository.UserRepository;
+import com.study.palette.module.socialLogin.GoogleAuth;
+import com.study.palette.module.socialLogin.KakaoAuth;
+import com.study.palette.module.socialLogin.NaverAuth;
+import com.study.palette.module.socialLogin.dto.GoogleOAuthTokenDto;
+import com.study.palette.module.socialLogin.dto.GoogleUserInfoDto;
+import com.study.palette.module.socialLogin.dto.KakaoOAuthTokenDto;
+import com.study.palette.module.socialLogin.dto.KakaoUserInfoDto;
+import com.study.palette.module.socialLogin.dto.NaverOAuthTokenDto;
+import com.study.palette.module.socialLogin.dto.NaverUserInfoDto;
+import com.study.palette.module.users.entity.Role;
+import com.study.palette.module.users.entity.SocialType;
+import com.study.palette.module.users.entity.Users;
+import com.study.palette.module.users.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,14 +25,14 @@ public class SocialLoginService {
 
     private final NaverAuth naverAuth;
 
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    public SocialLoginService(GoogleAuth googleAuth, KakaoAuth kakaoAuth, NaverAuth naverAuth, UserRepository userRepository) {
+    public SocialLoginService(GoogleAuth googleAuth, KakaoAuth kakaoAuth, NaverAuth naverAuth, UsersRepository usersRepository) {
         this.googleAuth = googleAuth;
         this.kakaoAuth = kakaoAuth;
         this.naverAuth = naverAuth;
-        this.userRepository = userRepository;
+        this.usersRepository = usersRepository;
     }
 
     public String redirectUrl(SocialType socialLoginType) {
@@ -51,53 +58,56 @@ public class SocialLoginService {
         //TODO: 소셜로그인 타입 UserInfoDto로 변환 후 작업 필요
         if(socialType.equals(SocialType.GOOGLE)) {
             GoogleUserInfoDto user = getGoogleUserInfoDto(code);
-            User findUser = userRepository.findBySocialTypeAndSocialId(socialType, user.getId()).orElse(null);
+            Users findUsers = usersRepository.findBySocialTypeAndSocialId(socialType, user.getId())
+                .orElse(null);
 
-            if(findUser == null) {
-                User createUser = User.builder()
-                        .role(Role.MEMBER)
-                        .email(user.getEmail())
-                        .name(user.getName())
-                        .socialType(socialType)
-                        .socialId(user.getId())
-                        .build();
+            if (findUsers == null) {
+                Users createUsers = Users.builder()
+                    .role(Role.MEMBER)
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .socialType(socialType)
+                    .socialId(user.getId())
+                    .build();
 
-            String id = userRepository.save(createUser).getId().toString();
-            return id;
+                String id = usersRepository.save(createUsers).getId().toString();
+                return id;
             }
         } else if(socialType.equals(SocialType.KAKAO)) {
             KakaoUserInfoDto user = getKakaoUserInfoDto(code);
-            User findUser = userRepository.findBySocialTypeAndSocialId(socialType, String.valueOf(user.getId())).orElse(null);
+            Users findUsers = usersRepository.findBySocialTypeAndSocialId(socialType,
+                String.valueOf(user.getId())).orElse(null);
 
-            if(findUser == null) {
-                User createUser = User.builder()
-                        .role(Role.MEMBER)
-                        .email(user.getKakao_account().getEmail())
-                        .name(user.getKakao_account().getProfile().getNickname())
-                        .socialType(socialType)
-                        .socialId(String.valueOf(user.getId()))
-                        .build();
+            if (findUsers == null) {
+                Users createUsers = Users.builder()
+                    .role(Role.MEMBER)
+                    .email(user.getKakao_account().getEmail())
+                    .name(user.getKakao_account().getProfile().getNickname())
+                    .socialType(socialType)
+                    .socialId(String.valueOf(user.getId()))
+                    .build();
 
-            String id = userRepository.save(createUser).getId().toString();
-            return id;
+                String id = usersRepository.save(createUsers).getId().toString();
+                return id;
             }
 
-        } else if(socialType.equals(SocialType.NAVER)){
+        } else if (socialType.equals(SocialType.NAVER)) {
             NaverUserInfoDto user = getNaverUserInfoDto(code);
 
-            User findUser = userRepository.findBySocialTypeAndSocialId(socialType, user.getResponse().getId()).orElse(null);
+            Users findUsers = usersRepository.findBySocialTypeAndSocialId(socialType,
+                user.getResponse().getId()).orElse(null);
 
-            if(findUser == null) {
-                User createUser = User.builder()
-                        .role(Role.MEMBER)
-                        .email(user.getResponse().getEmail())
-                        .name(user.getResponse().getName())
-                        .socialType(socialType)
-                        .socialId(user.getResponse().getId())
-                        .build();
+            if (findUsers == null) {
+                Users createUsers = Users.builder()
+                    .role(Role.MEMBER)
+                    .email(user.getResponse().getEmail())
+                    .name(user.getResponse().getName())
+                    .socialType(socialType)
+                    .socialId(user.getResponse().getId())
+                    .build();
 
-            String id = userRepository.save(createUser).getId().toString();
-            return id;
+                String id = usersRepository.save(createUsers).getId().toString();
+                return id;
             }
         }
 

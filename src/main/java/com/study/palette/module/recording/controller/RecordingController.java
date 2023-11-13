@@ -8,8 +8,8 @@ import com.study.palette.module.recording.dto.info.RecordingResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingUpdateRequestDto;
 import com.study.palette.module.recording.dto.query.FindRecordingQuery;
 import com.study.palette.module.recording.service.RecordingService;
-import com.study.palette.module.user.annotation.GetUserInfo;
-import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.users.annotation.GetUserInfo;
+import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -83,10 +83,10 @@ public class RecordingController {
   @PreAuthorize("hasRole('MUSICIAN')")
   public ResponseEntity<RecordingCreateResponseDto> createRecording(
       @Valid @RequestBody RecordingCreateRequestDto recordingCreateRequestDto,
-      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     return ResponseEntity.ok(
         recordingService.createRecording(recordingCreateRequestDto,
-            myInfoResponseDto.getUser()));
+            users));
   }
 
   //레코딩 수정
@@ -100,9 +100,9 @@ public class RecordingController {
   @PreAuthorize("hasRole('MUSICIAN')")
   public void updateRecording(@PathVariable String id,
       @RequestBody RecordingUpdateRequestDto recordingCreateRequestDto,
-      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     recordingService.updateRecording(id, recordingCreateRequestDto,
-        myInfoResponseDto.getUser());
+        users);
   }
 
   //레코딩 삭제

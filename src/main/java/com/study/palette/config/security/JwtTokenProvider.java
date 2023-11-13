@@ -2,10 +2,10 @@ package com.study.palette.config.security;
 
 import com.study.palette.common.dto.TokenDto;
 import com.study.palette.config.UserDetailsServiceImpl;
-import com.study.palette.module.user.entity.RefreshToken;
-import com.study.palette.module.user.entity.User;
-import com.study.palette.module.user.repository.RefreshTokenRepository;
-import com.study.palette.module.user.repository.UserRepository;
+import com.study.palette.module.users.entity.RefreshToken;
+import com.study.palette.module.users.entity.Users;
+import com.study.palette.module.users.repository.RefreshTokenRepository;
+import com.study.palette.module.users.repository.UsersRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
 
   private final RefreshTokenRepository refreshTokenRepository;
-  private final UserRepository userRepository;
+  private final UsersRepository usersRepository;
   private UserDetailsServiceImpl userDetailsService;
   @Value("${jwt.secret}")
   private String secretKey;
@@ -41,28 +41,28 @@ public class JwtTokenProvider {
 
   @Autowired
   public JwtTokenProvider(UserDetailsServiceImpl userDetailsService,
-      RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+      RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository) {
     this.userDetailsService = userDetailsService;
     this.refreshTokenRepository = refreshTokenRepository;
-    this.userRepository = userRepository;
+    this.usersRepository = usersRepository;
   }
 
   /**
    * 토큰 생성
    */
   public TokenDto createToken(Authentication authentication) {
-    User user = userRepository.findById(UUID.fromString(authentication.getName()))
+    Users users = usersRepository.findById(UUID.fromString(authentication.getName()))
         .orElseThrow(() -> {
           return new RuntimeException("로그인에러");//TODO 추후 에러처리
         });
 
-    Claims claims = Jwts.claims().setSubject(user.getId().toString());
+    Claims claims = Jwts.claims().setSubject(users.getId().toString());
     Date now = new Date();
     Date expireDate = new Date(now.getTime() + accessExpirationTime);
 
     String accessToken = Jwts.builder()
         .setClaims(claims)
-        .claim("ROLE", user.getRole())
+        .claim("ROLE", users.getRole())
         .setIssuedAt(now)
         .setExpiration(expireDate)
         .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -70,19 +70,19 @@ public class JwtTokenProvider {
 
     String refreshToken = Jwts.builder()
         .setClaims(claims)
-        .claim("ROLE", user.getRole())
+        .claim("ROLE", users.getRole())
         .setIssuedAt(now)
         .setExpiration(expireDate)
         .signWith(SignatureAlgorithm.HS256, secretKey)
         .compact();
 
     //TODO refresh token 저장 전에 기존 refresh token 삭제
-    refreshTokenRepository.deleteByUserId(UUID.fromString(authentication.getName()));
+    refreshTokenRepository.deleteByUsersId(UUID.fromString(authentication.getName()));
 
     //refresh token 저장
     refreshTokenRepository.save(
         RefreshToken.builder()
-            .user(user)
+            .users(users)
             .refreshToken(refreshToken)
             .refreshExpirationTime(refreshExpirationTime)
             .issuedAt(now)

@@ -1,7 +1,7 @@
 package com.study.palette.config;
 
-import com.study.palette.module.user.entity.User;
-import com.study.palette.module.user.repository.UserRepository;
+import com.study.palette.module.users.entity.Users;
+import com.study.palette.module.users.repository.UsersRepository;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -15,29 +15,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private final UserRepository userRepository;
+  private final UsersRepository usersRepository;
 
   @Autowired
-  public UserDetailsServiceImpl(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public UserDetailsServiceImpl(UsersRepository usersRepository) {
+    this.usersRepository = usersRepository;
   }
 
   @Override
   public UserDetails loadUserByUsername(String id) throws RuntimeException {
-    User user = userRepository.findById(UUID.fromString(id))
+    Users users = usersRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> {
           return new RuntimeException("로그인에러");//TODO 추후 에러처리
         });
 
     Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-    grantedAuthorities.add((GrantedAuthority) () -> user.getRole().getKey());
+    grantedAuthorities.add((GrantedAuthority) () -> users.getRole().getKey());
 
     return new org
         .springframework
         .security
         .core
         .userdetails
-        .User(user.getId().toString(), user.getPassword(), grantedAuthorities);
+        .User(users.getId().toString(), users.getPassword(), grantedAuthorities);
   }
 
 }

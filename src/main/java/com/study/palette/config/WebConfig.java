@@ -1,7 +1,7 @@
 package com.study.palette.config;
 
-import com.study.palette.module.user.annotation.GetUserInfoArgumentResolver;
-import com.study.palette.module.user.service.UserService;
+import com.study.palette.module.users.annotation.GetUserInfoArgumentResolver;
+import com.study.palette.module.users.service.UsersService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-  private final UserService userService;
+  private final UsersService usersService;
 
   @Autowired
-  public WebConfig(UserService userService) {
-    this.userService = userService;
+  public WebConfig(UsersService usersService) {
+    this.usersService = usersService;
   }
 
   @Override
@@ -26,6 +26,6 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public GetUserInfoArgumentResolver getUserInfoArgumentResolver() {
-    return new GetUserInfoArgumentResolver(userService);
+    return new GetUserInfoArgumentResolver(usersService);
   }
 }

@@ -4,9 +4,9 @@ import com.study.palette.module.socialLogin.GoogleOAuth2UserInfo;
 import com.study.palette.module.socialLogin.KakaoOAuth2UserInfo;
 import com.study.palette.module.socialLogin.NaverOAuth2UserInfo;
 import com.study.palette.module.socialLogin.OAuth2UserInfo;
-import com.study.palette.module.user.entity.Role;
-import com.study.palette.module.user.entity.SocialType;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Role;
+import com.study.palette.module.users.entity.SocialType;
+import com.study.palette.module.users.entity.Users;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,16 +70,16 @@ public class OAuth2AttributesDto {
      * socialId(식별값), nickname, imageUrl을 가져와서 build email에는 UUID로 중복 없는 랜덤 값 생성 role은 GUEST로 설정 이후에
      * CustomOAuth2UserService에서 Db에 저장할 내 서비스 User를 OAuth2UserInfo의 정보를 사용하여 빌더로 빌드 후 반환합니다.
      */
-    public User toEntity(SocialType socialType, OAuth2UserInfo oauth2UserInfo) {
-        return User.builder()
-                .socialType(socialType)
-                .socialId(oauth2UserInfo.getId())
-                .email(oauth2UserInfo.getEmail())
-                .name(oauth2UserInfo.getName())
+    public Users toEntity(SocialType socialType, OAuth2UserInfo oauth2UserInfo) {
+        return Users.builder()
+            .socialType(socialType)
+            .socialId(oauth2UserInfo.getId())
+            .email(oauth2UserInfo.getEmail())
+            .name(oauth2UserInfo.getName())
 //                .nickname(oauth2UserInfo.getNickname())
 //                .imageUrl(oauth2UserInfo.getImageUrl())
-                .role(Role.MEMBER)
-                .build();
+            .role(Role.MEMBER)
+            .build();
     }
 
 }
