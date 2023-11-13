@@ -93,9 +93,10 @@ public class MixMasteringService {
 
   /* MixMastering 수정*/
   @Transactional
-  public void updateMixMastering(String id, MixMasteringDto mixMasteringUpdateReqeustDto,
+  public void updateMixMastering(MixMasteringDto mixMasteringUpdateRequestDto,
       User user) {
-    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
+    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(
+            UUID.fromString(mixMasteringUpdateRequestDto.getId()))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
@@ -104,13 +105,13 @@ public class MixMasteringService {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
-    PaletteUtils.myCopyProperties(mixMasteringUpdateReqeustDto, mixMasteringInfo);
+    PaletteUtils.myCopyProperties(mixMasteringUpdateRequestDto, mixMasteringInfo);
 
     // update 전 초기화
     mixMasteringInfo.getMixMasteringLicenseInfos().clear();
 //        mixMasteringInfo.getMixMasteringFile().clear(); TODO 파일 구현 후 추가
 
-    mixMasteringUpdateReqeustDto.getMixMasteringLicenseInfos().stream().forEach(license -> {
+    mixMasteringUpdateRequestDto.getMixMasteringLicenseInfos().stream().forEach(license -> {
       mixMasteringInfo.getMixMasteringLicenseInfos()
           .add(MixMasteringLicenseInfo.from(license, mixMasteringInfo));
     });
@@ -125,10 +126,16 @@ public class MixMasteringService {
 
   /* MixMastering 삭제*/
   @Transactional
-  public void deleteMixMastering(String id) {
+  public void deleteMixMastering(String id, User user) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
+
+    //본인이 작성한 글인지 체크
+    if (!mixMasteringInfo.getUser().getId().equals(user.getId())) {
+      throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
+    }
+
     mixMasteringRepository.delete(mixMasteringInfo);
   }
 }
