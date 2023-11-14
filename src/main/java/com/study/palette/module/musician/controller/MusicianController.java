@@ -14,10 +14,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/musician")
+@RequestMapping("api")
 @Tag(name = "Musician", description = "뮤지션 API")
 @Log4j2
 public class MusicianController {
@@ -40,7 +47,7 @@ public class MusicianController {
             @ApiResponse(responseCode = "201", description = "생성 성공", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @PostMapping("/create/musician/{id}")
+    @PostMapping("/musician/{id}")
     @ResponseStatus(HttpStatus.CREATED)
 
     public MyInfoResponseDto createMusician(@PathVariable String id, @RequestBody CreateMusicianDto createMusicianDto) {
@@ -54,7 +61,7 @@ public class MusicianController {
             @ApiResponse(responseCode = "204", description = "생성 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseWithIdDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @PatchMapping("/update/musician/{id}")
+    @PatchMapping("/musician/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseWithIdDto updateMusician(@PathVariable String id, @RequestBody UpdateMusicianDto updateMusicianDto) {
 
@@ -65,7 +72,7 @@ public class MusicianController {
             @ApiResponse(responseCode = "204", description = "삭제 성공"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    @DeleteMapping("/update/musician/{id}")
+    @DeleteMapping("/musician/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteMusician(@PathVariable("id") String id) {
         musicianService.deleteMusician(id);
