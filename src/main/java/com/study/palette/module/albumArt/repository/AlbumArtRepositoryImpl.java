@@ -53,7 +53,7 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
             .and(albumArtLicenseInfo.licenseType.eq(10)))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(albumArtInfo.salesType.eq(query.getSaleType()))
+//        .where(albumArtInfo.salesType.eq(query.getSaleType()))
         .groupBy(albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,

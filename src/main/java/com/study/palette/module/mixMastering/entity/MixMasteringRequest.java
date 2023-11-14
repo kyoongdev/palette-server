@@ -1,8 +1,8 @@
-package com.study.palette.module.albumArt.entity;
+package com.study.palette.module.mixMastering.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AlbumArtRequest {
+public class MixMasteringRequest {
 
   @Id
   @GeneratedValue(generator = "uuid2")
@@ -29,15 +29,15 @@ public class AlbumArtRequest {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private LocalDateTime createAt;
+  private LocalDate createAt;
 
   @ManyToOne
-  @JoinColumn(name = "usersId")
+  @JoinColumn(name = "userId")
   @JsonIgnore
   private Users users;
 
   @ManyToOne
-  @JoinColumn(name = "albumArtInfoId")
+  @JoinColumn(name = "mixMasteringInfoId")
   @JsonIgnore
-  private AlbumArtInfo albumArtInfo;
+  private MixMasteringInfo mixMasteringInfo;
 }

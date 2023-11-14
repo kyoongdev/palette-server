@@ -79,4 +79,8 @@ public class AlbumArtInfo {
   public void setAlbumArtContact(List<AlbumArtContact> albumArtContacts) {
     this.albumArtContact = albumArtContacts;
   }
+
+  public void setAlbumArtFiles(List<AlbumArtFile> albumArtFiles) {
+    this.albumArtFile = albumArtFiles;
+  }
 }
