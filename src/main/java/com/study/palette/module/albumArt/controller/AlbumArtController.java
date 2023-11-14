@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "앨범아트", description = "앨범아트")
-@RequestMapping("/api/albumArts")
+@RequestMapping("/albumArts")
 @RestController
 public class AlbumArtController {
 

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "아티스트", description = "아티스트")
-@RequestMapping("/api/artists")
+@RequestMapping("/artists")
 @RestController
 public class ArtistController {
 

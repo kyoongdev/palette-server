@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("")
 @Tag(name = "Musician", description = "뮤지션 API")
 @Log4j2
 public class MusicianController {
