@@ -2,8 +2,8 @@ package com.study.palette.module.recording.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.common.enums.recording.Address1;
-import com.study.palette.common.enums.recording.Address2;
+import com.study.palette.common.enums.recording.CityCode;
+import com.study.palette.common.enums.recording.RegionCode;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,11 +60,11 @@ public class RecordingInfo {
 
   @Column(length = 100)
   @Enumerated(EnumType.STRING)
-  private Address1 studioAddress1;
+  private RegionCode studioRegionCode;
 
   @Column(length = 100)
   @Enumerated(EnumType.STRING)
-  private Address2 studioAddress2;
+  private CityCode studioCityCode;
 
   //녹음 엔지니어링 제공 여부
   @Column(columnDefinition = "boolean default false")
