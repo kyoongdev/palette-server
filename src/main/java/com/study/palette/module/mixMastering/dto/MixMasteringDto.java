@@ -3,13 +3,12 @@ package com.study.palette.module.mixMastering.dto;
 import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
 import com.study.palette.module.mixMastering.dto.file.MixMasteringFileDto;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
-import com.study.palette.module.user.dto.CommonUserDto;
+import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Data;
 
 @Data
 public class MixMasteringDto {
@@ -50,8 +49,9 @@ public class MixMasteringDto {
     this.genre = MixMasteringGenre.findMixMasteringGenre(mixMasteringInfo.getGenre());
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
     this.createdAt = mixMasteringInfo.getCreatedAt();
-    this.user = new CommonUserDto(mixMasteringInfo.getUser());
-    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
+    this.user = new CommonUserDto(mixMasteringInfo.getUsers());
+    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream()
+        .map(MixMasteringFileDto::new).collect(Collectors.toList());
   }
 
 }

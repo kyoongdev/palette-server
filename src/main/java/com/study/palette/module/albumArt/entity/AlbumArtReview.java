@@ -1,7 +1,7 @@
 package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -37,9 +37,9 @@ public class AlbumArtReview {
   private LocalDateTime createdAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
-  private User user;
+  private Users users;
 
   @ManyToOne
   @JoinColumn(name = "albumArtInfoId")

@@ -3,7 +3,7 @@ package com.study.palette.module.albumArt.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -55,9 +55,9 @@ public class AlbumArtLicenseInfo {
   private LocalDateTime createAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
-  private User user;
+  private Users users;
 
   @ManyToOne
   @JoinColumn(name = "albumArtInfoId")
@@ -77,7 +77,7 @@ public class AlbumArtLicenseInfo {
         .isUseCommercial(albumArtLicenseCreateDto.isUseCommercial())
         .isServeOriginFile(albumArtLicenseCreateDto.isServeOriginFile())
         .isOtherUseApproved(albumArtLicenseCreateDto.isOtherUseApproved())
-        .user(albumArtInfo.getUser())
+        .users(albumArtInfo.getUsers())
         .albumArtInfo(albumArtInfo)
         .build();
   }
@@ -96,7 +96,7 @@ public class AlbumArtLicenseInfo {
         .isUseCommercial(albumArtLicenseInfoWithIdDto.isUseCommercial())
         .isServeOriginFile(albumArtLicenseInfoWithIdDto.isServeOriginFile())
         .isOtherUseApproved(albumArtLicenseInfoWithIdDto.isOtherUseApproved())
-        .user(albumArtInfo.getUser())
+        .users(albumArtInfo.getUsers())
         .albumArtInfo(albumArtInfo)
         .build();
   }

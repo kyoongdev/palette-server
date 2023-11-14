@@ -8,8 +8,8 @@ import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateReqeustDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.service.AlbumArtService;
-import com.study.palette.module.user.annotation.GetUserInfo;
-import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.users.annotation.GetUserInfo;
+import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -83,9 +83,9 @@ public class AlbumArtController {
   @PreAuthorize("hasRole('MUSICIAN')")
   public ResponseEntity<AlbumArtCreateResponseDto> createAlbumArt(
       @Valid @RequestBody AlbumArtCreateRequestDto albumArtCreateRequestDto,
-      @Parameter(hidden = true) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     return ResponseEntity.ok(
-        albumArtService.createAlbumArt(albumArtCreateRequestDto, myInfoResponseDto.getUser()));
+        albumArtService.createAlbumArt(albumArtCreateRequestDto, users));
   }
 
   //앨범아트 수정
@@ -99,8 +99,8 @@ public class AlbumArtController {
   @PreAuthorize("hasRole('MUSICIAN')")
   public void updateAlbumArt(@PathVariable String id,
       @RequestBody AlbumArtUpdateReqeustDto albumArtCreateRequestDto,
-      @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    albumArtService.updateAlbumArt(id, albumArtCreateRequestDto, myInfoResponseDto.getUser());
+      @GetUserInfo Users users) {
+    albumArtService.updateAlbumArt(id, albumArtCreateRequestDto, users);
   }
 
   //구매의뢰하기
@@ -113,8 +113,8 @@ public class AlbumArtController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   public void createAlbumArtRequest(@PathVariable String id,
-      @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    albumArtService.createAlbumArtRequest(id, myInfoResponseDto.getUser());
+      @GetUserInfo Users users) {
+    albumArtService.createAlbumArtRequest(id, users);
   }
 
   //앨범아트 삭제
@@ -126,7 +126,7 @@ public class AlbumArtController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteAlbumArt(@PathVariable String id,
-      @Parameter(hidden = false) @GetUserInfo MyInfoResponseDto myInfoResponseDto) {
-    albumArtService.deleteAlbumArt(id, myInfoResponseDto.getUser());
+      @Parameter(hidden = false) @GetUserInfo Users users) {
+    albumArtService.deleteAlbumArt(id, users);
   }
 }

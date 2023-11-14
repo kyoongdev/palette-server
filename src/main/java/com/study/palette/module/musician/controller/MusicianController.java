@@ -4,7 +4,7 @@ import com.study.palette.common.dto.ResponseWithIdDto;
 import com.study.palette.module.musician.dto.CreateMusicianDto;
 import com.study.palette.module.musician.dto.UpdateMusicianDto;
 import com.study.palette.module.musician.service.MusicianService;
-import com.study.palette.module.user.dto.MyInfoResponseDto;
+import com.study.palette.module.users.dto.MyInfoResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

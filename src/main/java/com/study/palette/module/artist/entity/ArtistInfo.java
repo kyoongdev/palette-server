@@ -2,15 +2,24 @@ package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.study.palette.module.filter.entity.FilterInfo;
-import com.study.palette.module.user.entity.User;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-
-import javax.persistence.*;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @NoArgsConstructor
@@ -44,8 +53,8 @@ public class ArtistInfo {
   private LocalDate createdAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
-  private User user;
+  @JoinColumn(name = "usersId")
+  private Users users;
 
   @OneToMany(mappedBy = "artistInfo", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
@@ -63,14 +72,16 @@ public class ArtistInfo {
     artistFile.add(artistFileChild);
     artistFileChild.setArtistInfo(this);
   }
-  public void setUser(User userInfo) {
-    this.user = userInfo;
+
+  public void setUsers(Users usersInfo) {
+    this.users = usersInfo;
   }
 
   public void setArtistLicenseInfo(ArtistLicenseInfo artistLicenseInfoChild) {
     artistLicenseInfo.add(artistLicenseInfoChild);
     artistLicenseInfoChild.setArtistInfo(this);
   }
+
   public void setArtistReview(ArtistReview artistReviewChild) {
     artistReview.add(artistReviewChild);
     artistReviewChild.setArtistInfo(this);
@@ -83,7 +94,7 @@ public class ArtistInfo {
     this.filterInfo = filterInfo;
     this.serviceStatus = serviceStatus;
     this.createdAt = createdAt;
-    this.user = user;
+    this.users = users;
     this.artistFile = artistFile;
     this.artistLicenseInfo = artistLicenseInfo;
   }

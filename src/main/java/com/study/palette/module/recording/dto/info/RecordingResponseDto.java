@@ -24,7 +24,7 @@ public class RecordingResponseDto {
     this.id = recordingInfo.getId().toString();
     this.serviceName = recordingInfo.getServiceName();
     this.salesType = recordingInfo.getSalesType();
-    this.userName = recordingInfo.getUser().getName(); //TODO musician 생기면 활동명으로 바꿀수 있을듯?
+    this.userName = recordingInfo.getUsers().getName(); //TODO musician 생기면 활동명으로 바꿀수 있을듯?
 //        this.fileUrl = recordingInfo.getRecordingFile().get(0).getUploadFileName();
 //        this.price = recordingInfo.getRecordingLicenseInfo().get(0).getPrice();
   }

@@ -3,7 +3,7 @@ package com.study.palette.module.recording.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoUpdateRequestDto;
-import com.study.palette.module.user.entity.User;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -40,9 +40,9 @@ public class RecordingLicenseInfo {
   private LocalDate createAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
-  private User user;
+  private Users users;
 
   @ManyToOne
   @JoinColumn(name = "recordingInfoId")
@@ -55,7 +55,7 @@ public class RecordingLicenseInfo {
         .licenseType(recordingLicenseCreateDto.getLicenseType())
         .price(recordingLicenseCreateDto.getPrice())
         .useTime(recordingLicenseCreateDto.getUseTime())
-        .user(recordingInfo.getUser())
+        .users(recordingInfo.getUsers())
         .recordingInfo(recordingInfo)
         .build();
   }
@@ -67,7 +67,7 @@ public class RecordingLicenseInfo {
         .licenseType(recordingLicenseInfoUpdateRequestDto.getLicenseType().getLicenseType())
         .price(recordingLicenseInfoUpdateRequestDto.getPrice())
         .useTime(recordingLicenseInfoUpdateRequestDto.getUseTime())
-        .user(recordingInfo.getUser())
+        .users(recordingInfo.getUsers())
         .recordingInfo(recordingInfo)
         .build();
   }

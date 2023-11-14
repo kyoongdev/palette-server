@@ -1,27 +1,14 @@
 package com.study.palette.test.albumArt;
 
-import com.study.palette.common.dto.PaginationDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateReqeustDto;
-import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
-import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.service.AlbumArtService;
-import com.study.palette.module.user.repository.UserRepository;
-import io.jsonwebtoken.lang.Assert;
+import com.study.palette.module.users.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @SpringBootTest
 @Profile("local")
@@ -30,7 +17,7 @@ public class AlbumArtServiceTest {
     @Autowired
     private AlbumArtService albumArtService;
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
     @Autowired
     private AlbumArtRepository albumArtRepository;
 
