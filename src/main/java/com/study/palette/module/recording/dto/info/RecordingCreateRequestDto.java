@@ -2,7 +2,9 @@ package com.study.palette.module.recording.dto.info;
 
 import com.study.palette.common.enums.recording.Address1;
 import com.study.palette.common.enums.recording.Address2;
+import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
+import com.study.palette.module.recording.entity.RecordingFile;
 import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.recording.entity.RecordingLicenseInfo;
 import com.study.palette.module.users.entity.Users;
@@ -29,8 +31,8 @@ public class RecordingCreateRequestDto {
   @Schema(description = "서비스 설명", example = "강동 최고급 녹음 스튜디오~!")
   private String serviceExplain;
 
-  //    private List<RecordingFile> recordingFile = new ArrayList<>();
-  private List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfo = new ArrayList<>();
+  private final List<RecordingFileCreateRequestDto> recordingFile = new ArrayList<>();
+  private final List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfo = new ArrayList<>();
 
   public RecordingInfo toEntity(Users users) {
     RecordingInfo recordingInfo = RecordingInfo.builder()
@@ -46,6 +48,10 @@ public class RecordingCreateRequestDto {
 
     recordingInfo.setRecordingLicenseInfo(this.getRecordingLicenseInfo().stream()
         .map(dto -> RecordingLicenseInfo.from(dto, recordingInfo))
+        .toList());
+
+    recordingInfo.setRecordingFile(this.getRecordingFile().stream()
+        .map(dto -> RecordingFile.from(dto, recordingInfo))
         .toList());
 
     return recordingInfo;

@@ -9,6 +9,7 @@ import com.study.palette.module.recording.dto.info.RecordingDetailResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingUpdateRequestDto;
 import com.study.palette.module.recording.dto.query.FindRecordingQuery;
+import com.study.palette.module.recording.entity.RecordingFile;
 import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.recording.entity.RecordingLicenseInfo;
 import com.study.palette.module.recording.exception.RecordingErrorCode;
@@ -88,26 +89,31 @@ public class RecordingService {
 
     // update 전 초기화
     recordingInfo.getRecordingLicenseInfo().clear();
-//        recordingInfo.getRecordingFile().clear(); TODO 파일 구현 후 추가
+    recordingInfo.getRecordingFile().clear();
 
-    recordingUpdateRequestDto.getRecordingLicenseInfo().stream().forEach(license -> {
+    recordingUpdateRequestDto.getRecordingLicenseInfo().forEach(license -> {
       recordingInfo.getRecordingLicenseInfo()
           .add(RecordingLicenseInfo.from(license, recordingInfo));
     });
 
-    //TODO 파일 구현 후 추가
-//        recordingUpdateRequestDto.getRecordingLicenseInfo().stream().forEach(license -> {
-//            recordingInfo.getRecordingLicenseInfo().add(RecordingLicenseInfo.from(license, recordingInfo));
-//        });
+    recordingUpdateRequestDto.getRecordingFiles().forEach(license -> {
+      recordingInfo.getRecordingFile().add(RecordingFile.from(license, recordingInfo));
+    });
 
     recordingRepository.save(recordingInfo);
   }
 
   /* Recording 삭제*/
   @Transactional
-  public void deleteRecording(String id) {
+  public void deleteRecording(String id, Users users) {
     RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
+
+    //본인이 작성한 글인지 체크
+    if (!recordingInfo.getUsers().getId().equals(users.getId())) {
+      throw new RecordingException(RecordingErrorCode.RECORDING_NOT_YOURS);
+    }
+
     recordingRepository.delete(recordingInfo);
   }
 }

@@ -1,9 +1,10 @@
 package com.study.palette.module.recording.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.common.PaletteUtils;
+import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
+import com.study.palette.module.recording.dto.file.RecordingFileDto;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @AllArgsConstructor
@@ -54,7 +54,7 @@ public class RecordingFile {
 
   private boolean isThumbnail;
 
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "usersId")
@@ -65,24 +65,34 @@ public class RecordingFile {
   @JoinColumn(name = "recordingInfoId")
   private RecordingInfo recordingInfo;
 
-  public static RecordingFile from(MultipartFile recordingFiles, RecordingInfo recordingInfo) {
-    return new RecordingFile(recordingFiles, recordingInfo);
+  public static RecordingFile from(RecordingFileDto dto, RecordingInfo recordingInfo) {
+    return RecordingFile.builder()
+        .originFileName(dto.getOriginFileName())
+        .uploadFileName(dto.getUploadFileName())
+        .uploadFileSize(dto.getUploadFileSize())
+        .upoladFilePath(dto.getUrl())
+        .fileMasterCode(1)
+        .suffix(dto.getSuffix())
+        .isUse(true)
+        .isThumbnail(dto.isThumbnail())
+        .createdAt(LocalDateTime.now())
+        .recordingInfo(recordingInfo)
+        .build();
   }
 
-  public RecordingFile(MultipartFile recordingFile, RecordingInfo recordingInfo) {
-    this.originFileName = recordingFile.getOriginalFilename();
-    this.uploadFileName = PaletteUtils.generateUniqueName(recordingFile.getOriginalFilename());
-    this.uploadFileSize = (int) recordingFile.getSize();
-    this.upoladFilePath = "/upload"; //TODO 경로수정
-    this.fileMasterCode = 1; //TODO 코드수정
-    this.suffix = recordingFile.getContentType();
-    this.isUse = true;
-    this.isThumbnail = false;
-    this.createdAt = LocalDate.now();
-
-    if (recordingInfo != null) {
-      setRecording(recordingInfo);
-    }
+  public static RecordingFile from(RecordingFileCreateRequestDto dto, RecordingInfo recordingInfo) {
+    return RecordingFile.builder()
+        .originFileName(dto.getOriginFileName())
+        .uploadFileName(dto.getUploadFileName())
+        .uploadFileSize(dto.getUploadFileSize())
+        .upoladFilePath(dto.getUrl())
+        .fileMasterCode(1)
+        .suffix(dto.getSuffix())
+        .isUse(true)
+        .isThumbnail(dto.isThumbnail())
+        .createdAt(LocalDateTime.now())
+        .recordingInfo(recordingInfo)
+        .build();
   }
 
   public void setRecording(RecordingInfo recordingInfo) {

@@ -2,6 +2,7 @@ package com.study.palette.module.recording.dto.info;
 
 import com.study.palette.common.enums.recording.Address1;
 import com.study.palette.common.enums.recording.Address2;
+import com.study.palette.module.recording.dto.file.RecordingFileDto;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoUpdateRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -29,7 +30,9 @@ public class RecordingUpdateRequestDto {
   @Schema(description = "서비스 설명", example = "강동 최고급 녹음 스튜디오~!")
   private String serviceExplain;
 
+  @Schema(description = "레코딩 라이센스 정보", example = "레코딩 라이센스 정보")
   private List<RecordingLicenseInfoUpdateRequestDto> recordingLicenseInfo;
-
+  @Schema(description = "레코딩 파일 정보", example = "레코딩 파일 정보")
+  private List<RecordingFileDto> recordingFiles;
 
 }

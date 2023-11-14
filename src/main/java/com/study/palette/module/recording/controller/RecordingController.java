@@ -47,7 +47,7 @@ public class RecordingController {
     this.recordingService = recordingService;
   }
 
-
+  //레코딩 목록조회
   @Operation(summary = "레코딩 목록 조회", description = "레코딩 목록 조회 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = RecordingResponseDto.class)))),
@@ -113,7 +113,8 @@ public class RecordingController {
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteRecording(@PathVariable String id) {
-    recordingService.deleteRecording(id);
+  public void deleteRecording(@PathVariable String id,
+      @Parameter(hidden = true) @GetUserInfo Users users) {
+    recordingService.deleteRecording(id, users);
   }
 }
