@@ -5,7 +5,7 @@ import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateReqeustDto;
+import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateRequestDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.users.annotation.GetUserInfo;
@@ -98,7 +98,7 @@ public class AlbumArtController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MUSICIAN')")
   public void updateAlbumArt(@PathVariable String id,
-      @RequestBody AlbumArtUpdateReqeustDto albumArtCreateRequestDto,
+      @RequestBody AlbumArtUpdateRequestDto albumArtCreateRequestDto,
       @GetUserInfo Users users) {
     albumArtService.updateAlbumArt(id, albumArtCreateRequestDto, users);
   }

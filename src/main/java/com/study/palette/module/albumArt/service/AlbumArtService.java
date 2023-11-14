@@ -7,9 +7,10 @@ import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateReqeustDto;
+import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateRequestDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.entity.AlbumArtContact;
+import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
@@ -18,7 +19,6 @@ import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +84,7 @@ public class AlbumArtService {
 
   /* AlbumArt 수정*/
   @Transactional
-  public void updateAlbumArt(String id, AlbumArtUpdateReqeustDto albumArtUpdateReqeustDto,
+  public void updateAlbumArt(String id, AlbumArtUpdateRequestDto albumArtUpdateRequestDto,
       Users users) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
@@ -94,25 +94,24 @@ public class AlbumArtService {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
-    PaletteUtils.myCopyProperties(albumArtUpdateReqeustDto, albumArtInfo);
+    PaletteUtils.myCopyProperties(albumArtUpdateRequestDto, albumArtInfo);
 
     // update 전 초기화
     albumArtInfo.getAlbumArtLicenseInfo().clear();
     albumArtInfo.getAlbumArtContact().clear();
-//        albumArtInfo.getAlbumArtFile().clear(); TODO 파일 구현 후 추가
+    albumArtInfo.getAlbumArtFile().clear();
 
-    albumArtUpdateReqeustDto.getAlbumArtLicenseInfo().stream().forEach(license -> {
+    albumArtUpdateRequestDto.getAlbumArtLicenseInfo().forEach(license -> {
       albumArtInfo.getAlbumArtLicenseInfo().add(AlbumArtLicenseInfo.from(license, albumArtInfo));
     });
 
-    albumArtUpdateReqeustDto.getAlbumArtContact().stream().forEach(contact -> {
+    albumArtUpdateRequestDto.getAlbumArtContact().forEach(contact -> {
       albumArtInfo.getAlbumArtContact().add(AlbumArtContact.from(contact, albumArtInfo));
     });
 
-    //TODO 파일 구현 후 추가
-//        albumArtUpdateReqeustDto.getAlbumArtLicenseInfo().stream().forEach(license -> {
-//            albumArtInfo.getAlbumArtLicenseInfo().add(AlbumArtLicenseInfo.from(license, albumArtInfo));
-//        });
+    albumArtUpdateRequestDto.getAlbumArtFile().forEach(license -> {
+      albumArtInfo.getAlbumArtFile().add(AlbumArtFile.from(license, albumArtInfo));
+    });
 
     albumArtRepository.save(albumArtInfo);
   }
@@ -136,7 +135,7 @@ public class AlbumArtService {
     albumArtRequestRepository.save(AlbumArtRequest.builder()
         .albumArtInfo(albumArtInfo)
         .users(users)
-        .createAt(LocalDate.now())
+        .createAt(LocalDateTime.now())
         .build()
     );
   }

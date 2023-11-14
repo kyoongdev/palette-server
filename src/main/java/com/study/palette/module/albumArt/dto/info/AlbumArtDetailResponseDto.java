@@ -1,6 +1,6 @@
 package com.study.palette.module.albumArt.dto.info;
 
-import com.study.palette.module.albumArt.dto.file.AlbumArtFileResponseDto;
+import com.study.palette.module.albumArt.dto.file.AlbumArtFileDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
 import com.study.palette.module.albumArt.dto.review.AlbumArtReviewResponseDto;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
@@ -19,7 +19,7 @@ public class AlbumArtDetailResponseDto {
   private String editInfo;
   private boolean serviceStatus;
   private LocalDateTime createdAt;
-  private List<AlbumArtFileResponseDto> albumArtFileResponseDto;
+  private List<AlbumArtFileDto> albumArtFileDto;
   private List<AlbumArtReviewResponseDto> albumArtReviewResponseDto;
   private List<AlbumArtLicenseInfoWithIdDto> albumArtLicenseInfoResponseDto;
 
@@ -35,7 +35,7 @@ public class AlbumArtDetailResponseDto {
         .map(AlbumArtLicenseInfoWithIdDto::new).toList();
     this.albumArtReviewResponseDto = albumArtInfo.getAlbumArtReview().stream()
         .map(AlbumArtReviewResponseDto::new).toList();
-    this.albumArtFileResponseDto = albumArtInfo.getAlbumArtFile().stream()
-        .map(AlbumArtFileResponseDto::new).toList();
+    this.albumArtFileDto = albumArtInfo.getAlbumArtFile().stream()
+        .map(AlbumArtFileDto::new).toList();
   }
 }
