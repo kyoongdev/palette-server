@@ -1,13 +1,12 @@
 package com.study.palette.module.mixMastering.dto;
 
 import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
+import com.study.palette.module.mixMastering.dto.contact.MixMasteringContactDto;
 import com.study.palette.module.mixMastering.dto.file.MixMasteringFileDto;
 import com.study.palette.module.mixMastering.dto.license.MixMasteringLicenseDto;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +41,8 @@ public class MixMasteringDto {
   private List<MixMasteringFileDto> mixMasteringFile;
   @Schema(description = "라이센스")
   private List<MixMasteringLicenseDto> mixMasteringLicenseInfos;
+  @Schema(description = "연락수단")
+  private List<MixMasteringContactDto> mixMasteringContacts;
 
   public MixMasteringDto(MixMasteringInfo mixMasteringInfo) {
     this.id = mixMasteringInfo.getId().toString();
@@ -56,6 +57,7 @@ public class MixMasteringDto {
     this.user = new CommonUserDto(mixMasteringInfo.getUsers());
     this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
     this.mixMasteringLicenseInfos = mixMasteringInfo.getMixMasteringLicenseInfos().stream().map(MixMasteringLicenseDto::new).collect(Collectors.toList());
+    this.mixMasteringContacts = mixMasteringInfo.getMixMasteringContacts().stream().map(MixMasteringContactDto::new).collect(Collectors.toList());
   }
 
 }

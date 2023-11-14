@@ -116,6 +116,6 @@ public class mixMasteringController {
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   public void createMixMasteringRequest(@PathVariable String id,
       @GetUserInfo Users users) {
-//    mixMasteringService.createMixMasteringRequest(id, users);
+    mixMasteringService.createMixMasteringRequest(id, users);
   }
 }
