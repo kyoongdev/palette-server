@@ -1,5 +1,8 @@
 package com.study.palette.common.enums.recording;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public enum Address2 {
+public enum CityCode {
 
     //    서울
     JONGNO(1, 1, "종로구"),
@@ -274,23 +277,20 @@ public enum Address2 {
     private int code;
     private String name;
 
-    public static Address2 of(int groupCode, int code) {
-        for (Address2 address2 : Address2.values()) {
-            if (address2.getGroupCode() == groupCode && address2.getCode() == code) {
-                return address2;
+    public static CityCode of(int groupCode, int code) {
+        for (CityCode cityCode : CityCode.values()) {
+            if (cityCode.getGroupCode() == groupCode && cityCode.getCode() == code) {
+                return cityCode;
             }
         }
         return null;
     }
 
-    public static String[] getNames(int groupCode) {
-        String[] names = new String[Address2.values().length];
-        for (int i = 0; i < Address2.values().length; i++) {
-            if (Address2.values()[i].getGroupCode() == groupCode) {
-                names[i] = Address2.values()[i].getName();
-            }
-        }
-        return names;
+    //그룹 코드가 일치하는 도시 코드 목록 조회
+    public static List<CityCode> getCityCodes(int groupCode) {
+        return Arrays.stream(CityCode.values())
+            .filter(cityCode -> cityCode.getGroupCode() == groupCode)
+            .collect(Collectors.toList());
     }
 
 
