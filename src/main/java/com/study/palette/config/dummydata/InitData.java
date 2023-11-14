@@ -28,6 +28,7 @@ import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,10 +39,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -176,6 +173,7 @@ public class InitData implements ApplicationRunner {
                 "editInfo",
                 albumArtLicenseCreateRequestDtos,
                 AlbumArtContactCreateDtos,
+                null,
                 true
             );
 
@@ -198,7 +196,7 @@ public class InitData implements ApplicationRunner {
             AlbumArtRequest albumArtRequest = AlbumArtRequest.builder()
                 .albumArtInfo(albumArtRepository.findById(serviceId).get())
                 .users(newUsers2)
-                .createAt(LocalDate.now())
+                .createAt(LocalDateTime.now())
                 .build();
 
             albumArtRequestRepository.save(albumArtRequest);
