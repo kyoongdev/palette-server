@@ -1,6 +1,8 @@
 package com.study.palette.config.dummydata;
 
 import com.study.palette.common.enums.Contact;
+import com.study.palette.common.enums.recording.Address1;
+import com.study.palette.common.enums.recording.Address2;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
@@ -21,6 +23,13 @@ import com.study.palette.module.mixMastering.entity.MixMasteringContact;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
+import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
+import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
+import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
+import com.study.palette.module.recording.entity.RecordingFile;
+import com.study.palette.module.recording.entity.RecordingInfo;
+import com.study.palette.module.recording.entity.RecordingLicenseInfo;
+import com.study.palette.module.recording.repository.RecordingRepository;
 import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
@@ -47,6 +56,7 @@ public class InitData implements ApplicationRunner {
   private final AlbumArtRepository albumArtRepository;
   private final AlbumArtRequestRepository albumArtRequestRepository;
   private final MixMasteringRepository mixMasteringRepository;
+  private final RecordingRepository recordingRepository;
 
 
   /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
@@ -73,18 +83,22 @@ public class InitData implements ApplicationRunner {
 
     /* 연관관계 확인 후 save*/
     artistRepository.save(artistInfo);
+
     //albumart
+    List<AlbumArtInfo> albumArtInfos = new ArrayList<>();
     List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseCreateRequestDtos = new ArrayList<>();
     List<AlbumArtContactCreateDto> AlbumArtContactCreateDtos = new ArrayList<>();
     List<AlbumArtFileCreateRequestDto> albumArtFileCreateRequestDtos = new ArrayList<>();
-    List<AlbumArtInfo> albumArtInfos = new ArrayList<>();
+    //recording
+    List<RecordingInfo> recordingInfos = new ArrayList<>();
+    List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfoCreateRequestDtos = new ArrayList<>();
+    List<RecordingFileCreateRequestDto> recordingFileCreateRequestDtos = new ArrayList<>();
     //mixMastering
     List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
 
     //앨범아트 더미데이터 생성
     for (int i = 0; i < 50; i++) {
       //albumart
-
       albumArtFileCreateRequestDtos.add(//앨범아트 파일 생성
           new AlbumArtFileCreateRequestDto(
               "www.test.com",
@@ -92,6 +106,15 @@ public class InitData implements ApplicationRunner {
               "uploadfilname",
               1000,
               "jpg",
+              true
+          ));
+      recordingFileCreateRequestDtos.add(//레코딩 파일 생성
+          new RecordingFileCreateRequestDto(
+              "www.test.com",
+              "testfilenale",
+              "uploadfilname",
+              1000,
+              "mp3",
               true
           ));
       for (int j = 0; j < 3; j++) {
@@ -108,7 +131,6 @@ public class InitData implements ApplicationRunner {
                 true,
                 true
             ));
-
         albumArtFileCreateRequestDtos.add(//앨범아트 파일 생성
             new AlbumArtFileCreateRequestDto(
                 "www.test.com",
@@ -118,8 +140,22 @@ public class InitData implements ApplicationRunner {
                 "jpg",
                 false
             ));
+        recordingFileCreateRequestDtos.add(//레코딩 파일 생성
+            new RecordingFileCreateRequestDto(
+                "www.test.com",
+                "testfilenale",
+                "uploadfilname",
+                1000,
+                "mp3",
+                false
+            ));
+        recordingLicenseInfoCreateRequestDtos.add(//레코딩 라이센스 생성
+            new RecordingLicenseInfoCreateRequestDto(
+                1,
+                1000,
+                1
+            ));
       }
-
       for (int j = 0; j < 5; j++) {
         AlbumArtContactCreateDtos.add(//앨범아트 연락수단 생성
             new AlbumArtContactCreateDto(
@@ -127,7 +163,7 @@ public class InitData implements ApplicationRunner {
                 "content" + j
             ));
       }
-
+      //albumart 생성
       AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto(
           "serviceName" + i,
           "serviceExplain",
@@ -137,6 +173,19 @@ public class InitData implements ApplicationRunner {
           AlbumArtContactCreateDtos,
           albumArtFileCreateRequestDtos,
           true
+      );
+
+      //recording 생성
+      RecordingCreateRequestDto recordingCreateRequestDto = new RecordingCreateRequestDto(
+          "serviceName" + i,
+          "studioName" + i,
+          Address1.of(1),
+          Address2.of(1, 1),
+          true,
+          "www.test.com",
+          "serviceExplain",
+          recordingFileCreateRequestDtos,
+          recordingLicenseInfoCreateRequestDtos
       );
 
       AlbumArtInfo albumArtInfo = albumArtCreateRequestDto.toEntity(initCommUser);
@@ -159,6 +208,21 @@ public class InitData implements ApplicationRunner {
       albumArtLicenseCreateRequestDtos.clear();
       AlbumArtContactCreateDtos.clear();
       albumArtFileCreateRequestDtos.clear();
+
+      RecordingInfo recordingInfo = recordingCreateRequestDto.toEntity(initCommUser);
+      List<RecordingFile> recordingFiles = recordingCreateRequestDto.getRecordingFile()
+          .stream()
+          .map(file -> RecordingFile.from(file, recordingInfo))
+          .toList();
+      List<RecordingLicenseInfo> recordingLicenseInfo = recordingCreateRequestDto.getRecordingLicenseInfo()
+          .stream()
+          .map(license -> RecordingLicenseInfo.from(license, recordingInfo))
+          .toList();
+      recordingInfo.setRecordingLicenseInfo(recordingLicenseInfo);
+      recordingInfo.setRecordingFile(recordingFiles);
+      recordingInfos.add(recordingInfo);
+      recordingFileCreateRequestDtos.clear();
+      recordingLicenseInfoCreateRequestDtos.clear();
 
       //mixMastering
       List<MixMasteringContact> mixMasteringContacts = new ArrayList<>();
@@ -223,6 +287,7 @@ public class InitData implements ApplicationRunner {
       mixMasteringInfos.add(mixMasteringInfo);
     }
     albumArtRepository.saveAll(albumArtInfos);
+    recordingRepository.saveAll(recordingInfos);
     mixMasteringRepository.saveAll(mixMasteringInfos);
 
     //앨범아트 구매의뢰
