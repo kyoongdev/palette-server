@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping(value = "/api/files")
+@RequestMapping(value = "/files")
 @Validated
 @Tag(name = "File", description = "파일 API")
 public class FileUploadController {

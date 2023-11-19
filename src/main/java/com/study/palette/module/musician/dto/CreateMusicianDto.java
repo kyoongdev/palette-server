@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateMusicianDto {
 
-    private String nickName;
+    private String stageName;
 
     private String name;
 
@@ -24,14 +24,14 @@ public class CreateMusicianDto {
 
     private List<Integer> positionType = new ArrayList<>();
 
-    public UsersMusician toEntity(Users users) {
+    public UsersMusician toEntity(Users user) {
         return UsersMusician.builder()
-            .nickName(this.getNickName())
-            .name(this.getName())
-            .groupType(this.getGroupType())
-            .usersSns(new ArrayList<>())
-            .usersPosition(new ArrayList<>())
-            .users(users)
-            .build();
+                .stageName(this.getStageName())
+                .name(this.getName())
+                .groupType(this.getGroupType())
+                .usersSns(new ArrayList<>())
+                .usersPosition(new ArrayList<>())
+                .users(user)
+                .build();
     }
 }
