@@ -60,6 +60,10 @@ public class AlbumArtService {
         .map(data -> modelMapper.map(data, AlbumArtResponseDto.class))
         .collect(Collectors.toList());
 
+    if(artists.size() == 0) {
+      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND);
+    }
+
     PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
         artists);
 
@@ -94,26 +98,7 @@ public class AlbumArtService {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
-    PaletteUtils.myCopyProperties(albumArtUpdateRequestDto, albumArtInfo);
-
-    // update 전 초기화
-    albumArtInfo.getAlbumArtLicenseInfo().clear();
-    albumArtInfo.getAlbumArtContact().clear();
-    albumArtInfo.getAlbumArtFile().clear();
-
-    albumArtUpdateRequestDto.getAlbumArtLicenseInfo().forEach(license -> {
-      albumArtInfo.getAlbumArtLicenseInfo().add(AlbumArtLicenseInfo.from(license, albumArtInfo));
-    });
-
-    albumArtUpdateRequestDto.getAlbumArtContact().forEach(contact -> {
-      albumArtInfo.getAlbumArtContact().add(AlbumArtContact.from(contact, albumArtInfo));
-    });
-
-    albumArtUpdateRequestDto.getAlbumArtFile().forEach(license -> {
-      albumArtInfo.getAlbumArtFile().add(AlbumArtFile.from(license, albumArtInfo));
-    });
-
-    albumArtRepository.save(albumArtInfo);
+    albumArtRepository.save(albumArtUpdateRequestDto.toEntity(albumArtInfo));
   }
 
   /*

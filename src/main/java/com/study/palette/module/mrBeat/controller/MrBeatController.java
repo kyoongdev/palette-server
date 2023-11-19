@@ -4,8 +4,6 @@ import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.ResponseWithIdDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
-import com.study.palette.module.artist.dto.ArtistResponseDto;
-import com.study.palette.module.artist.dto.CreateArtistDto;
 import com.study.palette.module.mrBeat.dto.CreateMrBeatDto;
 import com.study.palette.module.mrBeat.dto.MrBeatResponseDto;
 import com.study.palette.module.mrBeat.dto.UpdateMrBeatDto;
@@ -20,10 +18,17 @@ import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "mr/beat", description = "mr/beat")
-@RequestMapping("/api/mr-beat")
+@RequestMapping("/mr-beat")
 @RestController
 public class MrBeatController {
 

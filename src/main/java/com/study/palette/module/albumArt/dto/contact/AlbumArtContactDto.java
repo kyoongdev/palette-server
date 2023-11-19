@@ -4,9 +4,13 @@ package com.study.palette.module.albumArt.dto.contact;
 import com.study.palette.common.enums.Contact;
 import com.study.palette.module.albumArt.entity.AlbumArtContact;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AlbumArtContactDto {
 
   @Schema(description = "아이디")

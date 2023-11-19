@@ -3,9 +3,13 @@ package com.study.palette.module.albumArt.dto.file;
 import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AlbumArtFileDto {
 
   @Schema(description = "파일 ID")
@@ -26,7 +30,7 @@ public class AlbumArtFileDto {
   private LocalDateTime createdAt;
 
   public AlbumArtFileDto(AlbumArtFile albumArtFile) {
-    this.id = albumArtFile.getId();
+    this.id = albumArtFile.getId().toString();
     this.originFileName = albumArtFile.getOriginFileName();
     this.uploadFileName = albumArtFile.getUploadFileName();
     this.uploadFileSize = albumArtFile.getUploadFileSize();

@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "레코딩", description = "레코딩")
-@RequestMapping("/api/recordings")
+@RequestMapping("/recordings")
 @RestController
 public class RecordingController {
 
