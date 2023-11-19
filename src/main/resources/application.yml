@@ -42,6 +42,6 @@ springdoc:
 
 ---
 
-server:
-  servlet:
-    context-path: /api
+#server:
+#  servlet:
+#    context-path: /api
