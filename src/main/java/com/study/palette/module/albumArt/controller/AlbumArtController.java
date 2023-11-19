@@ -75,7 +75,7 @@ public class AlbumArtController {
   //앨범아트 등록
   @Operation(summary = "앨범아트 등록", description = "앨범아트 등록 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "등록 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtCreateRequestDto.class))),
+      @ApiResponse(responseCode = "200", description = "등록 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtCreateResponseDto.class))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PostMapping
@@ -91,16 +91,16 @@ public class AlbumArtController {
   //앨범아트 수정
   @Operation(summary = "앨범아트 수정", description = "앨범아트 수정 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtCreateRequestDto.class))),
+      @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PatchMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MUSICIAN')")
   public void updateAlbumArt(@PathVariable String id,
-      @RequestBody AlbumArtUpdateRequestDto albumArtCreateRequestDto,
-      @GetUserInfo Users users) {
-    albumArtService.updateAlbumArt(id, albumArtCreateRequestDto, users);
+      @RequestBody AlbumArtUpdateRequestDto albumArtUpdateRequestDto,
+      @Parameter(hidden = true) @GetUserInfo Users users) {
+    albumArtService.updateAlbumArt(id, albumArtUpdateRequestDto, users);
   }
 
   //구매의뢰하기

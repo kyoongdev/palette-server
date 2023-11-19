@@ -1,5 +1,6 @@
 package com.study.palette.module.albumArt.dto.info;
 
+import com.study.palette.module.albumArt.dto.contact.AlbumArtContactDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
@@ -12,21 +13,24 @@ import lombok.Data;
 public class AlbumArtCreateResponseDto {
 
   @Schema(description = "앨범아트 ID")
-  public String id;
+  private String id;
   @Schema(description = "서비스명", example = "테스트 서비스명")
-  public String serviceName;
+  private String serviceName;
   @Schema(description = "서비스 설명", example = "테스트 서비스 설명")
-  public String serviceExplain;
+  private String serviceExplain;
   @Schema(description = "수정관련 안내", example = "테스트 수정관련 안내")
-  public String editInfo;
+  private String editInfo;
   @Schema(description = "서비스 상태", example = "true")
-  public boolean serviceStatus;
+  private boolean serviceStatus;
   @Schema(description = "앨범아트 생성일", example = "2021-07-21T12:34:56")
-  public LocalDateTime createdAt;
+  private LocalDateTime createdAt;
   @Schema(description = "앨범아트 파일")
-  public List<AlbumArtFileDto> albumArtFile;
+  private List<AlbumArtFileDto> albumArtFile;
   @Schema(description = "라이센스 정보")
-  public List<AlbumArtLicenseInfoWithIdDto> albumArtLicenseInfo;
+  private List<AlbumArtLicenseInfoWithIdDto> albumArtLicenseInfo;
+  @Schema(description = "연락수단")
+  private List<AlbumArtContactDto> albumArtContactDto;
+
 
   public AlbumArtCreateResponseDto(AlbumArtInfo albumArtInfo) {
     this.id = albumArtInfo.getId().toString();
@@ -40,6 +44,9 @@ public class AlbumArtCreateResponseDto {
         .toList();
     this.albumArtLicenseInfo = albumArtInfo.getAlbumArtLicenseInfo().stream()
         .map(AlbumArtLicenseInfoWithIdDto::new)
+        .toList();
+    this.albumArtContactDto = albumArtInfo.getAlbumArtContact().stream()
+        .map(AlbumArtContactDto::new)
         .toList();
   }
 }
