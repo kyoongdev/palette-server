@@ -3,9 +3,13 @@ package com.study.palette.module.recording.dto.file;
 import com.study.palette.module.recording.entity.RecordingFile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecordingFileDto {
 
   @Schema(description = "파일 ID")
@@ -26,7 +30,7 @@ public class RecordingFileDto {
   private LocalDateTime createdAt;
 
   public RecordingFileDto(RecordingFile recordingFile) {
-    this.id = recordingFile.getId();
+    this.id = recordingFile.getId().toString();
     this.originFileName = recordingFile.getOriginFileName();
     this.uploadFileName = recordingFile.getUploadFileName();
     this.uploadFileSize = recordingFile.getUploadFileSize();

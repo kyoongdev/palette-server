@@ -2,9 +2,9 @@ package com.study.palette.module.recording.dto.info;
 
 import com.study.palette.common.enums.recording.Address1;
 import com.study.palette.common.enums.recording.Address2;
-import com.study.palette.module.recording.entity.RecordingFile;
+import com.study.palette.module.recording.dto.file.RecordingFileDto;
+import com.study.palette.module.recording.dto.license.RecordingLicenseInfoDto;
 import com.study.palette.module.recording.entity.RecordingInfo;
-import com.study.palette.module.recording.entity.RecordingLicenseInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,8 +37,8 @@ public class RecordingCreateResponseDto {
   @Schema(description = "생성일")
   private LocalDateTime createdAt;
 
-  public List<RecordingFile> recordingFile;
-  public List<RecordingLicenseInfo> recordingLicenseInfo;
+  public List<RecordingFileDto> recordingFile;
+  public List<RecordingLicenseInfoDto> recordingLicenseInfo;
 
   public RecordingCreateResponseDto(RecordingInfo recordingInfo) {
     this.id = recordingInfo.getId().toString();
@@ -50,7 +50,11 @@ public class RecordingCreateResponseDto {
     this.studioReservationUrl = recordingInfo.getStudioReservationUrl();
     this.serviceExplain = recordingInfo.getServiceExplain();
     this.createdAt = recordingInfo.getCreatedAt();
-    this.recordingFile = recordingInfo.getRecordingFile();
-    this.recordingLicenseInfo = recordingInfo.getRecordingLicenseInfo();
+    this.recordingFile = recordingInfo.getRecordingFile().stream()
+        .map(RecordingFileDto::new)
+        .toList();
+    this.recordingLicenseInfo = recordingInfo.getRecordingLicenseInfo().stream()
+        .map(RecordingLicenseInfoDto::new)
+        .toList();
   }
 }

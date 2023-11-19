@@ -1,17 +1,16 @@
 package com.study.palette.module.recording.service;
 
-import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
+import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
+import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
 import com.study.palette.module.recording.dto.info.RecordingCreateResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingDetailResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingUpdateRequestDto;
 import com.study.palette.module.recording.dto.query.FindRecordingQuery;
-import com.study.palette.module.recording.entity.RecordingFile;
 import com.study.palette.module.recording.entity.RecordingInfo;
-import com.study.palette.module.recording.entity.RecordingLicenseInfo;
 import com.study.palette.module.recording.exception.RecordingErrorCode;
 import com.study.palette.module.recording.exception.RecordingException;
 import com.study.palette.module.recording.repository.RecordingRepository;
@@ -47,14 +46,15 @@ public class RecordingService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<RecordingResponseDto> artists = recordingRepository.findAll(query, pageable)
+    List<RecordingResponseDto> recordings = recordingRepository.findAll(query, pageable)
         .stream().map(data -> modelMapper.map(data, RecordingResponseDto.class))
         .collect(Collectors.toList());
 
-    PaginationDto<RecordingResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
-        artists);
+    if (recordings.size() == 0) {
+      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND);
+    }
 
-    return row;
+    return PaginationDto.of(new PagingDto(pageable, count), recordings);
   }
 
   /* Recording 상세 조회*/
@@ -85,22 +85,7 @@ public class RecordingService {
       throw new RecordingException(RecordingErrorCode.RECORDING_NOT_YOURS);
     }
 
-    PaletteUtils.myCopyProperties(recordingUpdateRequestDto, recordingInfo);
-
-    // update 전 초기화
-    recordingInfo.getRecordingLicenseInfo().clear();
-    recordingInfo.getRecordingFile().clear();
-
-    recordingUpdateRequestDto.getRecordingLicenseInfo().forEach(license -> {
-      recordingInfo.getRecordingLicenseInfo()
-          .add(RecordingLicenseInfo.from(license, recordingInfo));
-    });
-
-    recordingUpdateRequestDto.getRecordingFiles().forEach(license -> {
-      recordingInfo.getRecordingFile().add(RecordingFile.from(license, recordingInfo));
-    });
-
-    recordingRepository.save(recordingInfo);
+    recordingRepository.save(recordingUpdateRequestDto.toEntity(recordingInfo));
   }
 
   /* Recording 삭제*/

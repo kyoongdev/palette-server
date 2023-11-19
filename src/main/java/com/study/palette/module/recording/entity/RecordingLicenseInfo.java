@@ -2,7 +2,7 @@ package com.study.palette.module.recording.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
-import com.study.palette.module.recording.dto.license.RecordingLicenseInfoUpdateRequestDto;
+import com.study.palette.module.recording.dto.license.RecordingLicenseInfoDto;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -61,7 +61,7 @@ public class RecordingLicenseInfo {
   }
 
   public static RecordingLicenseInfo from(
-      RecordingLicenseInfoUpdateRequestDto recordingLicenseInfoUpdateRequestDto,
+      RecordingLicenseInfoDto recordingLicenseInfoUpdateRequestDto,
       RecordingInfo recordingInfo) {
     return builder()
         .licenseType(recordingLicenseInfoUpdateRequestDto.getLicenseType().getLicenseType())

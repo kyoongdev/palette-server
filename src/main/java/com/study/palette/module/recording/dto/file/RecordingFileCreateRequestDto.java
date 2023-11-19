@@ -1,9 +1,13 @@
 package com.study.palette.module.recording.dto.file;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecordingFileCreateRequestDto {
 
   @Schema(description = "파일 URL", example = "https://palette-study.s3.ap-northeast-2.amazonaws.com/albumArt/2021/07/21/albumArt_20210721123456.jpg")

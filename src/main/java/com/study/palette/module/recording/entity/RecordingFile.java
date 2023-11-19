@@ -5,6 +5,7 @@ import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto
 import com.study.palette.module.recording.dto.file.RecordingFileDto;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,8 +28,8 @@ public class RecordingFile {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(length = 24)
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
   @Column(length = 256)
   private String originFileName;

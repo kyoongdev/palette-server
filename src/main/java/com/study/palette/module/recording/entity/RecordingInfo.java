@@ -90,7 +90,7 @@ public class RecordingInfo {
   @JsonIgnore
   private Users users;
 
-  @OneToMany(mappedBy = "recordingInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "recordingInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RecordingFile> recordingFile = new ArrayList<>();
 
   @OneToMany(mappedBy = "recordingInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

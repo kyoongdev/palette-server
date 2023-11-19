@@ -11,9 +11,14 @@ import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecordingCreateRequestDto {
 
   @Schema(description = "서비스명", example = "XX 스튜디오 입니다!")
@@ -31,8 +36,8 @@ public class RecordingCreateRequestDto {
   @Schema(description = "서비스 설명", example = "강동 최고급 녹음 스튜디오~!")
   private String serviceExplain;
 
-  private final List<RecordingFileCreateRequestDto> recordingFile = new ArrayList<>();
-  private final List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfo = new ArrayList<>();
+  private List<RecordingFileCreateRequestDto> recordingFile = new ArrayList<>();
+  private List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfo = new ArrayList<>();
 
   public RecordingInfo toEntity(Users users) {
     RecordingInfo recordingInfo = RecordingInfo.builder()
