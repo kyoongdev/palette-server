@@ -25,7 +25,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
 
-    log.info("authentication : " + authentication.getName());ss
+    log.info("authentication : " + authentication.getName());
 
     TokenDto token = jwtTokenProvider.createToken(authentication);
 
