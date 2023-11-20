@@ -2,10 +2,6 @@ package com.study.palette.module.albumArt.controller;
 
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.dto.PaginationDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateRequestDto;
 import com.study.palette.module.users.annotation.GetUserInfo;
 import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,23 +26,23 @@ public interface CommonRestController<Q extends PageDto> {
 
   /*list*/
   @GetMapping("")
-  public PaginationDto<Object> getList(@ParameterObject Q query);
+  public PaginationDto<CommonResponseDto> getList(@ParameterObject Q query);
 
   /*detail*/
   @GetMapping("/{id}/detail")
-  public AlbumArtDetailResponseDto getDetail(@PathVariable String id);
+  public CommonResponseDto getDetail(@PathVariable String id);
 
   /*create*/
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('MUSICIAN')")
-  public ResponseEntity<AlbumArtCreateResponseDto> create(@Valid @RequestBody AlbumArtCreateRequestDto albumArtCreateRequestDto, @Parameter(hidden = true) @GetUserInfo Users users);
+  public ResponseEntity<CommonResponseDto> create(@Valid @RequestBody CommonRequestDto createRequestDto, @Parameter(hidden = true) @GetUserInfo Users users);
 
   /*update*/
   @PatchMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MUSICIAN')")
-  public void updateAlbumArt(@PathVariable String id, @RequestBody AlbumArtUpdateRequestDto albumArtUpdateRequestDto, @Parameter(hidden = true) @GetUserInfo Users users);
+  public void updateAlbumArt(@PathVariable String id, @RequestBody CommonRequestDto updateRequestDto, @Parameter(hidden = true) @GetUserInfo Users users);
 
   /*delete*/
   @DeleteMapping("/{id}")
