@@ -40,7 +40,7 @@ public class UsersMusician {
     private List<UsersSns> usersSns = new ArrayList<>();
 
     @Column(length = 100)
-    private String nickName;
+    private String stageName;
 
     @Column(length = 20)
     private String name;

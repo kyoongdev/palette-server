@@ -1,8 +1,10 @@
 package com.study.palette.module.albumArt.dto.info;
 
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
+import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
 import com.study.palette.module.albumArt.entity.AlbumArtContact;
+import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.users.entity.Users;
@@ -30,9 +32,8 @@ public class AlbumArtCreateRequestDto {
   public List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseInfo = new ArrayList<>();
   @NotNull(message = "연락수단을 하나이상 기재해 주세요.")
   public List<AlbumArtContactCreateDto> albumArtContact = new ArrayList<>();
+  public List<AlbumArtFileCreateRequestDto> albumArtFiles = new ArrayList<>();
 
-  //TODO 파일 구현 후 추가
-//    public List<MultipartFile> albumArtFiles = new ArrayList<>();
   public boolean serviceStatus;
 
   public AlbumArtInfo toEntity(Users users) {
@@ -51,6 +52,10 @@ public class AlbumArtCreateRequestDto {
 
     albumArtInfo.setAlbumArtContact(this.getAlbumArtContact().stream()
         .map(dto -> AlbumArtContact.from(dto, albumArtInfo))
+        .toList());
+
+    albumArtInfo.setAlbumArtFiles(this.getAlbumArtFiles().stream()
+        .map(dto -> AlbumArtFile.from(dto, albumArtInfo))
         .toList());
 
     return albumArtInfo;

@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "믹스마스터링", description = "믹스마스터링")
 @RestController
-@RequestMapping(value = "/api/mix-mastering")
+@RequestMapping(value = "/mix-mastering")
 public class mixMasteringController {
 
   private MixMasteringService mixMasteringService;
