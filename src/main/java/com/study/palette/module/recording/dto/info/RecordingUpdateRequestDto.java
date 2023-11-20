@@ -1,13 +1,8 @@
 package com.study.palette.module.recording.dto.info;
 
-import com.study.palette.common.PaletteUtils;
-import com.study.palette.common.enums.recording.Address1;
-import com.study.palette.common.enums.recording.Address2;
-import com.study.palette.module.recording.dto.file.RecordingFileDto;
-import com.study.palette.module.recording.dto.license.RecordingLicenseInfoDto;
-import com.study.palette.module.recording.entity.RecordingFile;
-import com.study.palette.module.recording.entity.RecordingInfo;
-import com.study.palette.module.recording.entity.RecordingLicenseInfo;
+import com.study.palette.common.enums.recording.CityCode;
+import com.study.palette.common.enums.recording.RegionCode;
+import com.study.palette.module.recording.dto.license.RecordingLicenseInfoUpdateRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,9 +20,9 @@ public class RecordingUpdateRequestDto {
   @Schema(description = "스튜디오명", example = "녹음 스튜디오 수정")
   private String studioName;
   @Schema(description = "스튜디오 주소 (도/특별시/광역시)", defaultValue = "", type = "int")
-  private Address1 studioAddress1;
+  private RegionCode studioRegionCode;
   @Schema(description = "스튜디오 주소 (시/군/구)", defaultValue = "", type = "int")
-  private Address2 studioAddress2;
+  private CityCode studioCityCode;
   @Schema(description = "녹음 엔지니어링 제공여부", example = "true")
   private boolean isRecordingEngineering;
   @Schema(description = "스튜디오 예약링크", example = "https://www.naver.com")

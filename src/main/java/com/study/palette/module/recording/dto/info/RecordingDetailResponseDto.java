@@ -1,9 +1,10 @@
 package com.study.palette.module.recording.dto.info;
 
-import com.study.palette.common.enums.recording.Address1;
-import com.study.palette.common.enums.recording.Address2;
 import com.study.palette.module.recording.dto.file.RecordingFileDto;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoDto;
+import com.study.palette.common.enums.recording.CityCode;
+import com.study.palette.common.enums.recording.RegionCode;
+import com.study.palette.module.recording.entity.RecordingFile;
 import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,11 +23,9 @@ public class RecordingDetailResponseDto {
   private String serviceName;
   @Schema(description = "스튜디오명")
   private String studioName;
-  @Schema(description = "스튜디오 주소1")
-  private Address1 studioAddress1;
-  @Schema(description = "스튜디오 주소2")
-  private Address2 studioAddress2;
   @Schema(description = "녹음 엔지니어링 여부")
+  private RegionCode studioRegionCode;
+  private CityCode studioCityCode;
   private boolean isRecordingEngineering;
   @Schema(description = "서비스 설명")
   private String serviceExplain;
@@ -43,8 +42,8 @@ public class RecordingDetailResponseDto {
     this.id = recordingInfo.getId().toString();
     this.serviceName = recordingInfo.getServiceName();
     this.studioName = recordingInfo.getStudioName();
-    this.studioAddress1 = recordingInfo.getStudioAddress1();
-    this.studioAddress2 = recordingInfo.getStudioAddress2();
+    this.studioRegionCode = recordingInfo.getStudioRegionCode();
+    this.studioCityCode = recordingInfo.getStudioCityCode();
     this.isRecordingEngineering = recordingInfo.isRecordingEngineering();
     this.serviceExplain = recordingInfo.getServiceExplain();
     this.createdAt = recordingInfo.getCreatedAt();
