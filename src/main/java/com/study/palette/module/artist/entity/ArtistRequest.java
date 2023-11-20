@@ -1,4 +1,6 @@
+
 package com.study.palette.module.artist.entity;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
@@ -32,7 +34,7 @@ public class ArtistRequest {
   private LocalDate createAt;
 
   @ManyToOne
-  @JoinColumn(name = "usersId")
+  @JoinColumn(name = "userId")
   @JsonIgnore
   private Users users;
 
@@ -40,4 +42,5 @@ public class ArtistRequest {
   @JoinColumn(name = "artistInfoId")
   @JsonIgnore
   private ArtistInfo artistInfo;
+
 }

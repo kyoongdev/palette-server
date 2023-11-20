@@ -1,6 +1,8 @@
 package com.study.palette.config.dummydata;
 
 import com.study.palette.common.enums.Contact;
+import com.study.palette.common.enums.recording.Address1;
+import com.study.palette.common.enums.recording.Address2;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
@@ -21,6 +23,13 @@ import com.study.palette.module.mixMastering.entity.MixMasteringContact;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
+import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
+import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
+import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
+import com.study.palette.module.recording.entity.RecordingFile;
+import com.study.palette.module.recording.entity.RecordingInfo;
+import com.study.palette.module.recording.entity.RecordingLicenseInfo;
+import com.study.palette.module.recording.repository.RecordingRepository;
 import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
@@ -47,6 +56,7 @@ public class InitData implements ApplicationRunner {
   private final AlbumArtRepository albumArtRepository;
   private final AlbumArtRequestRepository albumArtRequestRepository;
   private final MixMasteringRepository mixMasteringRepository;
+  private final RecordingRepository recordingRepository;
 
 
   /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
