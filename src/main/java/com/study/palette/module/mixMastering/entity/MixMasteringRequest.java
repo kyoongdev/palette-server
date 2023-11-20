@@ -1,9 +1,9 @@
-package com.study.palette.module.albumArt.entity;
+package com.study.palette.module.mixMastering.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,32 +21,23 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AlbumArtReview {
+public class MixMasteringRequest {
 
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(length = 24)
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
-  private BigDecimal rating;
-
-  @Column(length = 50)
-  private String review;
-
-  private LocalDateTime createdAt;
+  private LocalDate createAt;
 
   @ManyToOne
-  @JoinColumn(name = "usersId")
+  @JoinColumn(name = "userId")
   @JsonIgnore
   private Users users;
 
   @ManyToOne
-  @JoinColumn(name = "albumArtInfoId")
+  @JoinColumn(name = "mixMasteringInfoId")
   @JsonIgnore
-  private AlbumArtInfo albumArtInfo;
-
-  public void setAlbumArtInfo(AlbumArtInfo albumArtInfo) {
-    this.albumArtInfo = albumArtInfo;
-  }
+  private MixMasteringInfo mixMasteringInfo;
 }

@@ -1,24 +1,21 @@
 package com.study.palette.module.albumArt.service;
 
-import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateReqeustDto;
+import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateRequestDto;
+import com.study.palette.module.albumArt.dto.info.AlbumArtsResponseDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
-import com.study.palette.module.albumArt.entity.AlbumArtContact;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
 import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,7 +43,7 @@ public class AlbumArtService {
 
   /* AlbumArt 필터 포함 조회*/
   @Transactional(readOnly = true)
-  public PaginationDto<AlbumArtResponseDto> getAlbumArts(FindAlbumArtQuery query,
+  public PaginationDto<AlbumArtsResponseDto> getAlbumArts(FindAlbumArtQuery query,
       Pageable pageable) {
     Long count = albumArtRepository.count();
 
@@ -54,12 +51,16 @@ public class AlbumArtService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<AlbumArtResponseDto> artists = albumArtRepository.findAll(query, pageable)
+    List<AlbumArtsResponseDto> artists = albumArtRepository.findAll(query, pageable)
         .stream()
-        .map(data -> modelMapper.map(data, AlbumArtResponseDto.class))
+        .map(data -> modelMapper.map(data, AlbumArtsResponseDto.class))
         .collect(Collectors.toList());
 
-    PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
+    if(artists.size() == 0) {
+      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND);
+    }
+
+    PaginationDto<AlbumArtsResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
         artists);
 
     return row;
@@ -83,7 +84,7 @@ public class AlbumArtService {
 
   /* AlbumArt 수정*/
   @Transactional
-  public void updateAlbumArt(String id, AlbumArtUpdateReqeustDto albumArtUpdateReqeustDto,
+  public void updateAlbumArt(String id, AlbumArtUpdateRequestDto albumArtUpdateRequestDto,
       Users users) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
@@ -93,27 +94,7 @@ public class AlbumArtService {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
-    PaletteUtils.myCopyProperties(albumArtUpdateReqeustDto, albumArtInfo);
-
-    // update 전 초기화
-    albumArtInfo.getAlbumArtLicenseInfo().clear();
-    albumArtInfo.getAlbumArtContact().clear();
-//        albumArtInfo.getAlbumArtFile().clear(); TODO 파일 구현 후 추가
-
-    albumArtUpdateReqeustDto.getAlbumArtLicenseInfo().stream().forEach(license -> {
-      albumArtInfo.getAlbumArtLicenseInfo().add(AlbumArtLicenseInfo.from(license, albumArtInfo));
-    });
-
-    albumArtUpdateReqeustDto.getAlbumArtContact().stream().forEach(contact -> {
-      albumArtInfo.getAlbumArtContact().add(AlbumArtContact.from(contact, albumArtInfo));
-    });
-
-    //TODO 파일 구현 후 추가
-//        albumArtUpdateReqeustDto.getAlbumArtLicenseInfo().stream().forEach(license -> {
-//            albumArtInfo.getAlbumArtLicenseInfo().add(AlbumArtLicenseInfo.from(license, albumArtInfo));
-//        });
-
-    albumArtRepository.save(albumArtInfo);
+    albumArtRepository.save(albumArtUpdateRequestDto.toEntity(albumArtInfo));
   }
 
   /*
@@ -125,8 +106,8 @@ public class AlbumArtService {
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //오늘 이미 구매의뢰를 했는지 체크
-    Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUserAndCreatedAt(
-        users, albumArtInfo, LocalDate.now());
+    Optional<AlbumArtRequest> albumArtRequest = albumArtRequestRepository.findByAlbumArtInfoAndUsersAndCreatedAt(
+        users, albumArtInfo, LocalDateTime.now());
 
     if (albumArtRequest.isPresent()) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_REQUEST_ALREADY_EXISTS);
@@ -135,7 +116,7 @@ public class AlbumArtService {
     albumArtRequestRepository.save(AlbumArtRequest.builder()
         .albumArtInfo(albumArtInfo)
         .users(users)
-        .createAt(LocalDate.now())
+        .createAt(LocalDateTime.now())
         .build()
     );
   }

@@ -1,7 +1,6 @@
 package com.study.palette.module.serviceProgress.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.common.enums.albumArt.AlbumArtServiceType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class ServiceProgressInfo {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private AlbumArtServiceType serviceType; // 인기순 집계를 위해 추가
+    private int serviceType; // 인기순 집계를 위해 추가
 
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
