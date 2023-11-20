@@ -1,10 +1,9 @@
 package com.study.palette.module.recording.dto.info;
 
-import com.study.palette.module.recording.dto.file.RecordingFileDto;
-import com.study.palette.module.recording.dto.license.RecordingLicenseInfoDto;
 import com.study.palette.common.enums.recording.CityCode;
 import com.study.palette.common.enums.recording.RegionCode;
-import com.study.palette.module.recording.entity.RecordingFile;
+import com.study.palette.module.recording.dto.file.RecordingFileDto;
+import com.study.palette.module.recording.dto.license.RecordingLicenseInfoDto;
 import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,9 +22,11 @@ public class RecordingDetailResponseDto {
   private String serviceName;
   @Schema(description = "스튜디오명")
   private String studioName;
-  @Schema(description = "녹음 엔지니어링 여부")
+  @Schema(description = "스튜디오 지역 코드")
   private RegionCode studioRegionCode;
+  @Schema(description = "스튜디오 도시 코드")
   private CityCode studioCityCode;
+  @Schema(description = "녹음 엔지니어링 여부")
   private boolean isRecordingEngineering;
   @Schema(description = "서비스 설명")
   private String serviceExplain;
@@ -51,5 +52,6 @@ public class RecordingDetailResponseDto {
         .map(RecordingFileDto::new).toList();
     this.recordingLicenseInfo = recordingInfo.getRecordingLicenseInfo().stream()
         .map(RecordingLicenseInfoDto::new).toList();
+    this.users = new CommonUserDto(recordingInfo.getUsers());
   }
 }

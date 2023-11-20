@@ -2,6 +2,7 @@ package com.study.palette.module.recording.dto.info;
 
 import com.study.palette.common.enums.recording.CityCode;
 import com.study.palette.common.enums.recording.RegionCode;
+import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
 import com.study.palette.module.recording.entity.RecordingFile;
 import com.study.palette.module.recording.entity.RecordingInfo;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data

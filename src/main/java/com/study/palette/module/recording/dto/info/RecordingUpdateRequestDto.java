@@ -1,8 +1,13 @@
 package com.study.palette.module.recording.dto.info;
 
+import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.enums.recording.CityCode;
 import com.study.palette.common.enums.recording.RegionCode;
-import com.study.palette.module.recording.dto.license.RecordingLicenseInfoUpdateRequestDto;
+import com.study.palette.module.recording.dto.file.RecordingFileDto;
+import com.study.palette.module.recording.dto.license.RecordingLicenseInfoDto;
+import com.study.palette.module.recording.entity.RecordingFile;
+import com.study.palette.module.recording.entity.RecordingInfo;
+import com.study.palette.module.recording.entity.RecordingLicenseInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
