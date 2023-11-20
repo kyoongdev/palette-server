@@ -2,7 +2,7 @@ package com.study.palette.module.albumArt.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
+import com.study.palette.module.albumArt.dto.info.AlbumArtsResponseDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.entity.QAlbumArtFile;
 import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
@@ -27,14 +27,14 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
   }
 
   @Override
-  public Page<AlbumArtResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable) {
+  public Page<AlbumArtsResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable) {
     QAlbumArtInfo albumArtInfo = QAlbumArtInfo.albumArtInfo;
     QAlbumArtFile albumArtFile = QAlbumArtFile.albumArtFile;
     QAlbumArtLicenseInfo albumArtLicenseInfo = QAlbumArtLicenseInfo.albumArtLicenseInfo;
     QAlbumArtRequest albumArtRequest = QAlbumArtRequest.albumArtRequest;
 
-    List<AlbumArtResponseDto> result = queryFactory
-        .select(Projections.constructor(AlbumArtResponseDto.class,
+    List<AlbumArtsResponseDto> result = queryFactory
+        .select(Projections.constructor(AlbumArtsResponseDto.class,
             albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,

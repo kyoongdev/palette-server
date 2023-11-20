@@ -1,18 +1,14 @@
 package com.study.palette.module.albumArt.service;
 
-import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateRequestDto;
+import com.study.palette.module.albumArt.dto.info.AlbumArtsResponseDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
-import com.study.palette.module.albumArt.entity.AlbumArtContact;
-import com.study.palette.module.albumArt.entity.AlbumArtFile;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
 import com.study.palette.module.albumArt.exception.AlbumArtException;
@@ -47,7 +43,7 @@ public class AlbumArtService {
 
   /* AlbumArt 필터 포함 조회*/
   @Transactional(readOnly = true)
-  public PaginationDto<AlbumArtResponseDto> getAlbumArts(FindAlbumArtQuery query,
+  public PaginationDto<AlbumArtsResponseDto> getAlbumArts(FindAlbumArtQuery query,
       Pageable pageable) {
     Long count = albumArtRepository.count();
 
@@ -55,16 +51,16 @@ public class AlbumArtService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<AlbumArtResponseDto> artists = albumArtRepository.findAll(query, pageable)
+    List<AlbumArtsResponseDto> artists = albumArtRepository.findAll(query, pageable)
         .stream()
-        .map(data -> modelMapper.map(data, AlbumArtResponseDto.class))
+        .map(data -> modelMapper.map(data, AlbumArtsResponseDto.class))
         .collect(Collectors.toList());
 
     if(artists.size() == 0) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND);
     }
 
-    PaginationDto<AlbumArtResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
+    PaginationDto<AlbumArtsResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
         artists);
 
     return row;

@@ -4,8 +4,8 @@ import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateRequestDto;
+import com.study.palette.module.albumArt.dto.info.AlbumArtsResponseDto;
 import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.users.annotation.GetUserInfo;
@@ -50,11 +50,11 @@ public class AlbumArtController {
 
   @Operation(summary = "앨범아트 목록 조회", description = "앨범아트 목록 조회 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AlbumArtResponseDto.class)))),
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AlbumArtsResponseDto.class)))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("")
-  public PaginationDto<AlbumArtResponseDto> albumArtInfos(
+  public PaginationDto<AlbumArtsResponseDto> albumArtInfos(
       @ParameterObject FindAlbumArtQuery query) {
     return albumArtService.getAlbumArts(query,
         query.toPageable(Sort.by(Sort.Direction.DESC, "createdAt")));

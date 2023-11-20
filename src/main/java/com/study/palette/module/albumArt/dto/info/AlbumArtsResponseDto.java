@@ -1,6 +1,5 @@
 package com.study.palette.module.albumArt.dto.info;
 
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AlbumArtResponseDto {
+public class AlbumArtsResponseDto {
 
   @Schema(description = "앨범아트 ID")
   private String id;
@@ -26,7 +25,7 @@ public class AlbumArtResponseDto {
   @Schema(description = "요청수", example = "10000")
   private long requestCount;
 
-  public AlbumArtResponseDto(UUID id, String serviceName, int salesType, String userName,
+  public AlbumArtsResponseDto(UUID id, String serviceName, int salesType, String userName,
       String fileUrl, int price, long requestCount) {
     this.id = id.toString();
     this.serviceName = serviceName;
