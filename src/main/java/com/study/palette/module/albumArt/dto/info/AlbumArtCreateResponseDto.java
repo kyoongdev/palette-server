@@ -4,6 +4,7 @@ import com.study.palette.module.albumArt.dto.contact.AlbumArtContactDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
+import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +31,8 @@ public class AlbumArtCreateResponseDto {
   private List<AlbumArtLicenseInfoWithIdDto> albumArtLicenseInfo;
   @Schema(description = "연락수단")
   private List<AlbumArtContactDto> albumArtContactDto;
-
+  @Schema(description = "유저 정보")
+  private CommonUserDto users;
 
   public AlbumArtCreateResponseDto(AlbumArtInfo albumArtInfo) {
     this.id = albumArtInfo.getId().toString();
@@ -48,5 +50,6 @@ public class AlbumArtCreateResponseDto {
     this.albumArtContactDto = albumArtInfo.getAlbumArtContact().stream()
         .map(AlbumArtContactDto::new)
         .toList();
+    this.users = new CommonUserDto(albumArtInfo.getUsers());
   }
 }
