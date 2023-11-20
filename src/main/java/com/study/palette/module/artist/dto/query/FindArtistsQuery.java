@@ -1,7 +1,11 @@
 package com.study.palette.module.artist.dto.query;
 
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.study.palette.common.dto.PageDto;
+import com.study.palette.common.enums.CustomSort;
+import com.study.palette.module.artist.entity.QArtistInfo;
+import com.study.palette.module.artist.entity.QArtistRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -9,10 +13,21 @@ import lombok.Data;
 @Data
 public class FindArtistsQuery extends PageDto {
 
-    @Schema(description = "아티스트 필터", defaultValue = "1")
-    private int code;
+    private int saleType;
 
-    @Schema(description = "정렬 조건 인기순 rating, 신규등록순 id, 평점순 rating", defaultValue = "rating")
-    private String sort;
+    @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
+        "POPULAR"})
+    private CustomSort sort;
+
+    public OrderSpecifier<?>[] getSort() {
+        if (this.sort == null) {
+        }
+
+        if (this.sort == CustomSort.POPULAR) {
+            return new OrderSpecifier[]{QArtistRequest.artistRequest.id.count().desc()};
+        } else { // 신규등록
+            return new OrderSpecifier[]{QArtistInfo.artistInfo.createdAt.desc()};
+        }
+    }
 
 }

@@ -1,46 +1,37 @@
 package com.study.palette.module.artist.dto;
 
-import com.study.palette.module.artist.entity.ArtistFile;
-import com.study.palette.module.artist.entity.ArtistInfo;
-import com.study.palette.module.artist.entity.ArtistLicenseInfo;
-import com.study.palette.module.artist.entity.ArtistReview;
-import com.study.palette.module.filter.entity.FilterInfo;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@NoArgsConstructor
 public class ArtistResponseDto {
 
-    private String id;
-    private String serviceName;
-    private String serviceInfo;
-    private String editInfo;
+  private String id;
+  private String serviceName;
 
-    private List<FilterInfo> filterInfo = new ArrayList<>();
+  private int salesType;
 
-    private boolean serviceStatus;
+  private String userName;
 
-    private String userName;
+  private String fileUrl;
 
-    private List<ArtistFile> artistFile;
+  private int price;
 
-    private List<ArtistLicenseInfo> artistLicenseInfo;
+  private long requestCount;
 
-    private List<ArtistReview> artistReview;
+  public ArtistResponseDto(String id, String serviceName, int salesType, String userName,
+      String fileUrl, int price, long requestCount) {
+    this.id = id;
+    this.serviceName = serviceName;
+    this.salesType = salesType;
+    this.userName = userName;
+    this.fileUrl = fileUrl;
+    this.price = price;
+    this.requestCount = requestCount;
 
-    public ArtistResponseDto(ArtistInfo artistInfo){
-        this.id= artistInfo.getId();
-        this.serviceName = artistInfo.getServiceName();
-        this.serviceInfo = artistInfo.getServiceInfo();
-        this.editInfo = artistInfo.getEditInfo();
-        this.serviceInfo = artistInfo.getServiceInfo();
-        this.serviceStatus = artistInfo.isServiceStatus();
-        this.userName = artistInfo.getUsers().getName();
-        this.artistFile = artistInfo.getArtistFile();
-        this.artistLicenseInfo = artistInfo.getArtistLicenseInfo();
-        this.artistReview = artistInfo.getArtistReview();
-    }
+  }
+
 
 }

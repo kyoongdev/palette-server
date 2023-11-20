@@ -1,12 +1,11 @@
 package com.study.palette.module.artist.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import com.study.palette.module.artist.dto.CreateArtistContactDto;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,28 +23,32 @@ import org.hibernate.annotations.GenericGenerator;
 @Getter
 @Setter
 @Builder
-public class ArtistReview {
+public class ArtistContact {
 
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
-  private int rating;
+  private int type;
 
-  @Column(length = 50)
-  private String review;
+  private String content;
 
-  private LocalDate createdAt;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "usersId")
-  @JsonIgnore
-  private Users users;
+  private LocalDateTime createAt;
 
   @ManyToOne
   @JoinColumn(name = "artistInfoId")
   @JsonIgnore
   private ArtistInfo artistInfo;
 
+
+  public static ArtistContact from(CreateArtistContactDto artistContactDto,
+      ArtistInfo artistInfo) {
+    return builder()
+        .type(artistContactDto.getType().getContact())
+        .content(artistContactDto.getContent())
+        .artistInfo(artistInfo).build();
+
+  }
 }

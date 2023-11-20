@@ -1,5 +1,6 @@
 package com.study.palette.module.artist.service;
 
+import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
 import com.study.palette.common.dto.ResponseWithIdDto;
@@ -8,47 +9,44 @@ import com.study.palette.module.artist.dto.ArtistResponseDto;
 import com.study.palette.module.artist.dto.CreateArtistDto;
 import com.study.palette.module.artist.dto.UpdateArtistDto;
 import com.study.palette.module.artist.dto.query.FindArtistsQuery;
-import com.study.palette.module.artist.entity.ArtistFile;
+import com.study.palette.module.artist.entity.ArtistContact;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
+import com.study.palette.module.artist.entity.ArtistRequest;
 import com.study.palette.module.artist.repository.ArtistRepository;
-import com.study.palette.module.artist.repository.ArtistReviewRepository;
-import com.study.palette.module.filter.repository.FilterInfoRepository;
+import com.study.palette.module.artist.repository.ArtistRequestRepository;
 import com.study.palette.module.users.entity.Users;
-import com.study.palette.module.users.repository.UsersRepository;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ArtistService {
 
-  private ArtistRepository artistRepository;
+  private final ArtistRepository artistRepository;
 
-  private ArtistReviewRepository artistReviewRepository;
-  private FilterInfoRepository filterInfoRepository;
+  private final ArtistRequestRepository artistRequestRepository;
 
-  private UsersRepository usersRepository;
+  private final ModelMapper modelMapper;
 
 
   @Autowired
-  public ArtistService(ArtistRepository artistRepository, FilterInfoRepository filterInfoRepository, ArtistReviewRepository artistReviewRepository, UsersRepository usersRepository) {
-    this.filterInfoRepository = filterInfoRepository;
+  public ArtistService(ArtistRepository artistRepository,
+      ArtistRequestRepository artistRequestRepository, ModelMapper modelMapper) {
     this.artistRepository = artistRepository;
-    this.artistReviewRepository = artistReviewRepository;
-    this.usersRepository = usersRepository;
+    this.artistRequestRepository = artistRequestRepository;
+    this.modelMapper = modelMapper;
 
   }
 
   /* artistInfo artistInfo 필터 정보 조회*/
-  public PaginationDto<ArtistResponseDto> findArtists(Pageable pageable) {
+  public PaginationDto<ArtistResponseDto> findArtists(FindArtistsQuery query, Pageable pageable) {
     //페이지네이션을 이용해서 정보를 조회하기 위해서는
     //크게
     // count: 해당 요청에 맞는 "전체 데이터 개수"
@@ -56,40 +54,23 @@ public class ArtistService {
     // limit : 한 페이지에 보여줄 "데이터 개수"
     //가 필요합니다.
     Long count = artistRepository.count();
-    List<ArtistResponseDto> artists = artistRepository.findAll(pageable).stream().map(ArtistResponseDto::new).collect(Collectors.toList());
 
-    PaginationDto<ArtistResponseDto> row = PaginationDto.of(new PagingDto(pageable, count), artists);
-
-
-    return row;
-  }
-
-  public PaginationDto<ArtistResponseDto> findArtistsFilter(FindArtistsQuery query) {
-
-    Long count = artistRepository.countByFilterInfo_Code(query.getCode());
-
-    Sort.Order sortOption;
-
-    if(query.getSort().equals("id")) {
-
-        sortOption = Sort.Order.asc(query.getSort());
-    } else {
-        sortOption = Sort.Order.desc("artistReview." + query.getSort());
+    if (count == 0) {
+      return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    Pageable pageable = query.toPageable(Sort.by(sortOption));
+    List<ArtistResponseDto> artists = artistRepository.findAll(query, pageable)
+        .stream()
+        .map(data -> modelMapper.map(data, ArtistResponseDto.class))
+        .collect(Collectors.toList());
 
-    List<ArtistResponseDto> artists = artistRepository.findAllByFilterInfo_Code(query.getCode(), pageable).stream().map(ArtistResponseDto::new).collect(Collectors.toList());
-
-    PaginationDto<ArtistResponseDto> row = PaginationDto.of(new PagingDto(pageable, count), artists);
+    PaginationDto<ArtistResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
+        artists);
 
     return row;
-
   }
 
-
   public ArtistDetailResponseDto findArtistsDetail(String no) {
-
 
     ArtistInfo artists = artistRepository.findById(no).orElse(null);
 
@@ -116,169 +97,47 @@ public class ArtistService {
 
 
   @Transactional
-  public ResponseWithIdDto createArtist(CreateArtistDto data) {
+  public ResponseWithIdDto createArtist(CreateArtistDto createArtistDto, Users users) {
 
-    /*User 정보 가져와서 artistInfo에 추가*/
-    Users users = usersRepository.findByEmail(data.getUserEmail()).orElse(null);
+    ArtistInfo aritstInfo = createArtistDto.toEntity(users);
 
-    /* ArtistFile 정보 */
-    String originFileName = "";
-    String uploadFileName = "";
-    int uploadFileSize = 0;
-    String suffix = "";
-    boolean isThumbNail;
-    boolean isUse;
-    LocalDate createdAt = LocalDate.now();
-    UUID uuid = UUID.randomUUID();
-    List<ArtistFile> artistFiles = new ArrayList<>();
+    List<ArtistLicenseInfo> artistLicenses = createArtistDto.getArtistLicenseInfo().stream()
+        .map(artistLicense -> ArtistLicenseInfo.from(artistLicense, aritstInfo))
+        .toList();
 
-    for(int i = 0; i < data.getArtistFileDto().size(); i++) {
+    List<ArtistContact> artistContacts = createArtistDto.getArtistContactDto().stream()
+        .map(artistContact -> ArtistContact.from(artistContact, aritstInfo))
+        .toList();
 
-        originFileName = data.getArtistFileDto().get(i).getOriginFileName();
-        uploadFileName = uuid.toString() + data.getArtistFileDto().get(i).getOriginFileName();
-        uploadFileSize = data.getArtistFileDto().get(i).getUploadFileSize();
-        suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
-        isThumbNail = data.getArtistFileDto().get(i).isThumbnail();
-        isUse = data.getArtistFileDto().get(i).isUse();
+    aritstInfo.setArtistLicenseInfo(artistLicenses);
+    aritstInfo.setArtistContact(artistContacts);
 
-        ArtistFile artistFile = ArtistFile.builder()
-                .originFileName(originFileName)
-                .uploadFileName(uploadFileName)
-                .uploadFileSize(uploadFileSize)
-                .suffix(suffix)
-                .createdAt(createdAt)
-                .isThumbnail(isThumbNail)
-                .isUse(isUse).build();
+    artistRepository.save(aritstInfo);
 
-        artistFiles.add(artistFile);
-    }
-
-    /* ArtistLicensInfo 정보 */
-    List<ArtistLicenseInfo> artistLicenseInfoList = new ArrayList<>();
-
-    for(int i = 0; i < data.getArtistLicenseInfo().size(); i++) {
-      ArtistLicenseInfo artistLicenseInfo = ArtistLicenseInfo.builder()
-              .licenseType(data.getArtistLicenseInfo().get(i).getLicenseType())
-              .price(data.getArtistLicenseInfo().get(i).getPrice())
-              .serveFile(data.getArtistLicenseInfo().get(i).getServeFile())
-              .updateCount(data.getArtistLicenseInfo().get(i).getUpdateCount())
-              .period(data.getArtistLicenseInfo().get(i).getPeriod())
-              .isAssign(data.getArtistLicenseInfo().get(i).isAssign())
-              .isUseCommerical(data.getArtistLicenseInfo().get(i).isUseCommerical())
-              .isServeOriginFile(data.getArtistLicenseInfo().get(i).isServeOriginFile()).build();
-
-              artistLicenseInfoList.add(artistLicenseInfo);
-    }
-
-
-    ArtistInfo createArtist = ArtistInfo.builder()
-        .serviceName(data.getServiceName())
-        .serviceInfo(data.getServiceInfo())
-        .editInfo(data.getEditInfo())
-        .filterInfo(data.getSalesType())
-        .serviceStatus(data.isServiceStatus())
-        .users(users)
-            .artistFile(new ArrayList<>())
-            .artistLicenseInfo(new ArrayList<>()).build();
-
-
-    for(int i = 0; i < artistFiles.size(); i++) {
-
-      createArtist.setArtistFile(artistFiles.get(i));
-
-    }
-
-    for(int i = 0; i < artistLicenseInfoList.size(); i++) {
-      createArtist.setArtistLicenseInfo(artistLicenseInfoList.get(i));
-    }
-
-    artistRepository.save(createArtist);
-
-    return ResponseWithIdDto.builder().id(createArtist.getId()).build();
+    return ResponseWithIdDto.builder().id(aritstInfo.getId().toString()).build();
 
   }
 
-  public ResponseWithIdDto updateArtist(UpdateArtistDto data) {
+  public ResponseWithIdDto updateArtist(String id, UpdateArtistDto data, Users users) {
 
-    Users users = usersRepository.findByEmail(data.getUserEmail()).orElse(null);
+    ArtistInfo artistInfo = artistRepository.findById(id).orElseThrow();
 
-    /* ArtistFile 정보 */
-    String originFileName = "";
-    String uploadFileName = "";
-    int uploadFileSize = 0;
-    String suffix = "";
-    boolean isThumbNail;
-    boolean isUse;
-    LocalDate createdAt = LocalDate.now();
-    UUID uuid = UUID.randomUUID();
-    List<ArtistFile> artistFiles = new ArrayList<>();
+    PaletteUtils.myCopyProperties(data, artistInfo);
 
-    for(int i = 0; i < data.getArtistFileDto().size(); i++) {
+    artistInfo.getArtistContact().clear();
+    artistInfo.getArtistLicenseInfo().clear();
 
-      originFileName = data.getArtistFileDto().get(i).getOriginFileName();
-      uploadFileName = uuid.toString() + data.getArtistFileDto().get(i).getOriginFileName();
-      uploadFileSize = data.getArtistFileDto().get(i).getUploadFileSize();
-      suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
-      isThumbNail = data.getArtistFileDto().get(i).isThumbnail();
-      isUse = data.getArtistFileDto().get(i).isUse();
+    data.getArtistLicenseInfo().stream().forEach(artistLicenses -> {
+      artistInfo.getArtistLicenseInfo().add(ArtistLicenseInfo.from(artistLicenses, artistInfo));
+    });
 
-      ArtistFile artistFile = ArtistFile.builder()
-              .originFileName(originFileName)
-              .uploadFileName(uploadFileName)
-              .uploadFileSize(uploadFileSize)
-              .suffix(suffix)
-              .createdAt(createdAt)
-              .isThumbnail(isThumbNail)
-              .isUse(isUse).build();
+    data.getArtistContactDto().stream().forEach(artistContacts -> {
+      artistInfo.getArtistContact().add(ArtistContact.from(artistContacts, artistInfo));
+    });
 
-      artistFiles.add(artistFile);
-    }
+    artistRepository.save(artistInfo);
 
-    /* ArtistLicensInfo 정보 */
-    List<ArtistLicenseInfo> artistLicenseInfoList = new ArrayList<>();
-
-    for(int i = 0; i < data.getArtistLicenseInfo().size(); i++) {
-      ArtistLicenseInfo artistLicenseInfo = ArtistLicenseInfo.builder()
-              .licenseType(data.getArtistLicenseInfo().get(i).getLicenseType())
-              .price(data.getArtistLicenseInfo().get(i).getPrice())
-              .serveFile(data.getArtistLicenseInfo().get(i).getServeFile())
-              .updateCount(data.getArtistLicenseInfo().get(i).getUpdateCount())
-              .period(data.getArtistLicenseInfo().get(i).getPeriod())
-              .isAssign(data.getArtistLicenseInfo().get(i).isAssign())
-              .isUseCommerical(data.getArtistLicenseInfo().get(i).isUseCommerical())
-              .isServeOriginFile(data.getArtistLicenseInfo().get(i).isServeOriginFile()).build();
-
-      artistLicenseInfoList.add(artistLicenseInfo);
-    }
-
-
-    ArtistInfo updateArtistInfo = artistRepository.findById(data.getId()).orElse(null);
-    updateArtistInfo.getArtistFile().clear();
-    updateArtistInfo.getArtistLicenseInfo().clear();
-
-    updateArtistInfo.modifyArtistInfo(data.getServiceName()
-                                      ,data.getServiceInfo()
-                                      ,data.getEditInfo()
-                                      ,data.getSalesType()
-                                      ,data.isServiceStatus()
-                                      ,createdAt
-                                      ,updateArtistInfo.getArtistFile()
-                                      ,updateArtistInfo.getArtistLicenseInfo());
-
-
-    for(int i = 0; i < artistFiles.size(); i++) {
-
-      updateArtistInfo.setArtistFile(artistFiles.get(i));
-
-    }
-
-    for(int i = 0; i < artistLicenseInfoList.size(); i++) {
-      updateArtistInfo.setArtistLicenseInfo(artistLicenseInfoList.get(i));
-    }
-
-    artistRepository.save(updateArtistInfo);
-
-    return ResponseWithIdDto.builder().id(updateArtistInfo.getId()).build();
+    return ResponseWithIdDto.builder().id(artistInfo.getId()).build();
   }
 
 
@@ -290,5 +149,22 @@ public class ArtistService {
   }
 
 
+  public void createArtistRequest(String id, Users users) throws Exception {
+    ArtistInfo artistInfo = artistRepository.findById(id).orElseThrow();
 
+    //오늘 이미 구매의뢰를 했는지 체크
+    Optional<ArtistRequest> artistRequest = artistRequestRepository.findByArtistInfoAndUserAndCreatedAt(
+        users, artistInfo, LocalDate.now());
+
+    if (artistRequest.isPresent()) {
+      throw new Exception("이미 구매의뢰를 하셨습니다.");
+    }
+
+    artistRequestRepository.save(ArtistRequest.builder()
+        .artistInfo(artistInfo)
+        .users(users)
+        .createAt(LocalDate.now())
+        .build()
+    );
+  }
 }

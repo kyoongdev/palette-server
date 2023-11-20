@@ -1,9 +1,11 @@
 package com.study.palette.module.artist.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -20,53 +22,57 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 public class ArtistFile {
 
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private String id;
+  @Id
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  private String id;
 
-    @Column(length = 256)
-    private String originFileName;
+  @Column(length = 256)
+  private String originFileName;
 
-    @Column(length = 256)
-    private String uploadFileName;
+  @Column(length = 256)
+  private String uploadFileName;
 
-    private int uploadFileSize;
+  private int uploadFileSize;
 
-    @Column(length = 256)
-    private String uploadFilePath;
+  @Column(length = 256)
+  private String uploadFilePath;
 
-    private int fileType;
+  private int fileType;
 
-    @Column(length = 4)
-    private String suffix;
+  @Column(length = 4)
+  private String suffix;
 
-    private boolean isThumbnail;
+  private boolean isThumbnail;
 
-    @Column(columnDefinition="tinyint(1) default 1")
-    private boolean isUse;
+  @Column(columnDefinition = "tinyint(1) default 1")
+  private boolean isUse;
 
-    private LocalDate createdAt;
+  private LocalDate createdAt;
 
-    @Column(length = 24)
-    private String userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "usersId")
+  @JsonIgnore
+  private Users users;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "artistInfoId")
-    private ArtistInfo artistInfo;
+  @ManyToOne
+  @JoinColumn(name = "artistInfoId")
+  @JsonIgnore
+  private ArtistInfo artistInfo;
 
-    @Builder
-    public ArtistFile(String originFileName, String uploadFileName, int uploadFileSize, String uploadFilePath, int fileType, String suffix, boolean isThumbnail, boolean isUse, LocalDate createdAt, String userId) {
-        this.originFileName = originFileName;
-        this.uploadFileName = uploadFileName;
-        this.uploadFileSize = uploadFileSize;
-        this.uploadFilePath = uploadFilePath;
-        this.fileType = fileType;
-        this.suffix = suffix;
-        this.isThumbnail = isThumbnail;
-        this.isUse = isUse;
-        this.createdAt = createdAt;
-        this.userId = userId;
-    }
+  @Builder
+  public ArtistFile(String originFileName, String uploadFileName, int uploadFileSize,
+      String uploadFilePath, int fileType, String suffix, boolean isThumbnail, boolean isUse,
+      LocalDate createdAt, Users users) {
+    this.originFileName = originFileName;
+    this.uploadFileName = uploadFileName;
+    this.uploadFileSize = uploadFileSize;
+    this.uploadFilePath = uploadFilePath;
+    this.fileType = fileType;
+    this.suffix = suffix;
+    this.isThumbnail = isThumbnail;
+    this.isUse = isUse;
+    this.createdAt = createdAt;
+    this.users = users;
+  }
 }

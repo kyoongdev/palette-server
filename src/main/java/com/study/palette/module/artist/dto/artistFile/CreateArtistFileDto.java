@@ -6,26 +6,26 @@ import lombok.Data;
 @Data
 public class CreateArtistFileDto {
 
-    private String originFileName;
+  private String originFileName;
 
 
-    private String uploadFileName;
+  private String uploadFileName;
 
-    private int uploadFileSize;
+  private int uploadFileSize;
 
-    private String uploadFilePath;
+  private String uploadFilePath;
 
-    private int fileType;
-
-
-    private String suffix;
-
-    private boolean isThumbnail;
-
-    private boolean isUse;
+  private int fileType;
 
 
-    private String targetId;
+  private String suffix;
+
+  private boolean isThumbnail;
+
+  private boolean isUse;
+
+
+  private String targetId;
 
 
 }
