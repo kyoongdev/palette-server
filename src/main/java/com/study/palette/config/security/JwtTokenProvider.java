@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
@@ -50,6 +51,7 @@ public class JwtTokenProvider {
   /**
    * 토큰 생성
    */
+  @Transactional
   public TokenDto createToken(Authentication authentication) {
     Users users = usersRepository.findById(UUID.fromString(authentication.getName()))
         .orElseThrow(() -> {
