@@ -1,10 +1,14 @@
 package com.study.palette.module.mixMastering.dto;
 
+import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
 import com.study.palette.module.mixMastering.dto.contact.MixMasteringContactDto;
 import com.study.palette.module.mixMastering.dto.file.MixMasteringFileDto;
 import com.study.palette.module.mixMastering.dto.license.MixMasteringLicenseDto;
+import com.study.palette.module.mixMastering.entity.MixMasteringContact;
+import com.study.palette.module.mixMastering.entity.MixMasteringFile;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
+import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -38,7 +42,7 @@ public class MixMasteringDto {
   private LocalDateTime createdAt;
   private CommonUserDto user;
   @Schema(description = "이미지들")
-  private List<MixMasteringFileDto> mixMasteringFile;
+  private List<MixMasteringFileDto> mixMasteringFiles;
   @Schema(description = "라이센스")
   private List<MixMasteringLicenseDto> mixMasteringLicenseInfos;
   @Schema(description = "연락수단")
@@ -55,9 +59,33 @@ public class MixMasteringDto {
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUsers());
-    this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
+    this.mixMasteringFiles = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).collect(Collectors.toList());
     this.mixMasteringLicenseInfos = mixMasteringInfo.getMixMasteringLicenseInfos().stream().map(MixMasteringLicenseDto::new).collect(Collectors.toList());
     this.mixMasteringContacts = mixMasteringInfo.getMixMasteringContacts().stream().map(MixMasteringContactDto::new).collect(Collectors.toList());
   }
 
+  public MixMasteringInfo toEntity(MixMasteringInfo mixMasteringInfo) {
+    PaletteUtils.myCopyProperties(this, mixMasteringInfo);
+
+    mixMasteringInfo.getMixMasteringContacts().clear();
+    mixMasteringInfo.getMixMasteringLicenseInfos().clear();
+    mixMasteringInfo.getMixMasteringFiles().clear();
+
+    mixMasteringInfo.getMixMasteringLicenseInfos().addAll(
+        (this.getMixMasteringLicenseInfos().stream()
+            .map(dto -> MixMasteringLicenseInfo.from(dto, mixMasteringInfo))
+            .collect(Collectors.toList())));
+
+    mixMasteringInfo.getMixMasteringContacts().addAll(
+        (this.getMixMasteringContacts().stream()
+            .map(dto -> MixMasteringContact.from(dto, mixMasteringInfo))
+            .collect(Collectors.toList())));
+
+    mixMasteringInfo.getMixMasteringFiles().addAll(
+        (this.getMixMasteringFiles().stream()
+            .map(dto -> MixMasteringFile.from(dto, mixMasteringInfo))
+            .collect(Collectors.toList())));
+
+    return mixMasteringInfo;
+  }
 }

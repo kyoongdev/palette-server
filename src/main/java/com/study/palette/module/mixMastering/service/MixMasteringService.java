@@ -1,17 +1,14 @@
 package com.study.palette.module.mixMastering.service;
 
 
-import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
 import com.study.palette.module.mixMastering.dto.CreateMixMasteringDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDetailDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDto;
+import com.study.palette.module.mixMastering.dto.MixMasteringsDto;
 import com.study.palette.module.mixMastering.dto.query.FindMixMasteringQuery;
-import com.study.palette.module.mixMastering.entity.MixMasteringContact;
-import com.study.palette.module.mixMastering.entity.MixMasteringFile;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
-import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringRequest;
 import com.study.palette.module.mixMastering.exception.MixMasteringErrorCode;
 import com.study.palette.module.mixMastering.exception.MixMasteringException;
@@ -48,7 +45,7 @@ public class MixMasteringService {
 
   /* MixMastering 필터 포함 조회*/
   @Transactional(readOnly = true)
-  public PaginationDto<MixMasteringDto> getixmMasterings(FindMixMasteringQuery query,
+  public PaginationDto<MixMasteringsDto> getMixMastering(FindMixMasteringQuery query,
       Pageable pageable) {
     Long count = mixMasteringRepository.count();
 
@@ -56,26 +53,26 @@ public class MixMasteringService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<MixMasteringDto> artists = mixMasteringRepository.findAll(query, pageable)
+    List<MixMasteringsDto> mixmasterings = mixMasteringRepository.findAll(query, pageable)
         .stream()
-        .map(data -> modelMapper.map(data, MixMasteringDto.class))
+        .map(data -> modelMapper.map(data, MixMasteringsDto.class))
         .collect(Collectors.toList());
 
-    PaginationDto<MixMasteringDto> row = PaginationDto.of(new PagingDto(pageable, count),
-        artists);
+    if (mixmasterings.isEmpty()) {
+      throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND);
+    }
 
-    return row;
+    return PaginationDto.of(new PagingDto(pageable, count), mixmasterings);
   }
 
   /* MixMastering 단일 조회*/
   @Transactional(readOnly = true)
   public MixMasteringDetailDto getMixMastering(String id) {
-    Optional<MixMasteringInfo> mixMasteringInfo = mixMasteringRepository.findById(
-        UUID.fromString(id));
+    Optional<MixMasteringInfo> mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id));
+
     if (mixMasteringInfo.isEmpty()) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND);
     }
-    log.info("*MixMastering* : " + mixMasteringInfo.get().getMixMasteringLicenseInfos());
 
     return new MixMasteringDetailDto(mixMasteringInfo.get());
   }
@@ -90,9 +87,9 @@ public class MixMasteringService {
 
   /* MixMastering 수정*/
   @Transactional
-  public void updateMixMastering(MixMasteringDto mixMasteringUpdateRequestDto,
+  public void updateMixMastering(MixMasteringDto mixMasteringDto,
       Users user) {
-    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(mixMasteringUpdateRequestDto.getId())
+    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(mixMasteringDto.getId())
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
@@ -101,28 +98,7 @@ public class MixMasteringService {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
-    PaletteUtils.myCopyProperties(mixMasteringUpdateRequestDto, mixMasteringInfo);
-
-    // update 전 초기화
-    mixMasteringInfo.getMixMasteringLicenseInfos().clear();
-    mixMasteringInfo.getMixMasteringFiles().clear();
-    mixMasteringInfo.getMixMasteringContacts().clear();
-
-    mixMasteringUpdateRequestDto.getMixMasteringLicenseInfos().forEach(license -> {
-      mixMasteringInfo.getMixMasteringLicenseInfos()
-          .add(MixMasteringLicenseInfo.from(license, mixMasteringInfo));
-    });
-
-    mixMasteringUpdateRequestDto.getMixMasteringFile().forEach(license -> {
-      mixMasteringInfo.getMixMasteringFiles().add(MixMasteringFile.from(license, mixMasteringInfo));
-    });
-
-    mixMasteringUpdateRequestDto.getMixMasteringContacts().forEach(license -> {
-      mixMasteringInfo.getMixMasteringContacts()
-          .add(MixMasteringContact.from(license, mixMasteringInfo));
-    });
-
-    mixMasteringRepository.save(mixMasteringInfo);
+    mixMasteringRepository.save(mixMasteringDto.toEntity(mixMasteringInfo));
   }
 
   /* MixMastering 삭제*/
