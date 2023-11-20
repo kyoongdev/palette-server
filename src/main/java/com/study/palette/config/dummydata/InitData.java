@@ -1,8 +1,6 @@
 package com.study.palette.config.dummydata;
 
 import com.study.palette.common.enums.Contact;
-import com.study.palette.common.enums.recording.Address1;
-import com.study.palette.common.enums.recording.Address2;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
@@ -14,21 +12,11 @@ import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
-import com.study.palette.module.artist.entity.ArtistFile;
-import com.study.palette.module.artist.entity.ArtistInfo;
-import com.study.palette.module.artist.entity.ArtistLicenseInfo;
-import com.study.palette.module.artist.entity.ArtistReview;
 import com.study.palette.module.artist.repository.ArtistRepository;
 import com.study.palette.module.mixMastering.entity.MixMasteringContact;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
-import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
-import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
-import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
-import com.study.palette.module.recording.entity.RecordingFile;
-import com.study.palette.module.recording.entity.RecordingInfo;
-import com.study.palette.module.recording.entity.RecordingLicenseInfo;
 import com.study.palette.module.recording.repository.RecordingRepository;
 import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
@@ -71,18 +59,19 @@ public class InitData implements ApplicationRunner {
             .build());
 
     /* Artist 관련 클래스 예시 */
-    ArtistFile artistFile = new ArtistFile();
-    ArtistLicenseInfo artistLicenseInfo = new ArtistLicenseInfo();
-    ArtistReview artistReview = new ArtistReview();
-
-    ArtistInfo artistInfo = new ArtistInfo();
-    artistInfo.setArtistFile(artistFile);
-    artistInfo.setArtistLicenseInfo(artistLicenseInfo);
-    artistInfo.setArtistReview(artistReview);
-    artistInfo.setUsers(initCommUser);
+//    ArtistFile artistFile = new ArtistFile();
+//    ArtistLicenseInfo artistLicenseInfo = new ArtistLicenseInfo();
+//    ArtistReview artistReview = new ArtistReview();
+//
+//    ArtistInfo artistInfo = new ArtistInfo();
+//    artistInfo.setArtistFile(artistFile);
+//    artistInfo.setArtistLicenseInfo(artistLicenseInfo);
+//    artistInfo.setArtistReview(artistReview);
+//    artistInfo.setUsers(initCommUser);
 
     /* 연관관계 확인 후 save*/
-    artistRepository.save(artistInfo);
+//    artistRepository.save(artistInfo);
+
     //albumart
     List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseCreateRequestDtos = new ArrayList<>();
     List<AlbumArtContactCreateDto> AlbumArtContactCreateDtos = new ArrayList<>();
