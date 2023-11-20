@@ -4,54 +4,60 @@ import java.util.Map;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
-    /* 카카오는 유저 정보가 kakao_account.profile로 두번 감싸져 있는 구조라 get을 2번 사용 후 원하는 정보의 key값을 꺼내서 사용해야한다.
-     * 또한 getId는 Long타입으로 반환되어 String.ofValue 사용*/
-    public KakaoOAuth2UserInfo(Map<String, Object> attributes) {
-        super(attributes);
+  /* 카카오는 유저 정보가 kakao_account.profile로 두번 감싸져 있는 구조라 get을 2번 사용 후 원하는 정보의 key값을 꺼내서 사용해야한다.
+   * 또한 getId는 Long타입으로 반환되어 String.ofValue 사용*/
+  public KakaoOAuth2UserInfo(Map<String, Object> attributes) {
+    super(attributes);
+  }
+
+  @Override
+  public String getId() {
+    return String.valueOf(attributes.get("id"));
+  }
+
+  @Override
+  public String getName() {
+
+    Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+
+    if (account == null) {
+      return null;
     }
 
-    @Override
-    public String getId() {
-        return String.valueOf(attributes.get("id"));
+    Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+
+    if (profile == null) {
+      return null;
     }
 
-    @Override
-    public String getName() {
+    return (String) profile.get("nickname");
+  }
 
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+  @Override
+  public String getImageUrl() {
 
-        if (account == null || profile == null) {
-            return null;
-        }
+    Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+    Map<String, Object> profile = (Map<String, Object>) account.get("profile");
 
-        return (String) profile.get("nickname");
+    if (account == null || profile == null) {
+      return null;
     }
 
-    @Override
-    public String getImageUrl() {
+    return (String) profile.get("thumbnail_image_url");
+  }
 
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+  @Override
+  public String getEmail() {
 
-        if (account == null || profile == null) {
-            return null;
-        }
+    Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
 
-        return (String) profile.get("thumbnail_image_url");
+    if (account == null) {
+      return null;
     }
 
-    @Override
-    public String getEmail() {
-        
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> email = (Map<String, Object>) account.get("email");
+    String email = account.get("email").toString();
 
-        if (account == null || email == null) {
-            return null;
-        }
+    return email;
 
-        return (String) email.get("email");
-
-    }
+  }
 }

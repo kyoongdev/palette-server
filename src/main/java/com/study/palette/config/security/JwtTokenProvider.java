@@ -1,7 +1,7 @@
 package com.study.palette.config.security;
 
 import com.study.palette.common.dto.TokenDto;
-import com.study.palette.config.UserDetailsServiceImpl;
+import com.study.palette.module.user.service.UserDetailsServiceImpl;
 import com.study.palette.module.users.entity.RefreshToken;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.RefreshTokenRepository;
