@@ -1,11 +1,11 @@
 package com.study.palette.config.security;
 
 import com.study.palette.common.dto.TokenDto;
-import com.study.palette.module.user.service.UserDetailsServiceImpl;
 import com.study.palette.module.users.entity.RefreshToken;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.RefreshTokenRepository;
 import com.study.palette.module.users.repository.UsersRepository;
+import com.study.palette.module.users.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

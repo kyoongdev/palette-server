@@ -1,4 +1,4 @@
-package com.study.palette.module.user.service;
+package com.study.palette.module.users.service;
 
 import java.io.Serializable;
 import java.util.Collection;

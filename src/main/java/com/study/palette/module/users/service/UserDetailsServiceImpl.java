@@ -1,4 +1,4 @@
-package com.study.palette.module.user.service;
+package com.study.palette.module.users.service;
 
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
