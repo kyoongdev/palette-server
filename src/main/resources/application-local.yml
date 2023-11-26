@@ -70,3 +70,4 @@ s3:
 server:
   host:
     front: http://localhost:3000
+
