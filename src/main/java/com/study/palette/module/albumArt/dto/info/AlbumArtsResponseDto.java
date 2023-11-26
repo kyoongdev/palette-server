@@ -1,11 +1,11 @@
 package com.study.palette.module.albumArt.dto.info;
 
-import com.study.palette.module.albumArt.controller.CommonResponseDto;
+import com.study.palette.common.dto.CommonResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 
 
-public class AlbumArtsResponseDto extends CommonResponseDto {
+public class AlbumArtsResponseDto {
 
   @Schema(description = "앨범아트 ID")
   private String id;
