@@ -1,5 +1,6 @@
 package com.study.palette.module.artist.dto;
 
+import com.study.palette.module.artist.entity.ArtistContact;
 import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
@@ -22,11 +23,9 @@ public class ArtistDetailResponseDto {
 
   private List<ArtistFile> artistFile;
 
-  private List<ArtistReview> artistReview;
-
-  private long reviewAverage;
-
   private List<ArtistLicenseInfo> artistLicenseInfo;
+
+  private List<ArtistContact> artistContact;
 
   public static ArtistDetailResponseDto toEntity(ArtistInfo artistInfo) {
     return ArtistDetailResponseDto.builder()
@@ -34,7 +33,7 @@ public class ArtistDetailResponseDto {
         .serviceInfo(artistInfo.getServiceName())
         .editInfo(artistInfo.getEditInfo())
         .artistFile(artistInfo.getArtistFile())
-        .artistReview(artistInfo.getArtistReview())
+        .artistContact(artistInfo.getArtistContact())
         .artistLicenseInfo(artistInfo.getArtistLicenseInfo()).build();
   }
 

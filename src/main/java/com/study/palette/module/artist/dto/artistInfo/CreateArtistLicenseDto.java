@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateArtistInfoDto {
+public class CreateArtistLicenseDto {
 
   private int licenseType;
 

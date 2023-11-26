@@ -69,9 +69,4 @@ public class ArtistInfo {
   @OneToMany(mappedBy = "artistInfo", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ArtistContact> artistContact = new ArrayList<>();
 
-  public void setArtistFile(ArtistFile artistFileChild) {
-    artistFile.add(artistFileChild);
-    artistFileChild.setArtistInfo(this);
-  }
-
 }

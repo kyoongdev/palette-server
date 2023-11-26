@@ -12,6 +12,14 @@ import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
+import com.study.palette.module.artist.dto.CreateArtistContactDto;
+import com.study.palette.module.artist.dto.CreateArtistDto;
+import com.study.palette.module.artist.dto.artistFile.CreateArtistFileDto;
+import com.study.palette.module.artist.dto.artistInfo.CreateArtistLicenseDto;
+import com.study.palette.module.artist.entity.ArtistContact;
+import com.study.palette.module.artist.entity.ArtistFile;
+import com.study.palette.module.artist.entity.ArtistInfo;
+import com.study.palette.module.artist.entity.ArtistLicenseInfo;
 import com.study.palette.module.artist.repository.ArtistRepository;
 import com.study.palette.module.mixMastering.entity.MixMasteringContact;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
@@ -21,6 +29,7 @@ import com.study.palette.module.recording.repository.RecordingRepository;
 import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,19 +67,87 @@ public class InitData implements ApplicationRunner {
             .name("홍길동")
             .build());
 
-    /* Artist 관련 클래스 예시 */
-//    ArtistFile artistFile = new ArtistFile();
-//    ArtistLicenseInfo artistLicenseInfo = new ArtistLicenseInfo();
-//    ArtistReview artistReview = new ArtistReview();
-//
-//    ArtistInfo artistInfo = new ArtistInfo();
-//    artistInfo.setArtistFile(artistFile);
-//    artistInfo.setArtistLicenseInfo(artistLicenseInfo);
-//    artistInfo.setArtistReview(artistReview);
-//    artistInfo.setUsers(initCommUser);
+    /* artist */
+    List<CreateArtistLicenseDto> artistLicenseInfo = new ArrayList<>();
+    List<CreateArtistFileDto> artistFiles = new ArrayList<>();
+    List<CreateArtistContactDto> artistContacts = new ArrayList<>();
+    List<ArtistInfo> artistInfoList = new ArrayList<>();
 
-    /* 연관관계 확인 후 save*/
-//    artistRepository.save(artistInfo);
+    for(int i = 0 ; i < 10; i ++) {
+
+      for (int j = 0; j < 3; j++) {
+        artistLicenseInfo.add(new CreateArtistLicenseDto(
+            10,
+            1000,
+            "servedFile" + i,
+            3,
+            1,
+            1,
+            true,
+            true,
+            true
+        ));
+      }
+
+      for (int j = 0; j < 3; j++) {
+        artistContacts.add(new CreateArtistContactDto(
+            Contact.findContact(j + 1),
+            "010-1234-1234"
+        ));
+      }
+
+      for (int j = 0; j < 3; j++) {
+        artistFiles.add(new CreateArtistFileDto(
+            "www.test.com",
+            "testfilenale",
+            "uploadfilname",
+            1000,
+            "jpg",
+            true
+        ));
+      }
+
+      CreateArtistDto createArtistDto = new CreateArtistDto(
+          "serviceName",
+          "serviceInfo",
+          "editInfo",
+          2,
+          true,
+          LocalDate.now(),
+          artistFiles,
+          artistLicenseInfo,
+          artistContacts);
+
+      ArtistInfo artistInfo = createArtistDto.toEntity(initCommUser);
+
+      List<ArtistLicenseInfo> artistLicenseInfos = createArtistDto.getArtistLicenseInfo()
+          .stream()
+          .map(license -> ArtistLicenseInfo.from(license, artistInfo))
+          .toList();
+
+      List<ArtistContact> artistContactList = createArtistDto.getArtistContactDto()
+          .stream()
+          .map(contact -> ArtistContact.from(contact, artistInfo))
+          .toList();
+
+      List<ArtistFile> artistFileList = createArtistDto.getArtistFileDto()
+          .stream()
+          .map(file -> ArtistFile.from(file, artistInfo))
+          .toList();
+
+      artistInfo.setArtistLicenseInfo(artistLicenseInfos);
+      artistInfo.setArtistContact(artistContactList);
+      artistInfo.setArtistFile(artistFileList);
+      artistInfoList.add(artistInfo);
+
+      artistLicenseInfo.clear();
+      artistFiles.clear();
+      artistContacts.clear();
+
+    }
+
+    /* artist save*/
+    artistRepository.saveAll(artistInfoList);
 
     //albumart
     List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseCreateRequestDtos = new ArrayList<>();
