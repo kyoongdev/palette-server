@@ -27,3 +27,10 @@ logging:
 s3:
   naming-strategy:
     path: dev
+
+#TODO: 개발서버 host정보 받을 때 변경
+#front 서버에 redirect하기 위한 host 정보
+server:
+  host:
+    front: http://localhost:3000
+
