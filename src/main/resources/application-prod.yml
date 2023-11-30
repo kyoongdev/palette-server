@@ -11,7 +11,7 @@ spring:
     database: mysql
     show-sql: 'true'
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -27,3 +27,9 @@ logging:
 s3:
   naming-strategy:
     path: prod
+
+#TODO: 운영서버 host정보 받을 때 변경
+#front 서버에 redirect하기 위한 host 정보
+server:
+  host:
+    front: http://localhost:3000

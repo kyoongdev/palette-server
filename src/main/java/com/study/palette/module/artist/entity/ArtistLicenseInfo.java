@@ -1,7 +1,7 @@
 package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.artist.dto.artistInfo.CreateArtistInfoDto;
+import com.study.palette.module.artist.dto.artistInfo.CreateArtistLicenseDto;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -85,7 +85,7 @@ public class ArtistLicenseInfo {
     this.artistInfo = artistInfo;
   }
 
-  public static ArtistLicenseInfo from(CreateArtistInfoDto artistLicenseInfoDto,
+  public static ArtistLicenseInfo from(CreateArtistLicenseDto artistLicenseInfoDto,
       ArtistInfo artistInfo) {
     return builder()
         .licenseType(artistLicenseInfoDto.getLicenseType())

@@ -1,10 +1,10 @@
 package com.study.palette.module.socialLogin.service;
 
 import com.study.palette.module.socialLogin.dto.OAuth2AttributesDto;
-import com.study.palette.module.user.service.PrincipalDetails;
 import com.study.palette.module.users.entity.SocialType;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
+import com.study.palette.module.users.service.PrincipalDetails;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

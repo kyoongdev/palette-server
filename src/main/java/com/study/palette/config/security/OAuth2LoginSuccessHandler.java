@@ -5,9 +5,9 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -17,22 +17,20 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
+  @Value("${server.host.front}")
+  private String frontServerHost;
+
   private final JwtTokenProvider jwtTokenProvider;
 
 
   @Override
-  @Transactional
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
 
-    log.info("authentication : " + authentication.getName());
-
     TokenDto token = jwtTokenProvider.createToken(authentication);
 
-    log.info("token : " + token.getAccessToken());
-
     response.sendRedirect(
-        "http://localhost:8080/login?accessToken=" + token.getAccessToken() + "&refreshToken="
+        frontServerHost + "/loginSuccess?accessToken=" + token.getAccessToken() + "&refreshToken="
             + token.getRefreshToken());
 
   }
