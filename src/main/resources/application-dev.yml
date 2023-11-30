@@ -4,14 +4,14 @@ spring:
       on-profile: "devdb"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/devpalette?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: testpass
+    url: jdbc:mysql://pallete-dev-db.c9wbuwje8wxh.ap-northeast-2.rds.amazonaws.com/:3306/palette?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: pallete
+    password: VmCqzlvpklnDhRMLxrGp
   jpa:
     database: mysql
     show-sql: 'true'
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
