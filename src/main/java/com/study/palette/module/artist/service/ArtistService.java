@@ -10,6 +10,7 @@ import com.study.palette.module.artist.dto.CreateArtistDto;
 import com.study.palette.module.artist.dto.UpdateArtistDto;
 import com.study.palette.module.artist.dto.query.FindArtistsQuery;
 import com.study.palette.module.artist.entity.ArtistContact;
+import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
 import com.study.palette.module.artist.entity.ArtistRequest;
@@ -70,27 +71,11 @@ public class ArtistService {
     return row;
   }
 
-  public ArtistDetailResponseDto findArtistsDetail(String no) {
+  public ArtistDetailResponseDto findArtistsDetail(String id) {
 
-    ArtistInfo artists = artistRepository.findById(no).orElse(null);
+    ArtistInfo artists = artistRepository.findById(id).orElse(null);
 
     ArtistDetailResponseDto artistDetail = ArtistDetailResponseDto.toEntity(artists);
-
-    /* review 조회 중 */
-//    int artistReviewRatingSum = 0;
-//    int artistReviewRatingCount = 0;
-//
-//    for(int i = 0; i < artistDetail.getArtistReview().size(); i++) {
-//
-//      artistReviewRatingSum += artistDetail.getArtistReview().get(i).getRating();
-//
-//      artistReviewRatingCount++;
-//
-//    }
-//
-//    int artistReviewAverage = artistReviewRatingSum / artistReviewRatingCount;
-//
-//    artistDetail.setReviewAverage(artistReviewAverage);
 
     return artistDetail;
   }
@@ -109,6 +94,11 @@ public class ArtistService {
         .map(artistContact -> ArtistContact.from(artistContact, aritstInfo))
         .toList();
 
+    List<ArtistFile> artistFiles = createArtistDto.getArtistFileDto().stream()
+        .map(artistFile -> ArtistFile.from(artistFile, aritstInfo))
+        .toList();
+
+    aritstInfo.setArtistFile(artistFiles);
     aritstInfo.setArtistLicenseInfo(artistLicenses);
     aritstInfo.setArtistContact(artistContacts);
 
@@ -126,6 +116,11 @@ public class ArtistService {
 
     artistInfo.getArtistContact().clear();
     artistInfo.getArtistLicenseInfo().clear();
+    artistInfo.getArtistFile().clear();
+
+    data.getArtistFileDto().stream().forEach(artistFiles -> {
+      artistInfo.getArtistFile().add(ArtistFile.from(artistFiles, artistInfo));
+    });
 
     data.getArtistLicenseInfo().stream().forEach(artistLicenses -> {
       artistInfo.getArtistLicenseInfo().add(ArtistLicenseInfo.from(artistLicenses, artistInfo));
@@ -141,7 +136,9 @@ public class ArtistService {
   }
 
 
-  public Boolean artistDelete(String id) {
+  public Boolean artistDelete(String id, Users users) {
+
+    ArtistInfo artistInfo = artistRepository.findById(id).orElseThrow();
 
     artistRepository.deleteById(id);
 

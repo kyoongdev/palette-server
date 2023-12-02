@@ -1,7 +1,7 @@
 package com.study.palette.module.artist.dto;
 
 import com.study.palette.module.artist.dto.artistFile.CreateArtistFileDto;
-import com.study.palette.module.artist.dto.artistInfo.CreateArtistInfoDto;
+import com.study.palette.module.artist.dto.artistInfo.CreateArtistLicenseDto;
 import java.util.List;
 import lombok.Data;
 
@@ -23,7 +23,7 @@ public class UpdateArtistDto {
 
   private List<CreateArtistFileDto> artistFileDto;
 
-  private List<CreateArtistInfoDto> artistLicenseInfo;
+  private List<CreateArtistLicenseDto> artistLicenseInfo;
 
   private List<CreateArtistContactDto> artistContactDto;
 }

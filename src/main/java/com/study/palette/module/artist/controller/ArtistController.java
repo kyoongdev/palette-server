@@ -2,6 +2,7 @@ package com.study.palette.module.artist.controller;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.ResponseWithIdDto;
+import com.study.palette.module.artist.dto.ArtistDetailResponseDto;
 import com.study.palette.module.artist.dto.ArtistResponseDto;
 import com.study.palette.module.artist.dto.CreateArtistDto;
 import com.study.palette.module.artist.dto.UpdateArtistDto;
@@ -12,6 +13,7 @@ import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,7 +48,7 @@ public class ArtistController {
 
   @Operation(summary = "아티스트 조회", description = "아티스트 조회 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArtistResponseDto.class))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("")
@@ -60,10 +62,24 @@ public class ArtistController {
 
   }
 
+  @Operation(summary = "아티스트 상세", description = "아티스트 상세 조회 메서드입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @GetMapping("{id}/detail")
+  //ResponseEntity -> PaginationDto
+  //만들어둔 페이지네이션 객체 사용
+  public ArtistDetailResponseDto artistInfo(@PathVariable String id) {
+
+    return artistService.findArtistsDetail(id);
+
+  }
+
   @Operation(summary = "아티스트 생성", description = "아티스트 생성 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "생성 성공", content = @Content(mediaType = "application/json")),
-
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @PostMapping(path = "")
   @PreAuthorize("hasRole('MUSICIAN')")
@@ -78,13 +94,13 @@ public class ArtistController {
   @Operation(summary = "아티스트 삭제", description = "아티스트 삭제.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(mediaType = "application/json")),
-
+      @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @DeleteMapping("/{id}")
   public ResponseEntity<Boolean> artistDelete(@PathVariable String id,
       @Parameter(hidden = false) @GetUserInfo Users users) {
 
-    Boolean result = artistService.artistDelete(id);
+    Boolean result = artistService.artistDelete(id, users);
 
     return ResponseEntity.ok(result);
   }
@@ -92,6 +108,7 @@ public class ArtistController {
   @Operation(summary = "아티스트 수정", description = "아티스트 수정 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
 
   })
   @PatchMapping(path = "/{id}")

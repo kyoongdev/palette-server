@@ -39,7 +39,7 @@ public class ArtistRepositoryImpl implements ArtistCustomRepository {
             artistInfo.serviceName,
             artistInfo.salesType,
             artistInfo.users.name.as("userName"),
-            artistFile.uploadFilePath.as("fileUrl"),
+            artistFile.url.as("fileUrl"),
             artistLicenseInfo.price.as("price"),
             artistRequest.id.count().as("requestCount")))
         .from(artistInfo)
@@ -53,12 +53,12 @@ public class ArtistRepositoryImpl implements ArtistCustomRepository {
             .and(artistLicenseInfo.licenseType.eq(10)))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(artistInfo.salesType.eq(query.getSaleType()))
+        .where(artistInfo.salesType.eq(query.getSaleType().getCode()))
         .groupBy(artistInfo.id,
             artistInfo.serviceName,
             artistInfo.salesType,
             artistInfo.users.name,
-            artistFile.uploadFilePath,
+            artistFile.url,
             artistLicenseInfo.price)
         .orderBy(query.getSort())
         .fetch();
