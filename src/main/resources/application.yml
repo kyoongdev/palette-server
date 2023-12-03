@@ -5,7 +5,7 @@ spring:
       "dev": "devdb, common"
       "prod": "proddb, common"
     include: "jwt, aws"
-    active: dev
+    active: local
 ---
 
 spring: #공통환경
