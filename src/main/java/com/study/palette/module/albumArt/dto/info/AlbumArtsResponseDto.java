@@ -1,13 +1,10 @@
 package com.study.palette.module.albumArt.dto.info;
 
+import com.study.palette.common.dto.CommonResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
-@Data
-@NoArgsConstructor
 public class AlbumArtsResponseDto {
 
   @Schema(description = "앨범아트 ID")
