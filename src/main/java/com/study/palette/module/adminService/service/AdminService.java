@@ -56,6 +56,7 @@ public class AdminService {
         allByServiceStatusAndCreatedAtDesc);
   }
 
+  // 판매글 목록 전체 카운트
   @Transactional(readOnly = true)
   public ServiceCountResponseDto getServicesCount(FindAdminServiceQuery query) {
     long albumArtCount = albumArtRepository.countByServiceStatus(query.isRegistrationCompleted());

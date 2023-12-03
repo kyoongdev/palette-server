@@ -6,6 +6,15 @@ import com.study.palette.module.adminService.dto.ServiceCountResponseDto;
 import com.study.palette.module.adminService.dto.ServiceResponseDto;
 import com.study.palette.module.adminService.service.AdminService;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
+import com.study.palette.module.albumArt.service.AlbumArtService;
+import com.study.palette.module.artist.dto.ArtistResponseDto;
+import com.study.palette.module.artist.service.ArtistService;
+import com.study.palette.module.mixMastering.dto.MixMasteringDto;
+import com.study.palette.module.mixMastering.service.MixMasteringService;
+import com.study.palette.module.mrBeat.dto.MrBeatResponseDto;
+import com.study.palette.module.mrBeat.service.MrBeatService;
+import com.study.palette.module.recording.dto.info.RecordingResponseDto;
+import com.study.palette.module.recording.service.RecordingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,8 +24,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,9 +38,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminServiceController {
 
   private final AdminService adminService;
-
-  public AdminServiceController(AdminService adminService) {
+  private final ArtistService artistService;
+  private final MixMasteringService mixMasteringService;
+  private final RecordingService recordingService;
+  private final MrBeatService mrBeatService;
+  private final AlbumArtService albumArtService;
+  public AdminServiceController(AdminService adminService, ArtistService artistService, MixMasteringService mixMasteringService, RecordingService recordingService, MrBeatService mrBeatService, AlbumArtService albumArtService) {
     this.adminService = adminService;
+    this.artistService = artistService;
+    this.mixMasteringService = mixMasteringService;
+    this.recordingService = recordingService;
+    this.mrBeatService = mrBeatService;
+    this.albumArtService = albumArtService;
   }
 
 
@@ -57,16 +78,64 @@ public class AdminServiceController {
     return adminService.getServicesCount(query);
   }
 
-//앨범아트 상세조회
-  @Operation(summary = "앨범아트 상세 조회", description = "앨범아트 상세 조회 메서드입니다.")
+  //albumArt 판매글 등록/신청 승인 반려 처리
+  @Operation(summary = "앨범아트 판매글 등록/신청 승인 반려 처리", description = "앨범아트 판매글 등록/신청 승인 반려 처리 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtDetailResponseDto.class))),
+      @ApiResponse(responseCode = "200", description = "처리 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtDetailResponseDto.class))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
-  @GetMapping("/{id}/detail")
-  public AlbumArtDetailResponseDto albumArtInfoDetail(@PathVariable String id) {
-    return albumArtService.getAlbumArtWithDto(id);
+  @PatchMapping("album-art/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public AlbumArtDetailResponseDto albumArtInfoDetail(@PathVariable String id, @RequestBody String status) {
+    return albumArtService.updateServiceStatus(id, status);
   }
 
+  //artist 판매글 등록/신청 승인 반려 처리
+  @Operation(summary = "아티스트 판매글 등록/신청 승인 반려 처리", description = "아티스트 판매글 등록/신청 승인 반려 처리 메서드입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "처리 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtDetailResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @PatchMapping("artist/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ArtistResponseDto artistInfoDetail(@PathVariable String id, @RequestBody String status) {
+    return artistService.updateServiceStatus(id, status);
+  }
 
+  //mix-mastering 판매글 등록/신청 승인 반려 처리
+  @Operation(summary = "믹스마스터링 판매글 등록/신청 승인 반려 처리", description = "믹스마스터링 판매글 등록/신청 승인 반려 처리 메서드입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "처리 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtDetailResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @PatchMapping("mix-mastering/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public MixMasteringDto mixMasteringInfoDetail(@PathVariable String id, @RequestBody String status) {
+    return mixMasteringService.updateServiceStatus(id, status);
+  }
+
+  //recording 판매글 등록/신청 승인 반려 처리
+  @Operation(summary = "녹음 판매글 등록/신청 승인 반려 처리", description = "녹음 판매글 등록/신청 승인 반려 처리 메서드입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "처리 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtDetailResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @PatchMapping("recording/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public RecordingResponseDto recordingInfoDetail(@PathVariable String id, @RequestBody String status) {
+    return recordingService.updateServiceStatus(id, status);
+  }
+
+  //mr-beat 판매글 등록/신청 승인 반려 처리
+  @Operation(summary = "MR비트 판매글 등록/신청 승인 반려 처리", description = "MR비트 판매글 등록/신청 승인 반려 처리 메서드입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "처리 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtDetailResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @PatchMapping("mr-beat/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public MrBeatResponseDto mrBeatInfoDetail(@PathVariable String id, @RequestBody String status) {
+    return mrBeatService.updateServiceStatus(id, status);
+  }
 }
+
