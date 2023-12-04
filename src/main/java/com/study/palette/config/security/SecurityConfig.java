@@ -26,6 +26,8 @@ public class SecurityConfig {
 
   private final CustomOAuth2UserService customOAuth2UserService;
 
+  private final OAuth2LoginSuccessHandler oAUth2LoginSuccessHandler;
+
   @Bean
   public PasswordEncoder getPasswordEncoder() {
     return new BCryptPasswordEncoder();
@@ -58,6 +60,7 @@ public class SecurityConfig {
 
             .and()
             .oauth2Login()
+            .successHandler(oAUth2LoginSuccessHandler)
             .userInfoEndpoint().userService(customOAuth2UserService);
     ;
 

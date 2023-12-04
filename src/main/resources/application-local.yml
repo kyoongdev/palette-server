@@ -65,3 +65,9 @@ logging:
 s3:
   naming-strategy:
     path: dev
+
+#front 서버에 redirect하기 위한 host 정보
+server:
+  host:
+    front: http://localhost:3000
+

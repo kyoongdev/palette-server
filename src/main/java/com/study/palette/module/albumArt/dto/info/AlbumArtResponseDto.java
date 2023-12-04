@@ -1,6 +1,7 @@
 package com.study.palette.module.albumArt.dto.info;
 
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,22 +11,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlbumArtResponseDto {
 
+  @Schema(description = "앨범아트 ID")
   private String id;
+  @Schema(description = "서비스명", example = "테스트 서비스명")
   private String serviceName;
+  @Schema(description = "서비스 타입", example = "true")
   private int salesType;
+  @Schema(description = "아티스트명", example = "테스트 유저명")
   private String userName;
+  @Schema(description = "파일경로", example = "파일경로")
   private String fileUrl;
+  @Schema(description = "가격", example = "10000")
   private int price;
+  @Schema(description = "요청수", example = "10000")
   private long requestCount;
-
-  public AlbumArtResponseDto(AlbumArtInfo albumArtInfo) {
-    this.id = albumArtInfo.getId().toString();
-    this.serviceName = albumArtInfo.getServiceName();
-    this.salesType = albumArtInfo.getSalesType();
-    this.userName = albumArtInfo.getUsers().getName(); //TODO musician 생기면 활동명으로 바꿀수 있을듯?
-//        this.fileUrl = albumArtInfo.getAlbumArtFile().get(0).getUploadFileName();
-//        this.price = albumArtInfo.getAlbumArtLicenseInfo().get(0).getPrice();
-  }
 
   public AlbumArtResponseDto(UUID id, String serviceName, int salesType, String userName,
       String fileUrl, int price, long requestCount) {
@@ -33,7 +32,7 @@ public class AlbumArtResponseDto {
     this.serviceName = serviceName;
     this.salesType = salesType;
     this.userName = userName;
-//        this.fileUrl = fileUrl;
+    this.fileUrl = fileUrl;
     this.price = price;
     this.requestCount = requestCount;//TODO 추후 삭제 확인용
   }

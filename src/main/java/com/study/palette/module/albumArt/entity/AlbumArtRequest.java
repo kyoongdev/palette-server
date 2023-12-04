@@ -2,7 +2,7 @@ package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ public class AlbumArtRequest {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private LocalDate createAt;
+  private LocalDateTime createAt;
 
   @ManyToOne
   @JoinColumn(name = "usersId")

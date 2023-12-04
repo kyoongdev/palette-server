@@ -1,15 +1,20 @@
 package com.study.palette.module.mixMastering.entity;
 
+import com.study.palette.module.mixMastering.dto.license.MixMasteringLicenseDto;
+import java.time.LocalDate;
+import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -53,4 +58,20 @@ public class MixMasteringLicenseInfo {
   @JoinColumn(name = "mixMasteringInfoId")
   private MixMasteringInfo mixMasteringInfo;
 
+  public static MixMasteringLicenseInfo from(
+      MixMasteringLicenseDto mixMasteringLicenseCreateDto, MixMasteringInfo mixMasteringInfo) {
+    return builder()
+        .licenseType(mixMasteringLicenseCreateDto.getLicenseType().getLicenseType())
+        .price(mixMasteringLicenseCreateDto.getPrice())
+        .servedType(mixMasteringLicenseCreateDto.getServedType())
+        .updateCount(mixMasteringLicenseCreateDto.getUpdateCount())
+        .period(mixMasteringLicenseCreateDto.getPeriod())
+        .draftCount(mixMasteringLicenseCreateDto.getDraftCount())
+        .isAssign(mixMasteringLicenseCreateDto.isAssign())
+        .isUseCommercial(mixMasteringLicenseCreateDto.isUseCommercial())
+        .isServeOriginFile(mixMasteringLicenseCreateDto.isServeOriginFile())
+        .isOtherUseApproved(mixMasteringLicenseCreateDto.isOtherUseApproved())
+        .mixMasteringInfo(mixMasteringInfo)
+        .build();
+  }
 }

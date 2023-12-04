@@ -1,25 +1,26 @@
 package com.study.palette.module.socialLogin.service;
 
-import com.study.palette.module.socialLogin.CustomOAuth2User;
 import com.study.palette.module.socialLogin.dto.OAuth2AttributesDto;
 import com.study.palette.module.users.entity.SocialType;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
-import java.util.Collections;
+import com.study.palette.module.users.service.PrincipalDetails;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Log4j2
 @Service
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private static final String NAVER = "naver";
     private static final String KAKAO = "kakao";
@@ -43,8 +44,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
          * 사용자 정보를 얻은 후, 이를 통해 DefaultOAuth2User 객체를 생성 후 반환한다.
          * 결과적으로, OAuth2User는 OAuth 서비스에서 가져온 유저 정보를 담고 있는 유저
          */
-        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = delegate.loadUser(userRequest);
+        OAuth2User oAuth2User = super.loadUser(userRequest);
 
         /**
          * userRequest에서 registrationId 추출 후 registrationId으로 SocialType 저장
@@ -64,18 +64,18 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2AttributesDto extractAttributes = OAuth2AttributesDto.of(socialType,
             userNameAttributeName, attributes);
 
+        log.info("extractAttributes : " + extractAttributes);
+
         Users createdUsers = getUser(extractAttributes,
             socialType); // getUser() 메소드로 User 객체 생성 후 반환
 
-        // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
-        return new CustomOAuth2User(
-            Collections.singleton(new SimpleGrantedAuthority(createdUsers.getRole().getKey())),
-            attributes,
-            extractAttributes.getNameAttributeKey(),
-            createdUsers.getEmail(),
-            createdUsers.getRole()
-        );
+        Map<String, Object> userId = new HashMap<>();
+        userId.put("id", createdUsers.getId().toString());
 
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add((GrantedAuthority) () -> createdUsers.getRole().getKey());
+
+        return new PrincipalDetails(userId, grantedAuthorities);
     }
 
     private SocialType getSocialType(String registrationId) {
@@ -89,7 +89,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     /**
-     * SocialType과 attributes에 들어있는 소셜 로그인의 식별값 id를 통해 회원을 찾아 반환하는 메소드 만약 찾은 회원이 있다면, 그대로 반환하고 없다면 saveUser()를 호출하여 회원을 저장한다.
+     * SocialType과 attributes에 들어있는 소셜 로그인의 식별값 id를 통해 회원을 찾아 반환하는 메소드 만약 찾은 회원이 있다면, 그대로 반환하고 없다면
+     * saveUser()를 호출하여 회원을 저장한다.
      */
     private Users getUser(OAuth2AttributesDto attributes, SocialType socialType) {
         Users findUsers = usersRepository.findBySocialTypeAndSocialId(socialType,

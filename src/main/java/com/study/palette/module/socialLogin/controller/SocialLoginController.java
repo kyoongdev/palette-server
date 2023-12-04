@@ -1,8 +1,5 @@
 package com.study.palette.module.socialLogin.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.study.palette.module.socialLogin.service.SocialLoginService;
-import com.study.palette.module.users.entity.SocialType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,10 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "소셜 로그인", description = "소셜 로그인")
@@ -22,75 +16,51 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 public class SocialLoginController {
 
-    private final SocialLoginService socialLoginService;
+  @Operation(summary = "네이버 소셜 로그인", description = "네이버 소셜 로그인 입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @GetMapping("/social/naver")
+  public void naverSocialLogin(HttpServletResponse response) throws IOException {
+
+    response.sendRedirect("/oauth2/authorization/naver");
+
+  }
+
+  @Operation(summary = "구글 소셜 로그인", description = "구글 소셜 로그인 입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @GetMapping("/social/google")
+  public void googleSocialLogin(HttpServletResponse response) throws IOException {
+
+    response.sendRedirect("/oauth2/authorization/google");
+
+  }
+
+  @Operation(summary = "카카오 소셜 로그인", description = "카카오 소셜 로그인 입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @GetMapping("/social/kakao")
+  public void getSocialLoginUrl(HttpServletResponse response) throws IOException {
+
+    response.sendRedirect("/oauth2/authorization/kakao");
+
+  }
+
+  @Operation(summary = "소셜로그인 결과", description = "소셜로그인 결과 입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @GetMapping("/login")
+  public void redirectSocialResponse(HttpServletResponse response) throws IOException {
+
+  }
 
 
-    @Autowired
-    public SocialLoginController(SocialLoginService socialLoginService) {
-        this.socialLoginService = socialLoginService;
-    }
-
-    @Operation(summary = "소셜 로그인", description = "소셜 로그인 입니다.")
-    @GetMapping("/social/{socialLoginType}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
-    })
-    public String getSocialLoginUrl(@PathVariable(name = "socialLoginType") String socialLoginPath,
-            HttpServletResponse response) throws IOException {
-        SocialType socialLoginType = SocialType.valueOf(socialLoginPath.toUpperCase());
-        String redirectUrl = socialLoginService.redirectUrl(socialLoginType);
-
-        return redirectUrl;
-
-
-    }
-
-    @Operation(summary = "소셜 로그인", description = "소셜 로그인 입니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
-    })
-    @GetMapping("/login/oauth2/code/google")
-    public String googleResult(@RequestParam(name = "code") String code) throws JsonProcessingException {
-
-        SocialType socialType = SocialType.GOOGLE;
-
-        log.info(code);
-
-        return socialLoginService.socialLogin(code, socialType);
-
-    }
-    @Operation(summary = "소셜 로그인", description = "소셜 로그인 입니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
-    })
-    @GetMapping("/login/oauth2/code/kakao")
-    public String kakaoResult(@RequestParam(name = "code") String code) throws JsonProcessingException {
-
-        SocialType socialType = SocialType.KAKAO;
-
-        log.info(code);
-
-        return socialLoginService.socialLogin(code, socialType);
-
-    }
-
-    @Operation(summary = "소셜 로그인", description = "소셜 로그인 입니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "302", description = "로그인 폼", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
-    })
-    @GetMapping("/login/oauth2/code/naver")
-    public String naverResult(@RequestParam(name = "code") String code)
-            throws JsonProcessingException {
-
-        SocialType socialType = SocialType.NAVER;
-
-        log.info(code);
-
-        return socialLoginService.socialLogin(code, socialType);
-
-    }
 }

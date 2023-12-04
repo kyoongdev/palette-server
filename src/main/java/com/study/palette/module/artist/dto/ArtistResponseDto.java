@@ -1,46 +1,46 @@
 package com.study.palette.module.artist.dto;
 
-import com.study.palette.module.artist.entity.ArtistFile;
-import com.study.palette.module.artist.entity.ArtistInfo;
-import com.study.palette.module.artist.entity.ArtistLicenseInfo;
-import com.study.palette.module.artist.entity.ArtistReview;
-import com.study.palette.module.filter.entity.FilterInfo;
-import java.util.ArrayList;
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@NoArgsConstructor
 public class ArtistResponseDto {
 
-    private String id;
-    private String serviceName;
-    private String serviceInfo;
-    private String editInfo;
+  @Schema(description = "아티스트 ID")
+  private String id;
 
-    private List<FilterInfo> filterInfo = new ArrayList<>();
+  @Schema(description = "서비스명", example = "테스트 서비스명")
+  private String serviceName;
 
-    private boolean serviceStatus;
+  @Schema(description = "서비스 타입", example = "true")
+  private int salesType;
 
-    private String userName;
+  @Schema(description = "아티스트명", example = "테스트 유저명")
+  private String userName;
 
-    private List<ArtistFile> artistFile;
+  @Schema(description = "파일경로", example = "파일경로")
+  private String fileUrl;
 
-    private List<ArtistLicenseInfo> artistLicenseInfo;
+  @Schema(description = "가격", example = "10000")
+  private int price;
 
-    private List<ArtistReview> artistReview;
+  @Schema(description = "요청수", example = "10000")
+  private long requestCount;
 
-    public ArtistResponseDto(ArtistInfo artistInfo){
-        this.id= artistInfo.getId();
-        this.serviceName = artistInfo.getServiceName();
-        this.serviceInfo = artistInfo.getServiceInfo();
-        this.editInfo = artistInfo.getEditInfo();
-        this.serviceInfo = artistInfo.getServiceInfo();
-        this.serviceStatus = artistInfo.isServiceStatus();
-        this.userName = artistInfo.getUsers().getName();
-        this.artistFile = artistInfo.getArtistFile();
-        this.artistLicenseInfo = artistInfo.getArtistLicenseInfo();
-        this.artistReview = artistInfo.getArtistReview();
-    }
+  public ArtistResponseDto(String id, String serviceName, int salesType, String userName,
+      String fileUrl, int price, long requestCount) {
+    this.id = id;
+    this.serviceName = serviceName;
+    this.salesType = salesType;
+    this.userName = userName;
+    this.fileUrl = fileUrl;
+    this.price = price;
+    this.requestCount = requestCount;
+
+  }
+
 
 }
