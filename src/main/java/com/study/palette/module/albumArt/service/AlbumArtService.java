@@ -7,7 +7,6 @@ import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtUpdateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtsResponseDto;
-import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
@@ -43,7 +42,7 @@ public class AlbumArtService {
 
   /* AlbumArt 필터 포함 조회*/
   @Transactional(readOnly = true)
-  public PaginationDto<AlbumArtsResponseDto> getAlbumArts(FindAlbumArtQuery query,
+  public PaginationDto<AlbumArtsResponseDto> getAlbumArts(AlbumArtConditions query,
       Pageable pageable) {
     Long count = albumArtRepository.count();
 

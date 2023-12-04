@@ -1,28 +1,16 @@
 package com.study.palette.module.albumArt.dto.query;
 
-
-import com.querydsl.core.types.OrderSpecifier;
-import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
-import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
-import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
+import com.study.palette.module.albumArt.service.AlbumArtConditions;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-public class FindAlbumArtQuery extends PageDto {
+public class FindAlbumArtQuery extends AlbumArtConditions {
 
   /*
-      판매유형
-      전체, 사진편집, 일러스트, 그래픽아트, 그외 장르
-   */
+    판매유형
+    전체, 사진편집, 일러스트, 그래픽아트, 그외 장르
+ */
   @Schema(description = "판매유형", defaultValue = "")
   private AlbumArtSaleType saleType;
 
@@ -41,11 +29,4 @@ public class FindAlbumArtQuery extends PageDto {
   @Schema(description = "정렬", defaultValue = "")
   private CustomSort customSort;
 
-  public OrderSpecifier<?>[] getSort() {
-    if (this.customSort == CustomSort.POPULAR) {
-      return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
-    } else { // 신규등록
-      return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
-    }
-  }
 }

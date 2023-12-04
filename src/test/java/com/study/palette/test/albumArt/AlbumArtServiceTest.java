@@ -1,7 +1,7 @@
 package com.study.palette.test.albumArt;
 
-import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
+import com.study.palette.module.albumArt.service.AlbumArtConditions;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.users.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class AlbumArtServiceTest {
     //    @Test
     @Transactional
     public void getAlbumArtList() {
-        FindAlbumArtQuery query = new FindAlbumArtQuery();
+        AlbumArtConditions query = new AlbumArtConditions();
 
 //        query.setName("test");
 //        query.setLimit(10);
