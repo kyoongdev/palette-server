@@ -1,4 +1,6 @@
-package com.study.palette.module.recording.entity;
+
+package com.study.palette.module.artist.entity;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
@@ -21,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Getter
 @Builder
-public class RecordingRequest {
+public class ArtistRequest {
 
   @Id
   @GeneratedValue(generator = "uuid2")
@@ -32,12 +34,13 @@ public class RecordingRequest {
   private LocalDate createAt;
 
   @ManyToOne
-  @JoinColumn(name = "usersId")
+  @JoinColumn(name = "userId")
   @JsonIgnore
   private Users users;
 
   @ManyToOne
-  @JoinColumn(name = "recordingInfoId")
+  @JoinColumn(name = "artistInfoId")
   @JsonIgnore
-  private RecordingInfo recordingInfo;
+  private ArtistInfo artistInfo;
+
 }

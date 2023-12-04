@@ -1,11 +1,11 @@
 package com.study.palette.config.security;
 
 import com.study.palette.common.dto.TokenDto;
-import com.study.palette.config.UserDetailsServiceImpl;
 import com.study.palette.module.users.entity.RefreshToken;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.RefreshTokenRepository;
 import com.study.palette.module.users.repository.UsersRepository;
+import com.study.palette.module.users.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
@@ -50,6 +51,7 @@ public class JwtTokenProvider {
   /**
    * 토큰 생성
    */
+  @Transactional
   public TokenDto createToken(Authentication authentication) {
     Users users = usersRepository.findById(UUID.fromString(authentication.getName()))
         .orElseThrow(() -> {

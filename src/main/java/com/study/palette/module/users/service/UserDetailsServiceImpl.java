@@ -1,4 +1,4 @@
-package com.study.palette.config;
+package com.study.palette.module.users.service;
 
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
@@ -32,12 +32,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
     grantedAuthorities.add((GrantedAuthority) () -> users.getRole().getKey());
 
-    return new org
-        .springframework
-        .security
-        .core
-        .userdetails
-        .User(users.getId().toString(), users.getPassword(), grantedAuthorities);
+    return new PrincipalDetails(users.getId().toString(), grantedAuthorities);
   }
-
 }

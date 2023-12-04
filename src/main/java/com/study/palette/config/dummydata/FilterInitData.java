@@ -4,27 +4,39 @@ import com.study.palette.module.filter.entity.FilterInfo;
 import com.study.palette.module.filter.entity.FilterMaster;
 import com.study.palette.module.filter.repository.FilterInfoRepository;
 import com.study.palette.module.filter.repository.FilterMasterRepository;
+import com.study.palette.module.users.repository.UsersRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Profile("local")
+//@Profile("local")
+@Log4j2
 public class FilterInitData implements ApplicationRunner {
 
   private final FilterMasterRepository filterMasterRepository;
   private final FilterInfoRepository filterInfoRepository;
+  private final UsersRepository usersRepository;
 
 
   /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
   @Override
   public void run(ApplicationArguments args) throws Exception {
+    //dummydata 생성 분기처리
+    boolean isExists = usersRepository.findByEmail("test@test")
+        .isPresent();
+
+    if (isExists) {
+      log.info("이미 더미데이터가 존재합니다.");
+      return;
+    }
+
     /* 연관관계 확인 후 save */
     FilterMaster artistFilter = FilterMaster.builder()
         .code(1)

@@ -1,9 +1,13 @@
 package com.study.palette.module.artist.dto.artistInfo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class CreateArtistInfoDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateArtistLicenseDto {
 
   private int licenseType;
 
