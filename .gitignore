@@ -1,6 +1,6 @@
 HELP.md
 build/
-gradle/
+.gradle/
 gradlew
 gradlew.bat
 !gradle/wrapper/gradle-wrapper.jar
