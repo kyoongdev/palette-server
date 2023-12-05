@@ -80,4 +80,8 @@ public class AlbumArtInfo {
   public void setAlbumArtFiles(List<AlbumArtFile> albumArtFiles) {
     this.albumArtFile = albumArtFiles;
   }
+
+  public void updateServiceStatus(boolean serviceStatus) {
+    this.serviceStatus = serviceStatus;
+  }
 }
