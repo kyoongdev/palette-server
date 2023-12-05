@@ -12,6 +12,6 @@ public interface AlbumArtRepository extends JpaRepository<AlbumArtInfo, String>,
     AlbumArtCustomRepository {
 
   Optional<AlbumArtInfo> findById(UUID id);
-
+  long countByServiceStatus(boolean registrationCompleted);
   AlbumArtInfo findByServiceName(String serviceName);
 }
