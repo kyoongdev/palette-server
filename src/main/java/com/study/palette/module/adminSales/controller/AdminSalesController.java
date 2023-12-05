@@ -1,10 +1,10 @@
-package com.study.palette.module.adminService.controller;
+package com.study.palette.module.adminSales.controller;
 
 import com.study.palette.common.dto.PaginationDto;
-import com.study.palette.module.adminService.dto.FindAdminServiceQuery;
-import com.study.palette.module.adminService.dto.ServiceCountResponseDto;
-import com.study.palette.module.adminService.dto.ServiceResponseDto;
-import com.study.palette.module.adminService.service.AdminService;
+import com.study.palette.module.adminSales.dto.FindAdminSalesQuery;
+import com.study.palette.module.adminSales.dto.AdminSalesCountResponseDto;
+import com.study.palette.module.adminSales.dto.AdminSalesResponseDto;
+import com.study.palette.module.adminSales.service.AdminSalesService;
 import com.study.palette.module.albumArt.dto.info.AlbumArtDetailResponseDto;
 import com.study.palette.module.albumArt.service.AlbumArtService;
 import com.study.palette.module.artist.dto.ArtistResponseDto;
@@ -35,16 +35,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "admin service", description = "관리자 서비스 관리")
 @RequestMapping("/admin/service")
 @RestController
-public class AdminServiceController {
+public class AdminSalesController {
 
-  private final AdminService adminService;
+  private final AdminSalesService adminSalesService;
   private final ArtistService artistService;
   private final MixMasteringService mixMasteringService;
   private final RecordingService recordingService;
   private final MrBeatService mrBeatService;
   private final AlbumArtService albumArtService;
-  public AdminServiceController(AdminService adminService, ArtistService artistService, MixMasteringService mixMasteringService, RecordingService recordingService, MrBeatService mrBeatService, AlbumArtService albumArtService) {
-    this.adminService = adminService;
+  public AdminSalesController(AdminSalesService adminSalesService, ArtistService artistService, MixMasteringService mixMasteringService, RecordingService recordingService, MrBeatService mrBeatService, AlbumArtService albumArtService) {
+    this.adminSalesService = adminSalesService;
     this.artistService = artistService;
     this.mixMasteringService = mixMasteringService;
     this.recordingService = recordingService;
@@ -56,26 +56,26 @@ public class AdminServiceController {
   //판매글 목록 전체조회 (parameter 에 따라 등록/신청 또는 등록된글로 나뉩니다)
   @Operation(summary = "판매글 목록 조회", description = "판매글 목록을 조회합니다 (parameter 에 따라 등록/신청 또는 등록된글로 나뉩니다)")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ServiceResponseDto.class)))),
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AdminSalesResponseDto.class)))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("")
-  public PaginationDto<ServiceResponseDto> serviceInfos(
-      @ParameterObject FindAdminServiceQuery query) {
-    return adminService.getServices(query,
+  public PaginationDto<AdminSalesResponseDto> serviceInfos(
+      @ParameterObject FindAdminSalesQuery query) {
+    return adminSalesService.getServices(query,
         query.toPageable(Sort.by(Sort.Direction.DESC, "createdAt")));
   }
 
   //판매글 목록 카운트 (parameter 에 따라 등록/신청 또는 등록된글로 나뉩니다)
   @Operation(summary = "판매글 목록 카운트 조회", description = "판매글 목록의 카운트를 조회합니다 (parameter 에 따라 등록/신청 또는 등록된글로 나뉩니다)")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ServiceCountResponseDto.class)))),
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AdminSalesCountResponseDto.class)))),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("/count")
-  public ServiceCountResponseDto serviceInfosCount(
-      @ParameterObject FindAdminServiceQuery query) {
-    return adminService.getServicesCount(query);
+  public AdminSalesCountResponseDto serviceInfosCount(
+      @ParameterObject FindAdminSalesQuery query) {
+    return adminSalesService.getServicesCount(query);
   }
 
   //albumArt 판매글 등록/신청 승인 반려 처리
@@ -137,5 +137,14 @@ public class AdminServiceController {
   public MrBeatResponseDto mrBeatInfoDetail(@PathVariable String id, @RequestBody String status) {
     return mrBeatService.updateServiceStatus(id, status);
   }
+
+  //albumArt 판매글 수정
+  @Operation(summary = "앨범아트 판매글 수정", description = "앨범아트 판매글 수정 메서드입니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlbumArtDetailResponseDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad Request")
+  })
+  @PatchMapping("album-art/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
 }
 

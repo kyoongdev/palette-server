@@ -1,7 +1,7 @@
-package com.study.palette.module.adminService.repository;
+package com.study.palette.module.adminSales.repository;
 
-import com.study.palette.module.adminService.dto.FindAdminServiceQuery;
-import com.study.palette.module.adminService.dto.ServiceResponseDto;
+import com.study.palette.module.adminSales.dto.FindAdminSalesQuery;
+import com.study.palette.module.adminSales.dto.AdminSalesResponseDto;
 import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
@@ -15,24 +15,23 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AdminServiceCustomRepositoryImpl implements AdminServiceCustomRepository {
+public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepository {
 
   private final EntityManager entityManager;
 
   @Autowired
-  public AdminServiceCustomRepositoryImpl(EntityManager entityManager) {
+  public AdminSalesCustomRepositoryImpl(EntityManager entityManager) {
     this.entityManager = entityManager;
   }
 
   @Override
-  public List<ServiceResponseDto> findAllByServiceStatusAndCreatedAtDesc(FindAdminServiceQuery query, Pageable pageable) {
+  public List<AdminSalesResponseDto> findAllByServiceStatusAndCreatedAtDesc(FindAdminSalesQuery query, Pageable pageable) {
     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-    CriteriaQuery<ServiceResponseDto> cbQuery = cb.createQuery(ServiceResponseDto.class);
+    CriteriaQuery<AdminSalesResponseDto> cbQuery = cb.createQuery(AdminSalesResponseDto.class);
 
     Root<AlbumArtInfo> albumArtInfoRoot = cbQuery.from(AlbumArtInfo.class);
     Root<ArtistInfo> artistInfoRoot = cbQuery.from(ArtistInfo.class);
@@ -53,7 +52,7 @@ public class AdminServiceCustomRepositoryImpl implements AdminServiceCustomRepos
     cbQuery.where(recordingPredicate).orderBy(cb.desc(recordingInfoRoot.get("createdAt")));
 
     //5개의 entity union
-    cbQuery.select(cb.construct(ServiceResponseDto.class,
+    cbQuery.select(cb.construct(AdminSalesResponseDto.class,
         albumArtInfoRoot.get("serviceName"),
         albumArtInfoRoot.get("serviceType"),
         albumArtInfoRoot.get("createdAt"),
@@ -76,7 +75,7 @@ public class AdminServiceCustomRepositoryImpl implements AdminServiceCustomRepos
         recordingInfoRoot.get("registerDeadline")
     ));
 
-    TypedQuery<ServiceResponseDto> typedQuery = entityManager.createQuery(cbQuery);
+    TypedQuery<AdminSalesResponseDto> typedQuery = entityManager.createQuery(cbQuery);
     typedQuery.setFirstResult(pageable.getPageNumber());
     typedQuery.setMaxResults(pageable.getPageSize());
     return typedQuery.getResultList();

@@ -1,11 +1,11 @@
-package com.study.palette.module.adminService.service;
+package com.study.palette.module.adminSales.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
-import com.study.palette.module.adminService.dto.FindAdminServiceQuery;
-import com.study.palette.module.adminService.dto.ServiceCountResponseDto;
-import com.study.palette.module.adminService.dto.ServiceResponseDto;
-import com.study.palette.module.adminService.repository.AdminServiceCustomRepository;
+import com.study.palette.module.adminSales.dto.FindAdminSalesQuery;
+import com.study.palette.module.adminSales.dto.AdminSalesCountResponseDto;
+import com.study.palette.module.adminSales.dto.AdminSalesResponseDto;
+import com.study.palette.module.adminSales.repository.AdminSalesCustomRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.artist.repository.ArtistRepository;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
@@ -18,19 +18,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AdminService {
+public class AdminSalesService {
 
   private final AlbumArtRepository albumArtRepository;
   private final ArtistRepository artistRepository;
   private final MixMasteringRepository mixMasteringRepository;
   private final RecordingRepository recordingRepository;
   private final MrBeatRepository mrBeatRepository;
-  private final AdminServiceCustomRepository adminServiceCustomRepository;
+  private final AdminSalesCustomRepository adminServiceCustomRepository;
 
   @Autowired
-  public AdminService(AlbumArtRepository albumArtRepository, ArtistRepository artistRepository,
+  public AdminSalesService(AlbumArtRepository albumArtRepository, ArtistRepository artistRepository,
       MixMasteringRepository mixMasteringRepository, RecordingRepository recordingRepository,
-      MrBeatRepository mrBeatRepository, AdminServiceCustomRepository adminServiceCustomRepository) {
+      MrBeatRepository mrBeatRepository, AdminSalesCustomRepository adminServiceCustomRepository) {
     this.albumArtRepository = albumArtRepository;
     this.artistRepository = artistRepository;
     this.mixMasteringRepository = mixMasteringRepository;
@@ -41,7 +41,7 @@ public class AdminService {
 
   // 판매글 목록 전체조회
   @Transactional(readOnly = true)
-  public PaginationDto<ServiceResponseDto> getServices(FindAdminServiceQuery query,
+  public PaginationDto<AdminSalesResponseDto> getServices(FindAdminSalesQuery query,
       Pageable pageable) {
     long count = getServicesCount(query).getAllCount();
 
@@ -49,7 +49,7 @@ public class AdminService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<ServiceResponseDto> allByServiceStatusAndCreatedAtDesc = adminServiceCustomRepository.findAllByServiceStatusAndCreatedAtDesc(query, pageable);
+    List<AdminSalesResponseDto> allByServiceStatusAndCreatedAtDesc = adminServiceCustomRepository.findAllByServiceStatusAndCreatedAtDesc(query, pageable);
 
     //pageable
     return PaginationDto.of(new PagingDto(pageable, count),
@@ -58,14 +58,14 @@ public class AdminService {
 
   // 판매글 목록 전체 카운트
   @Transactional(readOnly = true)
-  public ServiceCountResponseDto getServicesCount(FindAdminServiceQuery query) {
+  public AdminSalesCountResponseDto getServicesCount(FindAdminSalesQuery query) {
     long albumArtCount = albumArtRepository.countByServiceStatus(query.isRegistrationCompleted());
     long artistCount = artistRepository.countByServiceStatus(query.isRegistrationCompleted());
     long mixMasteringCount = mixMasteringRepository.countByServiceStatus(query.isRegistrationCompleted());
     long recordingCount = recordingRepository.countByServiceStatus(query.isRegistrationCompleted());
     long mrBeatCount = mrBeatRepository.countByServiceStatus(query.isRegistrationCompleted());
 
-    return ServiceCountResponseDto.of(
+    return AdminSalesCountResponseDto.of(
         albumArtCount + artistCount + mixMasteringCount + recordingCount + mrBeatCount,
         albumArtCount,
         mixMasteringCount,

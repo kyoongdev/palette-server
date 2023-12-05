@@ -1,4 +1,4 @@
-package com.study.palette.module.adminService.dto;
+package com.study.palette.module.adminSales.dto;
 
 
 import com.study.palette.common.dto.PageDto;
@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class FindAdminServiceQuery extends PageDto {
+public class FindAdminSalesQuery extends PageDto {
 
   @Schema(description = "서비스 타입")
   String serviceType;

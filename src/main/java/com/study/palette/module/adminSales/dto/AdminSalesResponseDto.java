@@ -1,4 +1,4 @@
-package com.study.palette.module.adminService.dto;
+package com.study.palette.module.adminSales.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ServiceResponseDto {
+public class AdminSalesResponseDto {
 
   @Schema(description = "서비스 명")
   String serviceName;
