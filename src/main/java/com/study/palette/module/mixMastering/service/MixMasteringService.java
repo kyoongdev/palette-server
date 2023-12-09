@@ -45,7 +45,7 @@ public class MixMasteringService {
 
   /* MixMastering 필터 포함 조회*/
   @Transactional(readOnly = true)
-  public PaginationDto<MixMasteringsDto> getMixMastering(FindMixMasteringQuery query,
+  public PaginationDto<MixMasteringsDto> getMixMasterings(FindMixMasteringQuery query,
       Pageable pageable) {
     Long count = mixMasteringRepository.count();
 
