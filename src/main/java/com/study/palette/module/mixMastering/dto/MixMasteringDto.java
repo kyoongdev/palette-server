@@ -19,8 +19,6 @@ import lombok.Data;
 @Data
 public class MixMasteringDto {
 
-  @Schema(description = "아이디")
-  private String id;
   @Schema(description = "서비스 제목")
   private String serviceName;
 
@@ -49,7 +47,6 @@ public class MixMasteringDto {
   private List<MixMasteringContactDto> mixMasteringContacts;
 
   public MixMasteringDto(MixMasteringInfo mixMasteringInfo) {
-    this.id = mixMasteringInfo.getId().toString();
     this.serviceName = mixMasteringInfo.getServiceName();
     this.serviceExplain = mixMasteringInfo.getServiceExplain();
     this.editInfo = mixMasteringInfo.getEditInfo();

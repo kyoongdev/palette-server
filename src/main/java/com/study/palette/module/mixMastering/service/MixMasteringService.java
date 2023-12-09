@@ -87,9 +87,9 @@ public class MixMasteringService {
 
   /* MixMastering 수정*/
   @Transactional
-  public void updateMixMastering(MixMasteringDto mixMasteringDto,
+  public void updateMixMastering(String id, MixMasteringDto mixMasteringDto,
       Users user) {
-    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(mixMasteringDto.getId())
+    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 

@@ -86,12 +86,12 @@ public class mixMasteringController {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
-  @PatchMapping("")
+  @PatchMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('MUSICIAN')")
-  public void updateMixMastering(@RequestBody MixMasteringDto mixMasteringDto,
-      @GetUserInfo Users users) {
-    mixMasteringService.updateMixMastering(mixMasteringDto, users);
+  public void updateMixMastering(@PathVariable String id, @RequestBody MixMasteringDto mixMasteringDto,
+      @Parameter(hidden = true) @GetUserInfo Users users) {
+    mixMasteringService.updateMixMastering(id, mixMasteringDto, users);
   }
 
   //믹스마스터링 삭제
@@ -102,7 +102,7 @@ public class mixMasteringController {
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteMixMastering(@PathVariable String id,
-      @Parameter(hidden = false) @GetUserInfo Users users) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     mixMasteringService.deleteMixMastering(id, users);
   }
 
@@ -115,7 +115,7 @@ public class mixMasteringController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
   public void createMixMasteringRequest(@PathVariable String id,
-      @GetUserInfo Users users) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     mixMasteringService.createMixMasteringRequest(id, users);
   }
 }
