@@ -21,18 +21,18 @@ import lombok.Setter;
 public abstract class AlbumArtConditions extends PageDto {
 
   private int saleType;
-  private CustomSort customSort;
+  private int customSort;
 
   public OrderSpecifier<?>[] getSort() {
-    if (this.customSort == CustomSort.POPULAR) {
-      return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
-    } else {
+    if (CustomSort.findCustomSort(this.customSort) == CustomSort.ALL) {
       return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
+    } else {
+      return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
     }
   }
 
   public BooleanExpression getSaleTypeCondition(QAlbumArtInfo albumArtInfo) {
-    if (this.saleType == 0) {
+    if (AlbumArtSaleType.findAlbumArtSaleType(this.saleType) == AlbumArtSaleType.ALL) {
       return Expressions.TRUE.eq(Expressions.TRUE);
     } else {
       return albumArtInfo.salesType.eq(AlbumArtSaleType.findAlbumArtSaleType(this.saleType));
