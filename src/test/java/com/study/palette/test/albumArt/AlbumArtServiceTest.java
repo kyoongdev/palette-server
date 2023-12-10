@@ -24,7 +24,7 @@ public class AlbumArtServiceTest {
     //    @Test
     @Transactional
     public void getAlbumArtList() {
-        AlbumArtConditions query = new AlbumArtConditions();
+//        AlbumArtConditions query = new AlbumArtConditions();
 
 //        query.setName("test");
 //        query.setLimit(10);

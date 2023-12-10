@@ -1,5 +1,6 @@
 package com.study.palette.common.enums.albumArt;
 
+import com.study.palette.common.enums.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,4 +17,13 @@ public enum AlbumArtSaleType {
 
   private final int code;
   private final String name;
+
+  public static AlbumArtSaleType findAlbumArtSaleType(int code) {
+    for (AlbumArtSaleType saleType : AlbumArtSaleType.values()) {
+      if (saleType.code == code) {
+        return saleType;
+      }
+    }
+    throw new RuntimeException("saleType 은 1 ~ 4 까지만 가능합니다.");
+  }
 }

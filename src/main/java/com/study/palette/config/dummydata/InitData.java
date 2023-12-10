@@ -130,7 +130,7 @@ public class InitData implements ApplicationRunner {
           new AlbumArtFileCreateRequestDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", true));
       for (int j = 0; j < 3; j++) {
         albumArtLicenseCreateRequestDtos.add(//앨범아트 라이센스 생성
-            new AlbumArtLicenseInfoCreateRequestDto(10, 1000, "servedFile" + i, 3, null, 3, true, true, true, true));
+            new AlbumArtLicenseInfoCreateRequestDto(1, 1000, "servedFile" + i, 3, null, 3, true, true, true, true));
 
         albumArtFileCreateRequestDtos.add(//앨범아트 파일 생성
             new AlbumArtFileCreateRequestDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", false));
@@ -138,7 +138,7 @@ public class InitData implements ApplicationRunner {
 
       for (int j = 0; j < 5; j++) {
         AlbumArtContactCreateDtos.add(//앨범아트 연락수단 생성
-            new AlbumArtContactCreateDto(Contact.findContact(j + 1), "content" + j));
+            new AlbumArtContactCreateDto(j + 1, "content" + j));
       }
 
       AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto("serviceName" + i, "serviceExplain", 2, "editInfo", albumArtLicenseCreateRequestDtos, AlbumArtContactCreateDtos, albumArtFileCreateRequestDtos, true);
