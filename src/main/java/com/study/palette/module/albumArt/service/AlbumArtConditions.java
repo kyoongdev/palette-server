@@ -1,6 +1,7 @@
 package com.study.palette.module.albumArt.service;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -20,22 +21,4 @@ import lombok.Setter;
 @Setter
 public abstract class AlbumArtConditions extends PageDto {
 
-  private int saleType;
-  private int customSort;
-
-  public OrderSpecifier<?>[] getSort() {
-    if (CustomSort.findCustomSort(this.customSort) == CustomSort.ALL) {
-      return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
-    } else {
-      return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
-    }
-  }
-
-  public BooleanExpression getSaleTypeCondition(QAlbumArtInfo albumArtInfo) {
-    if (AlbumArtSaleType.findAlbumArtSaleType(this.saleType) == AlbumArtSaleType.ALL) {
-      return Expressions.TRUE.eq(Expressions.TRUE);
-    } else {
-      return albumArtInfo.salesType.eq(AlbumArtSaleType.findAlbumArtSaleType(this.saleType));
-    }
-  }
 }
