@@ -55,10 +55,6 @@ public class AlbumArtService {
         .map(data -> modelMapper.map(data, AlbumArtsResponseDto.class))
         .collect(Collectors.toList());
 
-    if (artists.size() == 0) {
-      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND);
-    }
-
     PaginationDto<AlbumArtsResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
         artists);
 
