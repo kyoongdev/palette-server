@@ -2,8 +2,11 @@ package com.study.palette.module.albumArt.service;
 
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.enums.CustomSort;
+import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
 import lombok.AllArgsConstructor;
@@ -25,6 +28,14 @@ public abstract class AlbumArtConditions extends PageDto {
       return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
     } else {
       return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
+    }
+  }
+
+  public BooleanExpression getSaleTypeCondition(QAlbumArtInfo albumArtInfo) {
+    if (this.saleType == 0) {
+      return Expressions.TRUE.eq(Expressions.TRUE);
+    } else {
+      return albumArtInfo.salesType.eq(AlbumArtSaleType.findAlbumArtSaleType(this.saleType));
     }
   }
 }
