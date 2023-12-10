@@ -1,12 +1,7 @@
 package com.study.palette.module.albumArt.dto.query;
 
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
-import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
-import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
 import com.study.palette.module.albumArt.service.AlbumArtConditions;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -16,8 +11,8 @@ public class FindAlbumArtQuery extends AlbumArtConditions {
     판매유형
     전체, 사진편집, 일러스트, 그래픽아트, 그외 장르
  */
-  @Schema(description = "판매유형", example = "0: 전체, 1: 사진편집, 2: 일러스트, 3:그래픽아트, 4: 그외장르")
-  private int saleType;
+  @Schema(description = "판매유형", defaultValue = "")
+  private AlbumArtSaleType saleType;
 
   /*
   인기순 = 매출액 순(매출액이 같은 경우 판매량 순)
@@ -31,22 +26,7 @@ public class FindAlbumArtQuery extends AlbumArtConditions {
 
   신규등록 순 = 판매글 등록이 완료된 최신순
 */
-  @Schema(description = "정렬", example = "0: 전체, 1: 인기순, 2: 신규순")
-  private int customSort;
+  @Schema(description = "정렬", defaultValue = "")
+  private CustomSort customSort;
 
-  public OrderSpecifier<?>[] getSort() {
-    if (CustomSort.findCustomSort(this.customSort) == CustomSort.ALL) {
-      return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
-    } else {
-      return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
-    }
-  }
-
-  public BooleanExpression getSaleTypeCondition(QAlbumArtInfo albumArtInfo) {
-    if (AlbumArtSaleType.findAlbumArtSaleType(this.saleType) == AlbumArtSaleType.ALL) {
-      return Expressions.TRUE.eq(Expressions.TRUE);
-    } else {
-      return albumArtInfo.salesType.eq(AlbumArtSaleType.findAlbumArtSaleType(this.saleType));
-    }
-  }
 }
