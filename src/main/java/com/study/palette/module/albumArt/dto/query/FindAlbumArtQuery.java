@@ -1,9 +1,11 @@
 package com.study.palette.module.albumArt.dto.query;
 
-import com.study.palette.common.enums.CustomSort;
-import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.albumArt.service.AlbumArtConditions;
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import lombok.Setter;
+import lombok.extern.java.Log;
 
 public class FindAlbumArtQuery extends AlbumArtConditions {
 
@@ -11,8 +13,9 @@ public class FindAlbumArtQuery extends AlbumArtConditions {
     판매유형
     전체, 사진편집, 일러스트, 그래픽아트, 그외 장르
  */
-  @Schema(description = "판매유형", defaultValue = "")
-  private AlbumArtSaleType saleType;
+  @Schema(description = "판매유형", defaultValue = "0")
+  @Min(value = 0, message = "판매유형은 0 ~ 4 까지만 가능합니다.")
+  private int saleType;
 
   /*
   인기순 = 매출액 순(매출액이 같은 경우 판매량 순)
@@ -26,7 +29,23 @@ public class FindAlbumArtQuery extends AlbumArtConditions {
 
   신규등록 순 = 판매글 등록이 완료된 최신순
 */
-  @Schema(description = "정렬", defaultValue = "")
-  private CustomSort customSort;
+  @Schema(description = "정렬", defaultValue = "0")
+  @Min(value = 0, message = "정렬은 0 ~ 3 까지만 가능합니다.")
+  private int customSort;
 
+  public FindAlbumArtQuery(int saleType, int customSort) {
+    super(saleType, customSort);
+    System.out.println("FindAlbumArtQuery 생성자 호출");
+  }
+
+  //setter
+//  public void setSaleType(int saleType) {
+//    super.setSaleType(saleType);
+//    System.out.println("FindAlbumArtQuery setSaleType 호출");
+//  }
+//
+//  public void setCustomSort(int customSort) {
+//    super.setCustomSort(customSort);
+//    System.out.println("FindAlbumArtQuery setCustomSort 호출");
+//  }
 }

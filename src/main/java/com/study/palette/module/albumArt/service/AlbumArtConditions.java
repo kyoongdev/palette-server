@@ -1,6 +1,7 @@
 package com.study.palette.module.albumArt.service;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -14,13 +15,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public abstract class AlbumArtConditions extends PageDto {
 
+  @JsonIgnore
   private int saleType;
+  @JsonIgnore
   private int customSort;
 
   public OrderSpecifier<?>[] getSort() {
@@ -37,5 +39,22 @@ public abstract class AlbumArtConditions extends PageDto {
     } else {
       return albumArtInfo.salesType.eq(AlbumArtSaleType.findAlbumArtSaleType(this.saleType));
     }
+  }
+
+  public AlbumArtConditions(int saleType, int customSort) {
+    this.saleType = saleType;
+    this.customSort = customSort;
+    System.out.println("AlbumArtConditions 생성자 호출");
+  }
+
+  //setter
+  public void setSaleType(int saleType) {
+    this.saleType = saleType;
+    System.out.println("AlbumArtConditions setSaleType 호출");
+  }
+
+  public void setCustomSort(int customSort) {
+    this.customSort = customSort;
+    System.out.println("AlbumArtConditions setCustomSort 호출");
   }
 }
