@@ -1,7 +1,6 @@
 package com.study.palette.module.mixMastering.dto;
 
 
-import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
 import com.study.palette.module.mixMastering.dto.contact.CreateMixMasteringContactDto;
 import com.study.palette.module.mixMastering.dto.file.CreateMixMasteringFileDto;
 import com.study.palette.module.mixMastering.dto.license.CreateMixMasteringLicenseDto;
@@ -9,9 +8,13 @@ import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateMixMasteringDto {
 
   @Schema(description = "서비스 제목")
@@ -27,7 +30,7 @@ public class CreateMixMasteringDto {
   @Schema(description = "작업 후 음원")
   private String afterJobMusic;
   @Schema(description = "장르")
-  private MixMasteringGenre genre;
+  private int genre;
   @Schema(description = "라이센스 정보")
   private List<CreateMixMasteringLicenseDto> licenses;
   @Schema(description = "이미지들")
@@ -43,7 +46,7 @@ public class CreateMixMasteringDto {
         .serviceExplain(this.serviceExplain)
         .editInfo(this.editInfo)
         .serviceStatus(this.sericeStatus)
-        .genre(this.genre.getGenre())
+        .genre(this.genre)
         .users(user)
         .build();
     mixMastering.setMixMasteringLicenseInfos(this.licenses.stream().map(license -> license.toEntity(mixMastering)).toList());

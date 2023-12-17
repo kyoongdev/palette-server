@@ -1,7 +1,10 @@
 package com.study.palette.module.mixMastering.entity;
 
+import com.study.palette.module.mixMastering.dto.MixMasteringDto;
+import com.study.palette.module.mixMastering.dto.license.CreateMixMasteringLicenseDto;
 import com.study.palette.module.mixMastering.dto.license.MixMasteringLicenseDto;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,16 +55,16 @@ public class MixMasteringLicenseInfo {
   private boolean isOtherUseApproved;
 
   @CreationTimestamp
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "mixMasteringInfoId")
   private MixMasteringInfo mixMasteringInfo;
 
   public static MixMasteringLicenseInfo from(
-      MixMasteringLicenseDto mixMasteringLicenseCreateDto, MixMasteringInfo mixMasteringInfo) {
+      CreateMixMasteringLicenseDto mixMasteringLicenseCreateDto, MixMasteringInfo mixMasteringInfo) {
     return builder()
-        .licenseType(mixMasteringLicenseCreateDto.getLicenseType().getLicenseType())
+        .licenseType(mixMasteringLicenseCreateDto.getLicenseType())
         .price(mixMasteringLicenseCreateDto.getPrice())
         .servedType(mixMasteringLicenseCreateDto.getServedType())
         .updateCount(mixMasteringLicenseCreateDto.getUpdateCount())
@@ -71,6 +74,22 @@ public class MixMasteringLicenseInfo {
         .isUseCommercial(mixMasteringLicenseCreateDto.isUseCommercial())
         .isServeOriginFile(mixMasteringLicenseCreateDto.isServeOriginFile())
         .isOtherUseApproved(mixMasteringLicenseCreateDto.isOtherUseApproved())
+        .mixMasteringInfo(mixMasteringInfo)
+        .build();
+  }
+
+  public static MixMasteringLicenseInfo from(MixMasteringLicenseDto mixMasteringLicenseDto, MixMasteringInfo mixMasteringInfo) {
+    return builder()
+        .licenseType(mixMasteringLicenseDto.getLicenseType())
+        .price(mixMasteringLicenseDto.getPrice())
+        .servedType(mixMasteringLicenseDto.getServedType())
+        .updateCount(mixMasteringLicenseDto.getUpdateCount())
+        .period(mixMasteringLicenseDto.getPeriod())
+        .draftCount(mixMasteringLicenseDto.getDraftCount())
+        .isAssign(mixMasteringLicenseDto.isAssign())
+        .isUseCommercial(mixMasteringLicenseDto.isUseCommercial())
+        .isServeOriginFile(mixMasteringLicenseDto.isServeOriginFile())
+        .isOtherUseApproved(mixMasteringLicenseDto.isOtherUseApproved())
         .mixMasteringInfo(mixMasteringInfo)
         .build();
   }

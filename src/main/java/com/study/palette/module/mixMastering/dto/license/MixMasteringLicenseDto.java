@@ -4,6 +4,7 @@ package com.study.palette.module.mixMastering.dto.license;
 import com.study.palette.common.enums.LicenseType;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class MixMasteringLicenseDto {
   @Schema(description = "아이디")
   private String id;
   @Schema(description = "라이센스 유형")
-  private LicenseType licenseType;
+  private int licenseType;
   @Schema(description = "가격")
   private int price;
 
@@ -40,11 +41,11 @@ public class MixMasteringLicenseDto {
 
   @Schema(description = "응용 활용 여부")
   private boolean isOtherUseApproved;
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   public MixMasteringLicenseDto(MixMasteringLicenseInfo mixMasteringLicenseInfo) {
     this.id = mixMasteringLicenseInfo.getId().toString();
-    this.licenseType = LicenseType.findLicenseType(mixMasteringLicenseInfo.getLicenseType());
+    this.licenseType = mixMasteringLicenseInfo.getLicenseType();
     this.price = mixMasteringLicenseInfo.getPrice();
     this.servedType = mixMasteringLicenseInfo.getServedType();
     this.updateCount = mixMasteringLicenseInfo.getUpdateCount();

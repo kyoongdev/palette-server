@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface MixMasteringRequestRepository extends JpaRepository<AlbumArtRequest, String> {
+public interface MixMasteringRequestRepository extends JpaRepository<MixMasteringRequest, String> {
 
   @Query("select a from MixMasteringRequest a where a.users = :users and a.mixMasteringInfo = :mixMasteringInfo and a.createAt = :now")
   Optional<MixMasteringRequest> findByMixMasteringInfoAndUsersAndCreatedAt(Users user,
