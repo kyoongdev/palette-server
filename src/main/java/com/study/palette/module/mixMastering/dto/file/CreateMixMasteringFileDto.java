@@ -16,7 +16,6 @@ public class CreateMixMasteringFileDto {
   private String originFileName;
   @Schema(description = "업로드 파일명")
   private String uploadFileName;
-  private int uploadFileSize;
   @Schema(description = "업로드 파일 크기")
   private int uploadFileSize;
   @Schema(description = "파일 URL")
