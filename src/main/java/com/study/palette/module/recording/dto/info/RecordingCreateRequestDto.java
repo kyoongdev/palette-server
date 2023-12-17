@@ -25,9 +25,9 @@ public class RecordingCreateRequestDto {
   @Schema(description = "스튜디오명", example = "녹음 스튜디오")
   private String studioName;
   @Schema(description = "스튜디오 주소 (도/특별시/광역시)", defaultValue = "", type = "int")
-  private RegionCode studioRegionCode;
+  private int studioRegionCode;
   @Schema(description = "스튜디오 주소 (시/군/구)", defaultValue = "", type = "int")
-  private CityCode studioCityCode;
+  private int studioCityCode;
   @Schema(description = "녹음 엔지니어링 제공여부", example = "true")
   private boolean isRecordingEngineering;
   @Schema(description = "스튜디오 예약링크", example = "https://www.naver.com")
@@ -42,8 +42,8 @@ public class RecordingCreateRequestDto {
     RecordingInfo recordingInfo = RecordingInfo.builder()
         .serviceName(this.getServiceName())
         .studioName(this.getStudioName())
-        .studioRegionCode(this.getStudioRegionCode())
-        .studioCityCode(this.getStudioCityCode())
+        .studioRegionCode(RegionCode.findRegionCode(this.getStudioRegionCode()))
+        .studioCityCode(CityCode.findCityCode(this.getStudioRegionCode(), this.getStudioCityCode()))
         .isRecordingEngineering(this.isRecordingEngineering())
         .studioReservationUrl(this.getStudioReservationUrl())
         .serviceExplain(this.getServiceExplain())
