@@ -1,5 +1,6 @@
 package com.study.palette.module.albumArt.dto.license;
 
+import com.study.palette.common.enums.LicenseType;
 import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class AlbumArtLicenseInfoWithIdDto {
 
   public AlbumArtLicenseInfoWithIdDto(AlbumArtLicenseInfo albumArtLicenseInfo) {
     this.id = albumArtLicenseInfo.getId().toString();
-    this.licenseType = albumArtLicenseInfo.getLicenseType();
+    this.licenseType = albumArtLicenseInfo.getLicenseType().getLicenseType();
     this.price = albumArtLicenseInfo.getPrice();
     this.servedFile = albumArtLicenseInfo.getServedFile();
     this.updateCount = albumArtLicenseInfo.getUpdateCount();

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MrBeatRepository extends JpaRepository<MrBeatInfo, String> {
+  long countByServiceStatus(boolean registrationCompleted);
 }
