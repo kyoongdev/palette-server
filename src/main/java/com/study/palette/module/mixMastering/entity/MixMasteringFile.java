@@ -1,6 +1,7 @@
 package com.study.palette.module.mixMastering.entity;
 
 import com.study.palette.module.mixMastering.dto.file.CreateMixMasteringFileDto;
+import com.study.palette.module.mixMastering.dto.file.MixMasteringFileDto;
 import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -70,4 +71,15 @@ public class MixMasteringFile {
         .build();
   }
 
+  public static MixMasteringFile from(MixMasteringFileDto dto, MixMasteringInfo mixMasteringInfo) {
+    return MixMasteringFile.builder()
+        .originFileName(dto.getOriginFileName())
+        .uploadFileName(dto.getUploadFileName())
+        .uploadFileSize(dto.getUploadFileSize())
+        .url(dto.getUrl())
+        .suffix(dto.getSuffix())
+        .isThumbnail(dto.isThumbnail())
+        .mixMasteringInfo(mixMasteringInfo)
+        .build();
+  }
 }

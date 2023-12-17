@@ -35,7 +35,7 @@ public class MixMasteringDto {
   @Schema(description = "작업 후 음원")
   private String afterJobMusic;
   @Schema(description = "장르")
-  private MixMasteringGenre genre;
+  private int genre;
   @Schema(description = "생성일자")
   private LocalDateTime createdAt;
   private CommonUserDto user;
@@ -52,7 +52,7 @@ public class MixMasteringDto {
     this.editInfo = mixMasteringInfo.getEditInfo();
     this.beforeJobMusic = mixMasteringInfo.getBeforeJobMusic();
     this.afterJobMusic = mixMasteringInfo.getAfterJobMusic();
-    this.genre = MixMasteringGenre.findMixMasteringGenre(mixMasteringInfo.getGenre());
+    this.genre = mixMasteringInfo.getGenre().getGenre();
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUsers());
