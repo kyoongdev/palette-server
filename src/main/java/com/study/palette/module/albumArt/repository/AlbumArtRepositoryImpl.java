@@ -1,8 +1,6 @@
 package com.study.palette.module.albumArt.repository;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.palette.module.albumArt.dto.info.AlbumArtsResponseDto;
 import com.study.palette.module.albumArt.entity.QAlbumArtFile;
@@ -54,7 +52,8 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
         .on(albumArtInfo.id.eq(albumArtLicenseInfo.albumArtInfo.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(query.getSaleTypeCondition(albumArtInfo))
+        .where(query.getSaleTypeCondition(albumArtInfo).
+            and(albumArtInfo.serviceStatus.eq(true)))
         .groupBy(albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,

@@ -3,9 +3,6 @@ package com.study.palette.module.albumArt.dto.query;
 import com.study.palette.module.albumArt.service.AlbumArtConditions;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import lombok.Setter;
-import lombok.extern.java.Log;
 
 public class FindAlbumArtQuery extends AlbumArtConditions {
 
