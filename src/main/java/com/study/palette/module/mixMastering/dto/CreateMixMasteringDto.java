@@ -1,6 +1,7 @@
 package com.study.palette.module.mixMastering.dto;
 
 
+import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
 import com.study.palette.module.mixMastering.dto.contact.CreateMixMasteringContactDto;
 import com.study.palette.module.mixMastering.dto.file.CreateMixMasteringFileDto;
 import com.study.palette.module.mixMastering.dto.license.CreateMixMasteringLicenseDto;
@@ -46,7 +47,7 @@ public class CreateMixMasteringDto {
         .serviceExplain(this.serviceExplain)
         .editInfo(this.editInfo)
         .serviceStatus(this.sericeStatus)
-        .genre(this.genre)
+        .genre(MixMasteringGenre.findMixMasteringGenre(this.genre))
         .users(user)
         .build();
     mixMastering.setMixMasteringLicenseInfos(this.licenses.stream().map(license -> license.toEntity(mixMastering)).toList());

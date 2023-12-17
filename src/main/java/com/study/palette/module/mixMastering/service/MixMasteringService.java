@@ -58,10 +58,6 @@ public class MixMasteringService {
         .map(data -> modelMapper.map(data, MixMasteringsDto.class))
         .collect(Collectors.toList());
 
-    if (mixmasterings.isEmpty()) {
-      throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND);
-    }
-
     return PaginationDto.of(new PagingDto(pageable, count), mixmasterings);
   }
 

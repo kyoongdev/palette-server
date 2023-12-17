@@ -1,6 +1,7 @@
 package com.study.palette.common.enums.mixMastering;
 
 public enum MixMasteringGenre {
+  ALL(0),
   BALAD(1),
   HIPHOP(2),
   TROT(3),
@@ -27,6 +28,6 @@ public enum MixMasteringGenre {
         return mixMasteringGenre;
       }
     }
-    throw new RuntimeException("MixMasteringGenre는 1 ~ 9까지 가능합니다.");
+    throw new RuntimeException("MixMasteringGenre는 0 ~ 9까지 가능합니다.");
   }
 }
