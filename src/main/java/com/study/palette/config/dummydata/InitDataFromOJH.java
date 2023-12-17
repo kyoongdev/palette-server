@@ -71,124 +71,123 @@ public class InitDataFromOJH implements ApplicationRunner {
 
     if (initCommUser != null) {
       log.info("이미 더미데이터가 존재합니다.");
-      return;
-    }
+    } else {
+      log.info("더미데이터 생성을 시작합니다.");
+      initCommUser = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test").password(passwordEncoder.encode("test1234")).name("홍길동").build());
 
-    initCommUser = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test").password(passwordEncoder.encode("test1234")).name("홍길동").build());
+      //albumart
+      List<AlbumArtInfo> albumArtInfos = new ArrayList<>();
 
-    //albumart
-    List<AlbumArtInfo> albumArtInfos = new ArrayList<>();
+      List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseCreateRequestDtos = new ArrayList<>();
+      List<AlbumArtFileCreateRequestDto> albumArtFileCreateRequestDtos = new ArrayList<>();
+      List<AlbumArtContactCreateDto> albumArtContactCreateDtos = new ArrayList<>();
+      //mixMastering
+      List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
 
-    List<AlbumArtLicenseInfoCreateRequestDto> albumArtLicenseCreateRequestDtos = new ArrayList<>();
-    List<AlbumArtFileCreateRequestDto> albumArtFileCreateRequestDtos = new ArrayList<>();
-    List<AlbumArtContactCreateDto> albumArtContactCreateDtos = new ArrayList<>();
-    //mixMastering
-    List<MixMasteringInfo> mixMasteringInfos = new ArrayList<>();
-
-    List<CreateMixMasteringLicenseDto> mixMasteringLicenseInfos = new ArrayList<>();
-    List<CreateMixMasteringFileDto> mixMasteringFiles = new ArrayList<>();
-    List<CreateMixMasteringContactDto> mixMasteringContacts = new ArrayList<>();
-    //recording
-    List<RecordingInfo> recordingInfos = new ArrayList<>();
-
-    List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfos = new ArrayList<>();
-    List<RecordingFileCreateRequestDto> recordingFiles = new ArrayList<>();
-
-    //앨범아트 더미데이터 생성
-    for (int i = 0; i < 50; i++) {
-      //albumartinfos
-
-      for (int j = 0; j < 3; j++) {
-        albumArtLicenseCreateRequestDtos.add(//앨범아트 라이센스 생성
-            new AlbumArtLicenseInfoCreateRequestDto(j + 1, 1000, "servedFile" + i, 3, null, 3, true, true, true, true));
-
-        albumArtFileCreateRequestDtos.add(//앨범아트 파일 생성
-            new AlbumArtFileCreateRequestDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", false));
-
-        mixMasteringLicenseInfos.add(//mixMastering 라이센스 생성
-            new CreateMixMasteringLicenseDto(j + 1, 1000, "제공파일" + i, 3, 0, 3, true, true, true, true)
-        );
-
-        mixMasteringFiles.add(//mixMastering 파일 생성
-            new CreateMixMasteringFileDto("fileNameTest", "uploadFileName", 1000, "www.test.com", "jpg", false)
-        );
-
-        recordingLicenseInfos.add(//recording 라이센스 생성
-            new RecordingLicenseInfoCreateRequestDto(j + 1, 1000, j + 2)
-        );
-
-        recordingFiles.add(//recording 파일 생성
-            new RecordingFileCreateRequestDto("www.test.com", "originFileName", "originFileName", 1000, "jpg", false)
-        );
-      }
-
-      for (int j = 0; j < 5; j++) {
-        albumArtContactCreateDtos.add(//앨범아트 연락수단 생성
-            new AlbumArtContactCreateDto(j + 1, "content" + j));
-
-        mixMasteringContacts.add(//mixMastering 연락수단 생성
-            new CreateMixMasteringContactDto(j + 1, "content" + j));
-      }
-
-      //앨범아트 생성
-      AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto("serviceName" + i, "serviceExplain", 2, "editInfo", albumArtLicenseCreateRequestDtos, albumArtContactCreateDtos, albumArtFileCreateRequestDtos, true);
-
-      AlbumArtInfo albumArtInfo = albumArtCreateRequestDto.toEntity(initCommUser);
-      List<AlbumArtLicenseInfo> licenses = albumArtCreateRequestDto.getAlbumArtLicenseInfo().stream().map(license -> AlbumArtLicenseInfo.from(license, albumArtInfo)).toList();
-      List<AlbumArtContact> contacts = albumArtCreateRequestDto.getAlbumArtContact().stream().map(contact -> AlbumArtContact.from(contact, albumArtInfo)).toList();
-      List<AlbumArtFile> files = albumArtCreateRequestDto.getAlbumArtFiles().stream().map(file -> AlbumArtFile.from(file, albumArtInfo)).toList();
-      albumArtInfo.setAlbumArtLicenseInfo(licenses);
-      albumArtInfo.setAlbumArtContact(contacts);
-      albumArtInfo.setAlbumArtFiles(files);
-      albumArtInfos.add(albumArtInfo);
-      albumArtLicenseCreateRequestDtos.clear();
-      albumArtContactCreateDtos.clear();
-      albumArtFileCreateRequestDtos.clear();
-
-      //mixMastering 생성
-      CreateMixMasteringDto createMixMasteringDto = new CreateMixMasteringDto("serviceName" + i, "serviceExplain", "editInfo", true, "beforeJobMusic", "afterJobMusic", 1, mixMasteringLicenseInfos, mixMasteringFiles, mixMasteringContacts);
-
-      MixMasteringInfo mixMasteringInfo = createMixMasteringDto.toEntity(initCommUser);
-      List<MixMasteringLicenseInfo> mixMasteringLicenseInfo = mixMasteringLicenseInfos.stream().map(license -> MixMasteringLicenseInfo.from(license, mixMasteringInfo)).toList();
-      List<MixMasteringContact> mixMasteringContact = mixMasteringContacts.stream().map(contact -> MixMasteringContact.from(contact, mixMasteringInfo)).toList();
-      List<MixMasteringFile> mixMasteringFile = mixMasteringFiles.stream().map(file -> MixMasteringFile.from(file, mixMasteringInfo)).toList();
-      mixMasteringInfo.setMixMasteringLicenseInfos(mixMasteringLicenseInfo);
-      mixMasteringInfo.setMixMasteringContacts(mixMasteringContact);
-      mixMasteringInfo.setMixMasteringFiles(mixMasteringFile);
-      mixMasteringInfos.add(mixMasteringInfo);
-      mixMasteringLicenseInfos.clear();
-      mixMasteringContacts.clear();
-      mixMasteringFiles.clear();
-
+      List<CreateMixMasteringLicenseDto> mixMasteringLicenseInfos = new ArrayList<>();
+      List<CreateMixMasteringFileDto> mixMasteringFiles = new ArrayList<>();
+      List<CreateMixMasteringContactDto> mixMasteringContacts = new ArrayList<>();
       //recording
-      RecordingCreateRequestDto recordingCreateRequestDto = new RecordingCreateRequestDto("serviceName" + i, "studioName", 1, 1, true, "www.예약.com", "serviceExplain", recordingFiles, recordingLicenseInfos);
+      List<RecordingInfo> recordingInfos = new ArrayList<>();
 
-      RecordingInfo recordingInfo = recordingCreateRequestDto.toEntity(initCommUser);
-      List<RecordingLicenseInfo> recordingLicenseInfo = recordingLicenseInfos.stream().map(license -> RecordingLicenseInfo.from(license, recordingInfo)).toList();
-      List<RecordingFile> recordingFile = recordingFiles.stream().map(file -> RecordingFile.from(file, recordingInfo)).toList();
-      recordingInfo.setRecordingLicenseInfo(recordingLicenseInfo);
-      recordingInfo.setRecordingFile(recordingFile);
-      recordingInfos.add(recordingInfo);
-      recordingLicenseInfos.clear();
-      recordingFiles.clear();
+      List<RecordingLicenseInfoCreateRequestDto> recordingLicenseInfos = new ArrayList<>();
+      List<RecordingFileCreateRequestDto> recordingFiles = new ArrayList<>();
+
+      //앨범아트 더미데이터 생성
+      for (int i = 0; i < 50; i++) {
+        //albumartinfos
+
+        for (int j = 0; j < 3; j++) {
+          albumArtLicenseCreateRequestDtos.add(//앨범아트 라이센스 생성
+              new AlbumArtLicenseInfoCreateRequestDto(j + 1, 1000, "servedFile" + i, 3, null, 3, true, true, true, true));
+
+          albumArtFileCreateRequestDtos.add(//앨범아트 파일 생성
+              new AlbumArtFileCreateRequestDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", false));
+
+          mixMasteringLicenseInfos.add(//mixMastering 라이센스 생성
+              new CreateMixMasteringLicenseDto(j + 1, 1000, "제공파일" + i, 3, 0, 3, true, true, true, true)
+          );
+
+          mixMasteringFiles.add(//mixMastering 파일 생성
+              new CreateMixMasteringFileDto("fileNameTest", "uploadFileName", 1000, "www.test.com", "jpg", false)
+          );
+
+          recordingLicenseInfos.add(//recording 라이센스 생성
+              new RecordingLicenseInfoCreateRequestDto(j + 1, 1000, j + 2)
+          );
+
+          recordingFiles.add(//recording 파일 생성
+              new RecordingFileCreateRequestDto("www.test.com", "originFileName", "originFileName", 1000, "jpg", false)
+          );
+        }
+
+        for (int j = 0; j < 5; j++) {
+          albumArtContactCreateDtos.add(//앨범아트 연락수단 생성
+              new AlbumArtContactCreateDto(j + 1, "content" + j));
+
+          mixMasteringContacts.add(//mixMastering 연락수단 생성
+              new CreateMixMasteringContactDto(j + 1, "content" + j));
+        }
+
+        //앨범아트 생성
+        AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto("serviceName" + i, "serviceExplain", 2, "editInfo", albumArtLicenseCreateRequestDtos, albumArtContactCreateDtos, albumArtFileCreateRequestDtos, true);
+
+        AlbumArtInfo albumArtInfo = albumArtCreateRequestDto.toEntity(initCommUser);
+        List<AlbumArtLicenseInfo> licenses = albumArtCreateRequestDto.getAlbumArtLicenseInfo().stream().map(license -> AlbumArtLicenseInfo.from(license, albumArtInfo)).toList();
+        List<AlbumArtContact> contacts = albumArtCreateRequestDto.getAlbumArtContact().stream().map(contact -> AlbumArtContact.from(contact, albumArtInfo)).toList();
+        List<AlbumArtFile> files = albumArtCreateRequestDto.getAlbumArtFiles().stream().map(file -> AlbumArtFile.from(file, albumArtInfo)).toList();
+        albumArtInfo.setAlbumArtLicenseInfo(licenses);
+        albumArtInfo.setAlbumArtContact(contacts);
+        albumArtInfo.setAlbumArtFiles(files);
+        albumArtInfos.add(albumArtInfo);
+        albumArtLicenseCreateRequestDtos.clear();
+        albumArtContactCreateDtos.clear();
+        albumArtFileCreateRequestDtos.clear();
+
+        //mixMastering 생성
+        CreateMixMasteringDto createMixMasteringDto = new CreateMixMasteringDto("serviceName" + i, "serviceExplain", "editInfo", true, "beforeJobMusic", "afterJobMusic", 1, mixMasteringLicenseInfos, mixMasteringFiles, mixMasteringContacts);
+
+        MixMasteringInfo mixMasteringInfo = createMixMasteringDto.toEntity(initCommUser);
+        List<MixMasteringLicenseInfo> mixMasteringLicenseInfo = mixMasteringLicenseInfos.stream().map(license -> MixMasteringLicenseInfo.from(license, mixMasteringInfo)).toList();
+        List<MixMasteringContact> mixMasteringContact = mixMasteringContacts.stream().map(contact -> MixMasteringContact.from(contact, mixMasteringInfo)).toList();
+        List<MixMasteringFile> mixMasteringFile = mixMasteringFiles.stream().map(file -> MixMasteringFile.from(file, mixMasteringInfo)).toList();
+        mixMasteringInfo.setMixMasteringLicenseInfos(mixMasteringLicenseInfo);
+        mixMasteringInfo.setMixMasteringContacts(mixMasteringContact);
+        mixMasteringInfo.setMixMasteringFiles(mixMasteringFile);
+        mixMasteringInfos.add(mixMasteringInfo);
+        mixMasteringLicenseInfos.clear();
+        mixMasteringContacts.clear();
+        mixMasteringFiles.clear();
+
+        //recording
+        RecordingCreateRequestDto recordingCreateRequestDto = new RecordingCreateRequestDto("serviceName" + i, "studioName", 1, 1, true, "www.예약.com", "serviceExplain", recordingFiles, recordingLicenseInfos);
+
+        RecordingInfo recordingInfo = recordingCreateRequestDto.toEntity(initCommUser);
+        List<RecordingLicenseInfo> recordingLicenseInfo = recordingLicenseInfos.stream().map(license -> RecordingLicenseInfo.from(license, recordingInfo)).toList();
+        List<RecordingFile> recordingFile = recordingFiles.stream().map(file -> RecordingFile.from(file, recordingInfo)).toList();
+        recordingInfo.setRecordingLicenseInfo(recordingLicenseInfo);
+        recordingInfo.setRecordingFile(recordingFile);
+        recordingInfos.add(recordingInfo);
+        recordingLicenseInfos.clear();
+        recordingFiles.clear();
+      }
+      albumArtRepository.saveAll(albumArtInfos);
+      mixMasteringRepository.saveAll(mixMasteringInfos);
+      recordingRepository.saveAll(recordingInfos);
+
+      //구매의뢰
+      for (int i = 0; i < 20; i++) {// 앨범아트 구매의뢰 더미데이터 생성
+        Random random = new Random();
+        int randomValue = random.nextInt(100000 - 2000) + 2000;
+        int randomValue2 = random.nextInt(20 - 1) + 1;
+        UUID serviceId = albumArtRepository.findByServiceName("serviceName" + randomValue2).getId();
+
+        AlbumArtRequest albumArtRequest = AlbumArtRequest.builder().albumArtInfo(albumArtRepository.findById(serviceId).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
+        MixMasteringRequest mixMasteringRequest = MixMasteringRequest.builder().mixMasteringInfo(mixMasteringRepository.findById(serviceId).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
+
+        albumArtRequestRepository.save(albumArtRequest);
+        mixMasteringRequestRepository.save(mixMasteringRequest);
+      }
     }
-    albumArtRepository.saveAll(albumArtInfos);
-    mixMasteringRepository.saveAll(mixMasteringInfos);
-    recordingRepository.saveAll(recordingInfos);
-
-    //구매의뢰
-    for (int i = 0; i < 20; i++) {// 앨범아트 구매의뢰 더미데이터 생성
-      Random random = new Random();
-      int randomValue = random.nextInt(100000 - 2000) + 2000;
-      int randomValue2 = random.nextInt(20 - 1) + 1;
-      UUID serviceId = albumArtRepository.findByServiceName("serviceName" + randomValue2).getId();
-
-      AlbumArtRequest albumArtRequest = AlbumArtRequest.builder().albumArtInfo(albumArtRepository.findById(serviceId).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
-      MixMasteringRequest mixMasteringRequest = MixMasteringRequest.builder().mixMasteringInfo(mixMasteringRepository.findById(serviceId).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
-
-      albumArtRequestRepository.save(albumArtRequest);
-      mixMasteringRequestRepository.save(mixMasteringRequest);
-    }
-
   }
 }

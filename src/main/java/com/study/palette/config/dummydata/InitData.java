@@ -1,17 +1,6 @@
 package com.study.palette.config.dummydata;
 
 import com.study.palette.common.enums.Contact;
-import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
-import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
-import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
-import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
-import com.study.palette.module.albumArt.entity.AlbumArtContact;
-import com.study.palette.module.albumArt.entity.AlbumArtFile;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
-import com.study.palette.module.albumArt.entity.AlbumArtRequest;
-import com.study.palette.module.albumArt.repository.AlbumArtRepository;
-import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
 import com.study.palette.module.artist.dto.CreateArtistContactDto;
 import com.study.palette.module.artist.dto.CreateArtistDto;
 import com.study.palette.module.artist.dto.artistFile.CreateArtistFileDto;
@@ -21,27 +10,12 @@ import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
 import com.study.palette.module.artist.repository.ArtistRepository;
-import com.study.palette.module.mixMastering.dto.CreateMixMasteringDto;
-import com.study.palette.module.mixMastering.dto.contact.CreateMixMasteringContactDto;
-import com.study.palette.module.mixMastering.dto.file.CreateMixMasteringFileDto;
-import com.study.palette.module.mixMastering.dto.license.CreateMixMasteringLicenseDto;
-import com.study.palette.module.mixMastering.entity.MixMasteringContact;
-import com.study.palette.module.mixMastering.entity.MixMasteringFile;
-import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
-import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
-import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
-import com.study.palette.module.recording.entity.RecordingInfo;
-import com.study.palette.module.recording.entity.RecordingLicenseInfo;
-import com.study.palette.module.recording.repository.RecordingRepository;
 import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.ApplicationArguments;
@@ -68,52 +42,54 @@ public class InitData implements ApplicationRunner {
     if (initCommUser != null) {
       log.info("이미 더미데이터가 존재합니다.");
       return;
+    } else {
+      log.info("더미데이터 생성 시작");
+
+      initCommUser = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test").password(passwordEncoder.encode("test1234")).name("홍길동").build());
+
+      /* artist */
+      List<CreateArtistLicenseDto> artistLicenseInfo = new ArrayList<>();
+      List<CreateArtistFileDto> artistFiles = new ArrayList<>();
+      List<CreateArtistContactDto> artistContacts = new ArrayList<>();
+      List<ArtistInfo> artistInfoList = new ArrayList<>();
+
+      for (int i = 0; i < 10; i++) {
+
+        for (int j = 0; j < 3; j++) {
+          artistLicenseInfo.add(new CreateArtistLicenseDto(10, 1000, "servedFile" + i, 3, 1, 1, true, true, true));
+        }
+
+        for (int j = 0; j < 3; j++) {
+          artistContacts.add(new CreateArtistContactDto(Contact.findContact(j + 1), "010-1234-1234"));
+        }
+
+        for (int j = 0; j < 3; j++) {
+          artistFiles.add(new CreateArtistFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", true));
+        }
+
+        CreateArtistDto createArtistDto = new CreateArtistDto("serviceName", "serviceInfo", "editInfo", 2, true, LocalDate.now(), artistFiles, artistLicenseInfo, artistContacts);
+
+        ArtistInfo artistInfo = createArtistDto.toEntity(initCommUser);
+
+        List<ArtistLicenseInfo> artistLicenseInfos = createArtistDto.getArtistLicenseInfo().stream().map(license -> ArtistLicenseInfo.from(license, artistInfo)).toList();
+
+        List<ArtistContact> artistContactList = createArtistDto.getArtistContactDto().stream().map(contact -> ArtistContact.from(contact, artistInfo)).toList();
+
+        List<ArtistFile> artistFileList = createArtistDto.getArtistFileDto().stream().map(file -> ArtistFile.from(file, artistInfo)).toList();
+
+        artistInfo.setArtistLicenseInfo(artistLicenseInfos);
+        artistInfo.setArtistContact(artistContactList);
+        artistInfo.setArtistFile(artistFileList);
+        artistInfoList.add(artistInfo);
+
+        artistLicenseInfo.clear();
+        artistFiles.clear();
+        artistContacts.clear();
+
+      }
+
+      /* artist save*/
+      artistRepository.saveAll(artistInfoList);
     }
-
-    initCommUser = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test").password(passwordEncoder.encode("test1234")).name("홍길동").build());
-
-    /* artist */
-    List<CreateArtistLicenseDto> artistLicenseInfo = new ArrayList<>();
-    List<CreateArtistFileDto> artistFiles = new ArrayList<>();
-    List<CreateArtistContactDto> artistContacts = new ArrayList<>();
-    List<ArtistInfo> artistInfoList = new ArrayList<>();
-
-    for (int i = 0; i < 10; i++) {
-
-      for (int j = 0; j < 3; j++) {
-        artistLicenseInfo.add(new CreateArtistLicenseDto(10, 1000, "servedFile" + i, 3, 1, 1, true, true, true));
-      }
-
-      for (int j = 0; j < 3; j++) {
-        artistContacts.add(new CreateArtistContactDto(Contact.findContact(j + 1), "010-1234-1234"));
-      }
-
-      for (int j = 0; j < 3; j++) {
-        artistFiles.add(new CreateArtistFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", true));
-      }
-
-      CreateArtistDto createArtistDto = new CreateArtistDto("serviceName", "serviceInfo", "editInfo", 2, true, LocalDate.now(), artistFiles, artistLicenseInfo, artistContacts);
-
-      ArtistInfo artistInfo = createArtistDto.toEntity(initCommUser);
-
-      List<ArtistLicenseInfo> artistLicenseInfos = createArtistDto.getArtistLicenseInfo().stream().map(license -> ArtistLicenseInfo.from(license, artistInfo)).toList();
-
-      List<ArtistContact> artistContactList = createArtistDto.getArtistContactDto().stream().map(contact -> ArtistContact.from(contact, artistInfo)).toList();
-
-      List<ArtistFile> artistFileList = createArtistDto.getArtistFileDto().stream().map(file -> ArtistFile.from(file, artistInfo)).toList();
-
-      artistInfo.setArtistLicenseInfo(artistLicenseInfos);
-      artistInfo.setArtistContact(artistContactList);
-      artistInfo.setArtistFile(artistFileList);
-      artistInfoList.add(artistInfo);
-
-      artistLicenseInfo.clear();
-      artistFiles.clear();
-      artistContacts.clear();
-
-    }
-
-    /* artist save*/
-    artistRepository.saveAll(artistInfoList);
   }
 }
