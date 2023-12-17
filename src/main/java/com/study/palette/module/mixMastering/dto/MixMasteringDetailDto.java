@@ -14,6 +14,7 @@ import lombok.Data;
 
 @Data
 public class MixMasteringDetailDto {
+
   @Schema(description = "아이디")
   private String id;
   @Schema(description = "서비스 제목")
@@ -56,8 +57,7 @@ public class MixMasteringDetailDto {
     this.genre = MixMasteringGenre.findMixMasteringGenre(mixMasteringInfo.getGenre());
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUsers());
-    this.reviews = mixMasteringInfo.getMixMasteringReviews().stream()
-        .map(MixMasteringReviewDto::new).toList();
+    this.reviews = mixMasteringInfo.getMixMasteringReviews().stream().map(MixMasteringReviewDto::new).toList();
     this.mixMasteringLicenseInfos = mixMasteringInfo.getMixMasteringLicenseInfos().stream().map(MixMasteringLicenseDto::new).toList();
     this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).toList();
     this.contacts = mixMasteringInfo.getMixMasteringContacts().stream().map(MixMasteringContactDto::new).toList();

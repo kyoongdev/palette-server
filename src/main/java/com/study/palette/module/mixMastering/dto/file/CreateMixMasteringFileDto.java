@@ -5,17 +5,25 @@ import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class CreateMixMasteringFileDto {
+
+  @Schema(description = "원본 파일명")
   private String originFileName;
+  @Schema(description = "업로드 파일명")
   private String uploadFileName;
   private int uploadFileSize;
+  @Schema(description = "업로드 파일 크기")
+  private int uploadFileSize;
+  @Schema(description = "파일 URL")
   private String url;
-
+  @Schema(description = "파일 확장자")
   private String suffix;
+  @Schema(description = "썸네일 여부")
   private boolean isThumbnail;
 
   public MixMasteringFile toEntity(MixMasteringInfo mixMastering) {
@@ -23,6 +31,9 @@ public class CreateMixMasteringFileDto {
             .originFileName(this.originFileName)
             .uploadFileName(this.uploadFileName)
             .uploadFileSize(this.uploadFileSize)
+        .originFileName(this.originFileName)
+        .uploadFileName(this.uploadFileName)
+        .uploadFileSize(this.uploadFileSize)
             .url(this.url)
             .suffix(this.suffix)
             .isThumbnail(this.isThumbnail)

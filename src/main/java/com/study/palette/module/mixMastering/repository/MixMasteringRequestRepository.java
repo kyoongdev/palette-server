@@ -1,6 +1,5 @@
 package com.study.palette.module.mixMastering.repository;
 
-import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringRequest;
 import com.study.palette.module.users.entity.Users;
