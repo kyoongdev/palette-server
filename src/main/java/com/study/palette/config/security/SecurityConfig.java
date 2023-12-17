@@ -26,7 +26,9 @@ public class SecurityConfig {
 
   private final CustomOAuth2UserService customOAuth2UserService;
 
-  private final OAuth2LoginSuccessHandler oAUth2LoginSuccessHandler;
+  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+  private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
   @Bean
   public PasswordEncoder getPasswordEncoder() {
@@ -60,7 +62,8 @@ public class SecurityConfig {
 
             .and()
             .oauth2Login()
-            .successHandler(oAUth2LoginSuccessHandler)
+            .successHandler(oAuth2LoginSuccessHandler)
+            .failureHandler(oAuth2LoginFailureHandler)
             .userInfoEndpoint().userService(customOAuth2UserService);
     ;
 

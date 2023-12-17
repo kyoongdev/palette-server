@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +30,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     TokenDto token = jwtTokenProvider.createToken(authentication);
 
+    OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) authentication;
+    String clientRegistrationId = authenticationToken.getAuthorizedClientRegistrationId();
+
     response.sendRedirect(
         frontServerHost + "/loginSuccess?accessToken=" + token.getAccessToken() + "&refreshToken="
-            + token.getRefreshToken());
+            + token.getRefreshToken() + "&socialType=" + clientRegistrationId);
 
   }
 
