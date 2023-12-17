@@ -2,7 +2,6 @@ package com.study.palette.module.adminSales.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
-import com.study.palette.module.adminSales.dto.FindAdminSalesQuery;
 import com.study.palette.module.adminSales.dto.AdminSalesCountResponseDto;
 import com.study.palette.module.adminSales.dto.AdminSalesResponseDto;
 import com.study.palette.module.adminSales.repository.AdminSalesCustomRepository;
@@ -41,7 +40,7 @@ public class AdminSalesService {
 
   // 판매글 목록 전체조회
   @Transactional(readOnly = true)
-  public PaginationDto<AdminSalesResponseDto> getServices(FindAdminSalesQuery query,
+  public PaginationDto<AdminSalesResponseDto> getServices(AdminSalesConditions query,
       Pageable pageable) {
     long count = getServicesCount(query).getAllCount();
 
@@ -58,12 +57,12 @@ public class AdminSalesService {
 
   // 판매글 목록 전체 카운트
   @Transactional(readOnly = true)
-  public AdminSalesCountResponseDto getServicesCount(FindAdminSalesQuery query) {
-    long albumArtCount = albumArtRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long artistCount = artistRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long mixMasteringCount = mixMasteringRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long recordingCount = recordingRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long mrBeatCount = mrBeatRepository.countByServiceStatus(query.isRegistrationCompleted());
+  public AdminSalesCountResponseDto getServicesCount(AdminSalesConditions query) {
+    long albumArtCount = albumArtRepository.countByServiceStatus(query.getRecordingSort());
+    long artistCount = artistRepository.countByServiceStatus(query.getRecordingSort());
+    long mixMasteringCount = mixMasteringRepository.countByServiceStatus(query.getRecordingSort());
+    long recordingCount = recordingRepository.countByServiceStatus(query.getRecordingSort());
+    long mrBeatCount = mrBeatRepository.countByServiceStatus(query.getRecordingSort());
 
     return AdminSalesCountResponseDto.of(
         albumArtCount + artistCount + mixMasteringCount + recordingCount + mrBeatCount,
