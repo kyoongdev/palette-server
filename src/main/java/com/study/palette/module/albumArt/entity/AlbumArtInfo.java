@@ -1,6 +1,8 @@
 package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.ArtistSalesType;
+import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class AlbumArtInfo {
   @Column(length = 1000)
   private String serviceExplain;
 
-  private int salesType;
+  private AlbumArtSaleType salesType;
 
   @Column(length = 1000)
   private String editInfo;
@@ -54,7 +56,6 @@ public class AlbumArtInfo {
   @CreatedDate
   private LocalDateTime createdAt;
 
-  //    @ManyToOne(cascade = CascadeType.PERSIST) TODO detached 오류 해결 필요
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "usersId")
   @JsonIgnore
@@ -79,5 +80,9 @@ public class AlbumArtInfo {
 
   public void setAlbumArtFiles(List<AlbumArtFile> albumArtFiles) {
     this.albumArtFile = albumArtFiles;
+  }
+
+  public void updateServiceStatus(boolean serviceStatus) {
+    this.serviceStatus = serviceStatus;
   }
 }

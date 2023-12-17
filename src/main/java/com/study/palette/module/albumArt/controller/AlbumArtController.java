@@ -126,7 +126,7 @@ public class AlbumArtController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteAlbumArt(@PathVariable String id,
-      @Parameter(hidden = false) @GetUserInfo Users users) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     albumArtService.deleteAlbumArt(id, users);
   }
 }

@@ -5,33 +5,25 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
-import com.study.palette.common.exception.CustomException;
-import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
-import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
-import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
+import com.study.palette.module.mixMastering.entity.QMixMasteringInfo;
+import com.study.palette.module.mixMastering.entity.QMixMasteringRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class FindMixMasteringQuery extends PageDto {
 
-  @Schema(description = "전문장르", type = "string", allowableValues = {"ALL", "ENGINEERING",
-      "NOT_ENGINEERING"})
+  @Schema(description = "전문장르", defaultValue = "", example = "1 : BALAD, 2 : HIPHOP, 3 : TROT, 4 : DANCE, 5 : RNB, 6 : ROCK, 7 : INDI, 8 : FORK, 9 : ETC")
   public MixMasteringGenre genre;
 
-  @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
-      "POPULAR"})
-  private CustomSort sort;
+  @Schema(description = "정렬", example = "1 : 신규등록, 2 : 인기순")
+  private CustomSort customSort;
 
   public OrderSpecifier<?>[] getSort() {
-    if (this.sort == null) {
-      throw new CustomException(AlbumArtErrorCode.ALBUM_ART_NOT_SORT);
-    }
-
-    if (this.sort == CustomSort.POPULAR) {
-      return new OrderSpecifier[]{QAlbumArtRequest.albumArtRequest.id.count().desc()};
+    if (this.customSort == CustomSort.POPULAR) {
+      return new OrderSpecifier[]{QMixMasteringRequest.mixMasteringRequest.id.count().desc()};
     } else { // 신규등록
-      return new OrderSpecifier[]{QAlbumArtInfo.albumArtInfo.createdAt.desc()};
+      return new OrderSpecifier[]{QMixMasteringInfo.mixMasteringInfo.createdAt.desc()};
     }
   }
 }

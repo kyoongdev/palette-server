@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MrBeatRepository extends JpaRepository<MrBeatInfo, String>,
-    MrBeatCustomRepository {
-
+public interface MrBeatRepository extends JpaRepository<MrBeatInfo, String> {
+  long countByServiceStatus(boolean registrationCompleted);
 }

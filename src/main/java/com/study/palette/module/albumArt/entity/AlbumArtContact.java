@@ -1,6 +1,7 @@
 package com.study.palette.module.albumArt.entity;
 
 
+import com.study.palette.common.enums.Contact;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactDto;
 import java.time.LocalDateTime;
@@ -33,7 +34,7 @@ public class AlbumArtContact {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private int type;
+  private Contact type;
 
   private String content;
 
@@ -45,7 +46,7 @@ public class AlbumArtContact {
 
   public static AlbumArtContact from(AlbumArtContactCreateDto dto, AlbumArtInfo albumArtInfo) {
     return AlbumArtContact.builder()
-        .type(dto.getType().getContact())
+        .type(Contact.findContact(dto.getType()))
         .content(dto.getContent())
         .albumArtInfo(albumArtInfo)
         .build();
@@ -53,7 +54,7 @@ public class AlbumArtContact {
 
   public static AlbumArtContact from(AlbumArtContactDto dto, AlbumArtInfo albumArtInfo) {
     return AlbumArtContact.builder()
-        .type(dto.getType().getContact())
+        .type(Contact.findContact(dto.getType()))
         .content(dto.getContent())
         .albumArtInfo(albumArtInfo)
         .build();

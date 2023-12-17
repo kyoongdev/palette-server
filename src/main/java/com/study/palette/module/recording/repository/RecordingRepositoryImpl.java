@@ -7,6 +7,7 @@ import com.study.palette.module.recording.dto.query.FindRecordingQuery;
 import com.study.palette.module.recording.entity.QRecordingFile;
 import com.study.palette.module.recording.entity.QRecordingInfo;
 import com.study.palette.module.recording.entity.QRecordingLicenseInfo;
+import com.study.palette.module.recording.service.RecordingConditions;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
   }
 
   @Override
-  public Page<RecordingResponseDto> findAll(FindRecordingQuery query, Pageable pageable) {
+  public Page<RecordingResponseDto> findAll(RecordingConditions query, Pageable pageable) {
     QRecordingInfo recordingInfo = QRecordingInfo.recordingInfo;
     QRecordingFile recordingFile = QRecordingFile.recordingFile;
     QRecordingLicenseInfo recordingLicenseInfo = QRecordingLicenseInfo.recordingLicenseInfo;
@@ -48,7 +49,7 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
             .and(recordingLicenseInfo.licenseType.eq(10)))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(query.getRecordingSort())
+        .where(query.getRecordingSort(recordingInfo))
         .groupBy(recordingInfo.id,
             recordingInfo.serviceName,
             recordingInfo.salesType,

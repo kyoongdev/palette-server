@@ -5,12 +5,17 @@ import com.study.palette.common.enums.LicenseType;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class CreateMixMasteringLicenseDto {
   @Schema(description = "라이센스 유형")
-  private LicenseType licenseType;
+  private int licenseType;
   @Schema(description = "가격")
   private int price;
 
@@ -38,7 +43,7 @@ public class CreateMixMasteringLicenseDto {
 
   public MixMasteringLicenseInfo toEntity(MixMasteringInfo mixMasteringInfo) {
     return MixMasteringLicenseInfo.builder()
-            .licenseType(this.licenseType.getLicenseType())
+            .licenseType(this.licenseType)
             .price(this.price)
             .servedType(this.servedType)
             .updateCount(this.updateCount)

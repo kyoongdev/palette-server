@@ -1,5 +1,6 @@
 package com.study.palette.module.albumArt.dto.info;
 
+import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
@@ -41,7 +42,7 @@ public class AlbumArtCreateRequestDto {
         .serviceName(this.getServiceName())
         .serviceExplain(this.getServiceExplain())
         .serviceStatus(this.isServiceStatus())
-        .salesType(this.getSalesType())
+        .salesType(AlbumArtSaleType.findAlbumArtSaleType(this.getSalesType()))
         .editInfo(this.getEditInfo())
         .users(users)
         .build();

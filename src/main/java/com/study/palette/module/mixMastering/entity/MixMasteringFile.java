@@ -1,5 +1,14 @@
 package com.study.palette.module.mixMastering.entity;
 
+import com.study.palette.module.mixMastering.dto.file.CreateMixMasteringFileDto;
+import java.time.LocalDate;
+import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,10 +16,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
-
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -53,5 +58,16 @@ public class MixMasteringFile {
   @JoinColumn(name = "mixMasteringInfoId")
   private MixMasteringInfo mixMasteringInfo;
 
+  public static MixMasteringFile from(CreateMixMasteringFileDto dto, MixMasteringInfo mixMasteringInfo) {
+    return MixMasteringFile.builder()
+        .originFileName(dto.getOriginFileName())
+        .uploadFileName(dto.getUploadFileName())
+        .uploadFileSize(dto.getUploadFileSize())
+        .url(dto.getUrl())
+        .suffix(dto.getSuffix())
+        .isThumbnail(dto.isThumbnail())
+        .mixMasteringInfo(mixMasteringInfo)
+        .build();
+  }
 
 }
