@@ -9,10 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class FindRecordingQuery extends RecordingConditions {
 
   @Schema(description = "엔지니어링 제공 여부", defaultValue = "0")

@@ -13,19 +13,30 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
-@Setter
 public abstract class RecordingConditions extends PageDto {
 
   @JsonIgnore
   public int recordingSort;
 
   public BooleanExpression getRecordingSort(QRecordingInfo recordingInfo) {
-    if (RecordingSort.findRecordingSort(recordingSort) == RecordingSort.ENGINEERING) {
+    if (RecordingSort.findRecordingSort(this.recordingSort) == RecordingSort.ENGINEERING) {
       return recordingInfo.isRecordingEngineering.eq(true);
-    } else if (RecordingSort.findRecordingSort(recordingSort) == RecordingSort.NOT_ENGINEERING) {
+    } else if (RecordingSort.findRecordingSort(this.recordingSort) == RecordingSort.NOT_ENGINEERING) {
       return recordingInfo.isRecordingEngineering.eq(false);
     } else {
       return Expressions.TRUE.eq(Expressions.TRUE);
     }
   }
+
+  public RecordingConditions(int recordingSort) {
+    this.recordingSort = recordingSort;
+    System.out.println("RecordingConditions 생성자 호출");
+  }
+
+  //Setter
+  public void setRecordingSort(int recordingSort) {
+    this.recordingSort = recordingSort;
+    System.out.println("RecordingConditions setRecordingSort 호출");
+  }
+
 }
