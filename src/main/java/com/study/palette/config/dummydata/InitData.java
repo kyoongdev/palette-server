@@ -239,10 +239,12 @@ public class InitData implements ApplicationRunner {
       Random random = new Random();
       int randomValue = random.nextInt(100000 - 2000) + 2000;
       int randomValue2 = random.nextInt(20 - 1) + 1;
+
       UUID serviceId = albumArtRepository.findByServiceName("serviceName" + randomValue2).getId();
+      UUID serviceId2 = mixMasteringRepository.findByServiceName("serviceName" + randomValue2).getId();
 
       AlbumArtRequest albumArtRequest = AlbumArtRequest.builder().albumArtInfo(albumArtRepository.findById(serviceId).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
-      MixMasteringRequest mixMasteringRequest = MixMasteringRequest.builder().mixMasteringInfo(mixMasteringRepository.findById(serviceId).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
+      MixMasteringRequest mixMasteringRequest = MixMasteringRequest.builder().mixMasteringInfo(mixMasteringRepository.findById(serviceId2).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
 
       albumArtRequestRepository.save(albumArtRequest);
       mixMasteringRequestRepository.save(mixMasteringRequest);
