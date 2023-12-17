@@ -29,23 +29,30 @@ public class TokenGenerator implements CommandLineRunner {
     this.passwordEncoder = passwordEncoder;
   }
 
-    @Override
-    public void run(String... args) throws Exception {
-      // 여기에 초기 데이터 생성 로직을 작성
-      Users data = Users.builder()
-          .email("testEmail")
-          .password(passwordEncoder.encode("testPassword"))
-          .role(Role.MUSICIAN)
-          .name("testName")
-          .phone("testPhone")
-          .isAlarmAccept(true)
-          .loginFailCount(0)
-          .isLocked(false)
-          .build();
-      usersRepository.save(data);
-
-      Authentication authentication = jwtTokenProvider.getAuthentication(data.getId().toString());
+  @Override
+  public void run(String... args) throws Exception {
+    Users user = usersRepository.findByEmail("testEmail").orElse(null);
+    if (user != null) {
+      log.info("이미 더미데이터가 존재합니다.");
+      Authentication authentication = jwtTokenProvider.getAuthentication(user.getId().toString());
       log.info("\n" + jwtTokenProvider.createToken(authentication).getAccessToken());
-
+      return;
     }
+    // 여기에 초기 데이터 생성 로직을 작성
+    Users data = Users.builder()
+        .email("testEmail")
+        .password(passwordEncoder.encode("testPassword"))
+        .role(Role.MUSICIAN)
+        .name("testName")
+        .phone("testPhone")
+        .isAlarmAccept(true)
+        .loginFailCount(0)
+        .isLocked(false)
+        .build();
+    usersRepository.save(data);
+
+    Authentication authentication = jwtTokenProvider.getAuthentication(data.getId().toString());
+    log.info("\n" + jwtTokenProvider.createToken(authentication).getAccessToken());
+
+  }
 }

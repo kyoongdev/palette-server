@@ -1,44 +1,44 @@
 package com.study.palette.module.mrBeat.dto;
 
-import com.study.palette.module.mrBeat.entity.MrBeatFile;
-import com.study.palette.module.mrBeat.entity.MrBeatInfo;
-import com.study.palette.module.mrBeat.entity.MrBeatLicenseInfo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import java.time.LocalDate;
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class MrBeatResponseDto {
 
-    private String id;
+  @Schema(description = "MrBeat ID")
+  private String id;
+  @Schema(description = "서비스명", example = "테스트 서비스명")
+  private String serviceName;
+  @Schema(description = "장르", example = "true")
+  private int genre;
+  @Schema(description = "분위기", example = "true")
+  private int mood;
+  @Schema(description = "서비스 타입", example = "true")
+  private int salesType;
+  @Schema(description = "파일경로", example = "파일경로")
+  private String fileUrl;
+  @Schema(description = "파일경로", example = "파일경로")
+  private String musicFileUrl;
+  @Schema(description = "가격", example = "10000")
+  private int price;
+  @Schema(description = "요청수", example = "10000")
+  private long requestCount;
 
-    private String serviceName;
+  public MrBeatResponseDto(String id, String serviceName, int genre, int mood, int salesType,
+      String fileUrl, String musicFileUrl, int price, long requestCount) {
+    this.id = id;
+    this.serviceName = serviceName;
+    this.genre = genre;
+    this.mood = mood;
+    this.salesType = salesType;
+    this.fileUrl = fileUrl;
+    this.musicFileUrl = musicFileUrl;
+    this.price = price;
+    this.requestCount = requestCount;
 
-    private int mood;
-
-    private int salesType;
-
-    private int genre;
-
-    private boolean serviceStatus;
-
-    private LocalDate createdAt;
-
-    private List<MrBeatFile> mrBeatFileList;
-
-    private List<MrBeatLicenseInfo> mrBeatLicenseInfo;
-
-    public MrBeatResponseDto(MrBeatInfo mrBeatInfo) {
-        this.id = mrBeatInfo.getId();
-        this.serviceName = mrBeatInfo.getServiceName();
-        this.mood = mrBeatInfo.getMood();
-        this.salesType = mrBeatInfo.getSalesType();
-        this.genre = mrBeatInfo.getGenre();
-        this.serviceStatus = mrBeatInfo.isServiceStatus();
-        this.createdAt = mrBeatInfo.getCreatedAt();
-        this.mrBeatFileList = mrBeatInfo.getMrBeatFileList();
-        this.mrBeatLicenseInfo = mrBeatInfo.getMrBeatLicenseInfo();
-    }
+  }
 
 }
