@@ -22,7 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Getter
 @Builder
-public class MrBeatFile {
+public class MrBeatMusicFIle {
 
   @Id
   @GeneratedValue(generator = "uuid2")
@@ -58,6 +58,5 @@ public class MrBeatFile {
   @JoinColumn(name = "mrBeatInfo")
   @JsonIgnore
   private MrBeatInfo mrBeatInfo;
-
 
 }
