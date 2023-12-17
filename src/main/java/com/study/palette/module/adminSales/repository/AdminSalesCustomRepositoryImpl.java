@@ -7,13 +7,16 @@ import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mrBeat.entity.MrBeatInfo;
 import com.study.palette.module.recording.entity.RecordingInfo;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -31,48 +34,104 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
   @Override
   public List<AdminSalesResponseDto> findAllByServiceStatusAndCreatedAtDesc(AdminSalesConditions query, Pageable pageable) {
     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-    CriteriaQuery<AdminSalesResponseDto> cbQuery = cb.createQuery(AdminSalesResponseDto.class);
-
-    Root<AlbumArtInfo> albumArtInfoRoot = cbQuery.from(AlbumArtInfo.class);
-//    Root<ArtistInfo> artistInfoRoot = cbQuery.from(ArtistInfo.class);
-    Root<MixMasteringInfo> mixMasteringInfoRoot = cbQuery.from(MixMasteringInfo.class);
-//    Root<MrBeatInfo> mrBeatInfoRoot = cbQuery.from(MrBeatInfo.class);
-    Root<RecordingInfo> recordingInfoRoot = cbQuery.from(RecordingInfo.class);
-
-    //조건
-    Predicate albumArtPredicate = cb.equal(albumArtInfoRoot.get("serviceStatus"), query.getRecordingSort());
-//    Predicate artistPredicate = cb.equal(artistInfoRoot.get("serviceStatus"), query.getRecordingSort());
-    Predicate mixMasteringPredicate = cb.equal(mixMasteringInfoRoot.get("serviceStatus"), query.getRecordingSort());
-//    Predicate mrBeatPredicate = cb.equal(mrBeatInfoRoot.get("serviceStatus"), query.getRecordingSort());
-    Predicate recordingPredicate = cb.equal(recordingInfoRoot.get("serviceStatus"), query.getRecordingSort());
-    cbQuery.where(albumArtPredicate).orderBy(cb.desc(albumArtInfoRoot.get("createdAt")));
-//    cbQuery.where(artistPredicate).orderBy(cb.desc(artistInfoRoot.get("createdAt")));
-    cbQuery.where(mixMasteringPredicate).orderBy(cb.desc(mixMasteringInfoRoot.get("createdAt")));
-//    cbQuery.where(mrBeatPredicate).orderBy(cb.desc(mrBeatInfoRoot.get("createdAt")));
-    cbQuery.where(recordingPredicate).orderBy(cb.desc(recordingInfoRoot.get("createdAt")));
+    CriteriaQuery<AdminSalesResponseDto> mainQuery = cb.createQuery(AdminSalesResponseDto.class);
+    Root<AdminSalesResponseDto> root = mainQuery.from(AdminSalesResponseDto.class);
 
     //5개의 entity union
-    cbQuery.select(cb.construct(AdminSalesResponseDto.class,
+    //1. albumArt
+//    CriteriaQuery<AdminSalesResponseDto> albumArtQuery = cb.createQuery(AdminSalesResponseDto.class);
+//    Root<AlbumArtInfo> albumArtInfoRoot = albumArtQuery.from(AlbumArtInfo.class);
+//    albumArtQuery.where(
+//            cb.equal(albumArtInfoRoot.get("serviceStatus"), query.getRecordingSort())
+//        )
+//        .orderBy(cb.desc(albumArtInfoRoot.get("createdAt")));
+
+//    //2. mix mastering
+//    CriteriaQuery<AdminSalesResponseDto> mixMasteringQuery = cb.createQuery(AdminSalesResponseDto.class);
+//    Root<MixMasteringInfo> mixMasteringInfoRoot = mixMasteringQuery.from(MixMasteringInfo.class);
+//    mixMasteringQuery.where(
+//            cb.equal(mixMasteringInfoRoot.get("serviceStatus"), query.getRecordingSort())
+//        )
+//        .orderBy(cb.desc(mixMasteringInfoRoot.get("createdAt")));
+
+    //3. recording
+//    CriteriaQuery<AdminSalesResponseDto> recordingQuery = cb.createQuery(AdminSalesResponseDto.class);
+//    Root<RecordingInfo> recordingInfoRoot = recordingQuery.from(RecordingInfo.class);
+//    recordingQuery.where(
+//            cb.equal(recordingInfoRoot.get("serviceStatus"), query.getRecordingSort())
+//        )
+//        .orderBy(cb.desc(recordingInfoRoot.get("createdAt")));
+
+    //4. artist
+//    CriteriaQuery<AdminSalesResponseDto> artistQuery = cb.createQuery(AdminSalesResponseDto.class);
+//    Root<ArtistInfo> artistInfoRoot = artistQuery.from(ArtistInfo.class);
+//    artistQuery.where(
+//            cb.equal(artistInfoRoot.get("serviceStatus"), query.getRecordingSort())
+//        )
+//        .orderBy(cb.desc(artistInfoRoot.get("createdAt")));
+
+    //5. mrBeat
+//    CriteriaQuery<AdminSalesResponseDto> mrBeatQuery = cb.createQuery(AdminSalesResponseDto.class);
+//    Root<MrBeatInfo> mrBeatInfoRoot = mrBeatQuery.from(MrBeatInfo.class);
+//    mrBeatQuery.where(
+//            cb.equal(mrBeatInfoRoot.get("serviceStatus"), query.getRecordingSort())
+//        )
+//        .orderBy(cb.desc(mrBeatInfoRoot.get("createdAt")));
+
+    //1. albumArt
+    Subquery<AlbumArtInfo> albumArtQuery = cb.createQuery().subquery(AlbumArtInfo.class);
+    Root<AlbumArtInfo> albumArtInfoRoot = albumArtQuery.from(AlbumArtInfo.class);
+
+    albumArtQuery.select(
         albumArtInfoRoot.get("serviceName"),
         albumArtInfoRoot.get("salesType"),
         albumArtInfoRoot.get("createdAt"),
-        albumArtInfoRoot.get("registerDeadline"),
+        cb.function("registerDeadline", Date.class, albumArtInfoRoot.get("createdAt"), cb.literal(5))
+    )
+
+
+    albumArtQuery.where(
+            cb.equal(albumArtInfoRoot.get("serviceStatus"), query.getRecordingSort())
+        );
+
+    //2. mix mastering
+    Subquery<AdminSalesResponseDto> mixMasteringQuery = cb.createQuery().subquery(AdminSalesResponseDto.class);
+    Root<MixMasteringInfo> mixMasteringInfoRoot = mixMasteringQuery.from(MixMasteringInfo.class);
+    mixMasteringQuery.where(
+            cb.equal(mixMasteringInfoRoot.get("serviceStatus"), query.getRecordingSort())
+        );
+
+    mainQuery.select(
+        root.get("serviceName"),
+        root.get("salesType"),
+        root.get("createdAt"),
+        root.get("registerDeadline")
+    )
+
+
+    cb.unionuni(albumArtQuery, mixMasteringQuery, recordingQuery, artistQuery, mrBeatQuery);
+    //5개의 entity union
+    cbQuery.select(cb.construct(AdminSalesResponseDto.class,
+        albumArtInfoRoot.get("serviceName"),
+        cb.literal("앨범아트").alias("salesType"),
+        albumArtInfoRoot.get("createdAt"),
+        cb.function("registerDeadline", Date.class, albumArtInfoRoot.get("createdAt"), cb.literal(5)),
 //        artistInfoRoot.get("serviceName"),
-//        artistInfoRoot.get("salesType"),
+//        cb.literal("아티스트").alias("salesType"),
 //        artistInfoRoot.get("createdAt"),
-//        artistInfoRoot.get("registerDeadline"),
+//        cb.function("registerDeadline", Date.class, artistInfoRoot.get("createdAt"), cb.literal(5)),
         mixMasteringInfoRoot.get("serviceName"),
-        mixMasteringInfoRoot.get("salesType"),
+        cb.literal("믹스&마스터링").alias("salesType"),
         mixMasteringInfoRoot.get("createdAt"),
-        mixMasteringInfoRoot.get("registerDeadline"),
+        cb.function("registerDeadline", Date.class, mixMasteringInfoRoot.get("createdAt"), cb.literal(5)),
 //        mrBeatInfoRoot.get("serviceName"),
-//        mrBeatInfoRoot.get("salesType"),
+//        cb.literal("작곡").alias("salesType"),
 //        mrBeatInfoRoot.get("createdAt"),
-//        mrBeatInfoRoot.get("registerDeadline"),
+//        cb.function("registerDeadline", Date.class, mrBeatInfoRoot.get("createdAt"), cb.literal(5)),
         recordingInfoRoot.get("serviceName"),
-        recordingInfoRoot.get("salesType"),
+        cb.literal("녹음"),
         recordingInfoRoot.get("createdAt"),
-        recordingInfoRoot.get("registerDeadline")
+        cb.function("registerDeadline", Date.class, recordingInfoRoot.get("createdAt"), cb.literal(5))
     ));
 
     TypedQuery<AdminSalesResponseDto> typedQuery = entityManager.createQuery(cbQuery);
