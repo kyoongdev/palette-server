@@ -2,6 +2,7 @@ package com.study.palette.module.mixMastering.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class MixMasteringInfo {
   private boolean serviceStatus;
   //장르
   @Column(length = 1)
-  private int genre;
+  private MixMasteringGenre genre;
   @CreationTimestamp
   private LocalDateTime createdAt;
 
