@@ -8,6 +8,7 @@ import com.study.palette.module.mixMastering.entity.QMixMasteringFile;
 import com.study.palette.module.mixMastering.entity.QMixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringRequest;
+import com.study.palette.module.mixMastering.service.MixMasteringConditions;
 import com.study.palette.module.musician.entity.QUsersMusician;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -28,7 +29,7 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
   }
 
   @Override
-  public Page<MixMasteringsDto> findAll(FindMixMasteringQuery query, Pageable pageable) {
+  public Page<MixMasteringsDto> findAll(MixMasteringConditions query, Pageable pageable) {
     QMixMasteringInfo mixMasteringInfo = QMixMasteringInfo.mixMasteringInfo;
     QMixMasteringFile mixMasteringFile = QMixMasteringFile.mixMasteringFile;
     QMixMasteringLicenseInfo mixMasteringLicenseInfo = QMixMasteringLicenseInfo.mixMasteringLicenseInfo;
@@ -69,7 +70,7 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
         .on(mixMasteringInfo.users.id.eq(userMusician.users.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(mixMasteringInfo.genre.eq(query.getGenre().getGenre()))
+        .where(query.getGenreCondition(mixMasteringInfo))
         .groupBy(mixMasteringInfo.id,
             mixMasteringInfo.serviceName,
             userMusician.name,

@@ -1,13 +1,15 @@
 package com.study.palette.module.albumArt.dto.info;
 
+import com.study.palette.common.dto.CommonResponseDto;
+import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 public class AlbumArtsResponseDto {
 
   @Schema(description = "앨범아트 ID")
@@ -25,11 +27,11 @@ public class AlbumArtsResponseDto {
   @Schema(description = "요청수", example = "10000")
   private long requestCount;
 
-  public AlbumArtsResponseDto(UUID id, String serviceName, int salesType, String userName,
+  public AlbumArtsResponseDto(UUID id, String serviceName, AlbumArtSaleType salesType, String userName,
       String fileUrl, int price, long requestCount) {
     this.id = id.toString();
     this.serviceName = serviceName;
-    this.salesType = salesType;
+    this.salesType = salesType.getCode();
     this.userName = userName;
     this.fileUrl = fileUrl;
     this.price = price;

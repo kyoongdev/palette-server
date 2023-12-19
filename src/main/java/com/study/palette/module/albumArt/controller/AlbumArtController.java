@@ -1,5 +1,6 @@
 package com.study.palette.module.albumArt.controller;
 
+import com.study.palette.common.annotations.CustomRestController;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateResponseDto;
@@ -33,11 +34,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "앨범아트", description = "앨범아트")
 @RequestMapping("/albumArts")
-@RestController
+@CustomRestController
 public class AlbumArtController {
 
   private AlbumArtService albumArtService;
@@ -126,7 +126,7 @@ public class AlbumArtController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteAlbumArt(@PathVariable String id,
-      @Parameter(hidden = false) @GetUserInfo Users users) {
+      @Parameter(hidden = true) @GetUserInfo Users users) {
     albumArtService.deleteAlbumArt(id, users);
   }
 }

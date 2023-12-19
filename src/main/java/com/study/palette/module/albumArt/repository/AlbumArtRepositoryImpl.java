@@ -3,11 +3,11 @@ package com.study.palette.module.albumArt.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.palette.module.albumArt.dto.info.AlbumArtsResponseDto;
-import com.study.palette.module.albumArt.dto.query.FindAlbumArtQuery;
 import com.study.palette.module.albumArt.entity.QAlbumArtFile;
 import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
+import com.study.palette.module.albumArt.service.AlbumArtConditions;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
   }
 
   @Override
-  public Page<AlbumArtsResponseDto> findAll(FindAlbumArtQuery query, Pageable pageable) {
+  public Page<AlbumArtsResponseDto> findAll(AlbumArtConditions query, Pageable pageable) {
     QAlbumArtInfo albumArtInfo = QAlbumArtInfo.albumArtInfo;
     QAlbumArtFile albumArtFile = QAlbumArtFile.albumArtFile;
     QAlbumArtLicenseInfo albumArtLicenseInfo = QAlbumArtLicenseInfo.albumArtLicenseInfo;
@@ -49,11 +49,11 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
         .on(albumArtInfo.id.eq(albumArtFile.albumArtInfo.id)
             .and(albumArtFile.isThumbnail.isTrue()))
         .leftJoin(albumArtLicenseInfo)
-        .on(albumArtInfo.id.eq(albumArtLicenseInfo.albumArtInfo.id)
-            .and(albumArtLicenseInfo.licenseType.eq(10)))
+        .on(albumArtInfo.id.eq(albumArtLicenseInfo.albumArtInfo.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(albumArtInfo.salesType.eq(query.getSaleType().getCode()))
+        .where(query.getSaleTypeCondition(albumArtInfo).
+            and(albumArtInfo.serviceStatus.eq(true)))
         .groupBy(albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,

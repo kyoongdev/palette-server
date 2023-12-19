@@ -1,6 +1,7 @@
 package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.LicenseType;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoCreateRequestDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
 import com.study.palette.module.users.entity.Users;
@@ -31,7 +32,7 @@ public class AlbumArtLicenseInfo {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private int licenseType;
+  private LicenseType licenseType;
 
   private int price;
 
@@ -67,7 +68,7 @@ public class AlbumArtLicenseInfo {
   public static AlbumArtLicenseInfo from(
       AlbumArtLicenseInfoCreateRequestDto albumArtLicenseCreateDto, AlbumArtInfo albumArtInfo) {
     return builder()
-        .licenseType(albumArtLicenseCreateDto.getLicenseType())
+        .licenseType(LicenseType.findLicenseType(albumArtLicenseCreateDto.getLicenseType()))
         .price(albumArtLicenseCreateDto.getPrice())
         .servedFile(albumArtLicenseCreateDto.getServedFile())
         .updateCount(albumArtLicenseCreateDto.getUpdateCount())
@@ -86,7 +87,7 @@ public class AlbumArtLicenseInfo {
       AlbumArtInfo albumArtInfo) {
     return builder()
         .id(UUID.fromString(albumArtLicenseInfoWithIdDto.getId()))
-        .licenseType(albumArtLicenseInfoWithIdDto.getLicenseType())
+        .licenseType(LicenseType.findLicenseType(albumArtLicenseInfoWithIdDto.getLicenseType()))
         .price(albumArtLicenseInfoWithIdDto.getPrice())
         .servedFile(albumArtLicenseInfoWithIdDto.getServedFile())
         .updateCount(albumArtLicenseInfoWithIdDto.getUpdateCount())

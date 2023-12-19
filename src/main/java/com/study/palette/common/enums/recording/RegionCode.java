@@ -15,13 +15,13 @@ public enum RegionCode {
 
   private int code;
 
-  public static RegionCode of(int code) {
+  public static RegionCode findRegionCode(int code) {
     for (RegionCode regionCode : RegionCode.values()) {
       if (regionCode.getCode() == code) {
         return regionCode;
       }
     }
-    return null;
+    throw new RuntimeException("code는 1 ~ 17 까지만 가능합니다.");
   }
 
   public static String[] getNames() {

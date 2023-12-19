@@ -38,7 +38,7 @@ public class RecordingService {
 
   /* Recording 필터 포함 조회*/
   @Transactional(readOnly = true)
-  public PaginationDto<RecordingResponseDto> getRecordings(FindRecordingQuery query,
+  public PaginationDto<RecordingResponseDto> getRecordings(RecordingConditions query,
       Pageable pageable) {
     Long count = recordingRepository.count();
 
@@ -49,10 +49,6 @@ public class RecordingService {
     List<RecordingResponseDto> recordings = recordingRepository.findAll(query, pageable)
         .stream().map(data -> modelMapper.map(data, RecordingResponseDto.class))
         .collect(Collectors.toList());
-
-    if (recordings.size() == 0) {
-      throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND);
-    }
 
     return PaginationDto.of(new PagingDto(pageable, count), recordings);
   }

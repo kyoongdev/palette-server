@@ -14,6 +14,7 @@ import lombok.Data;
 
 @Data
 public class MixMasteringDetailDto {
+
   @Schema(description = "아이디")
   private String id;
   @Schema(description = "서비스 제목")
@@ -29,7 +30,7 @@ public class MixMasteringDetailDto {
   @Schema(description = "작업 후 음원")
   private String afterJobMusic;
   @Schema(description = "장르")
-  private MixMasteringGenre genre;
+  private int genre;
   @Schema(description = "생성일자")
   private LocalDateTime createdAt;
   private CommonUserDto user;
@@ -53,11 +54,10 @@ public class MixMasteringDetailDto {
     this.beforeJobMusic = mixMasteringInfo.getBeforeJobMusic();
     this.afterJobMusic = mixMasteringInfo.getAfterJobMusic();
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
-    this.genre = MixMasteringGenre.findMixMasteringGenre(mixMasteringInfo.getGenre());
+    this.genre = mixMasteringInfo.getGenre().getGenre();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUsers());
-    this.reviews = mixMasteringInfo.getMixMasteringReviews().stream()
-        .map(MixMasteringReviewDto::new).toList();
+    this.reviews = mixMasteringInfo.getMixMasteringReviews().stream().map(MixMasteringReviewDto::new).toList();
     this.mixMasteringLicenseInfos = mixMasteringInfo.getMixMasteringLicenseInfos().stream().map(MixMasteringLicenseDto::new).toList();
     this.mixMasteringFile = mixMasteringInfo.getMixMasteringFiles().stream().map(MixMasteringFileDto::new).toList();
     this.contacts = mixMasteringInfo.getMixMasteringContacts().stream().map(MixMasteringContactDto::new).toList();
