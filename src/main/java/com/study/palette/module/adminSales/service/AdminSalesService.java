@@ -58,11 +58,11 @@ public class AdminSalesService {
   // 판매글 목록 전체 카운트
   @Transactional(readOnly = true)
   public AdminSalesCountResponseDto getServicesCount(AdminSalesConditions query) {
-    long albumArtCount = albumArtRepository.countByServiceStatus(query.getRecordingSort());
-    long artistCount = artistRepository.countByServiceStatus(query.getRecordingSort());
-    long mixMasteringCount = mixMasteringRepository.countByServiceStatus(query.getRecordingSort());
-    long recordingCount = recordingRepository.countByServiceStatus(query.getRecordingSort());
-    long mrBeatCount = mrBeatRepository.countByServiceStatus(query.getRecordingSort());
+    long albumArtCount = albumArtRepository.countByServiceStatus(query.isRegistrationCompleted());
+    long artistCount = artistRepository.countByServiceStatus(query.isRegistrationCompleted());
+    long mixMasteringCount = mixMasteringRepository.countByServiceStatus(query.isRegistrationCompleted());
+    long recordingCount = recordingRepository.countByServiceStatus(query.isRegistrationCompleted());
+    long mrBeatCount = mrBeatRepository.countByServiceStatus(query.isRegistrationCompleted());
 
     return AdminSalesCountResponseDto.of(
         albumArtCount + artistCount + mixMasteringCount + recordingCount + mrBeatCount,

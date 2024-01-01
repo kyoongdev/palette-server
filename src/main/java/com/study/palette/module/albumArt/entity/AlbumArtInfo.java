@@ -1,7 +1,6 @@
 package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.common.enums.ArtistSalesType;
 import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
@@ -22,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -52,8 +52,8 @@ public class AlbumArtInfo {
 
   private boolean serviceStatus;
 
-  @Column(columnDefinition = "datetime default now()")
-  @CreatedDate
+  @CreationTimestamp
+  @Column(columnDefinition = "TIMESTAMP")
   private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
