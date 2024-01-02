@@ -40,7 +40,7 @@ spring:
           naver:
             client-id: ZOqkQlU6PifHl2LTWaeW
             client-secret: XTL8xnM5pa
-            redirect-uri: https://api-dev.pa1ette.com/oauth2/code/naver
+            redirect-uri: https://api-dev.pa1ette.com/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope: name, email
             client-name: Naver
