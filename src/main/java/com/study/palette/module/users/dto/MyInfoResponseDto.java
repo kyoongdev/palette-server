@@ -30,6 +30,9 @@ public class MyInfoResponseDto {
   @Schema(description = "닉네임")
   private String nickname;
 
+  @Schema(description = "이름")
+  private String name;
+
 //  @Schema(description = "소셜 로그인한 소셜 타입 식별자(Naver, Google, Kakao)")
 //  private SocialType socialType;    //소셜 로그인한 소셜 타입 식별자(Naver, Google, Kakao)
 //  @Schema(description = "로그인한 소셜 타입 식별자(일반 로그인인 경우 null)")

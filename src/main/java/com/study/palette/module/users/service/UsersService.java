@@ -101,6 +101,7 @@ public class UsersService {
         .role(users.getRole())
         .profileImage(users.getProfileImage())
         .nickname(users.getNickname())
+        .name(users.getName())
         .build();
   }
 
