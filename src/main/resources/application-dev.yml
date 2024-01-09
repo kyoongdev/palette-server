@@ -69,3 +69,9 @@ server:
   host:
     front: http://localhost:3000
 
+#swagger Servers Info
+springdoc:
+  servers:
+    url: https://api-dev.pa1ette.com
+    description: dev server url
+
