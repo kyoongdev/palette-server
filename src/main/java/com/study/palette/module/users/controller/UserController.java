@@ -29,7 +29,6 @@ import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,9 +62,10 @@ public class UserController {
   })
   @GetMapping("me")
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
-  public ResponseEntity<MyInfoResponseDto> getMyInfo(
+  public MyInfoResponseDto getMyInfo(
       @Parameter(hidden = true) @GetUserInfo Users users) {
-    return ResponseEntity.ok(userService.getUserByIdWithDto(users));
+    
+    return userService.getUserByIdWithDto(users);
   }
 
   /**
@@ -101,8 +101,8 @@ public class UserController {
 
   @Operation(summary = "이메일 유무 확인", description = "이메일 유무 확인 api")
   @ApiResponses(
-      value= {
-          @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema =  @Schema(implementation = CheckEmailExistsDto.class)))
+      value = {
+          @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CheckEmailExistsDto.class)))
       }
   )
   @PostMapping("check-email")

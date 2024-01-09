@@ -1,7 +1,9 @@
 package com.study.palette.module.socialLogin;
 
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
   /* 카카오는 유저 정보가 kakao_account.profile로 두번 감싸져 있는 구조라 get을 2번 사용 후 원하는 정보의 key값을 꺼내서 사용해야한다.
@@ -50,10 +52,13 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
   public String getEmail() {
 
     Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+    log.info("account : " +account);
 
-    if (account == null) {
+
+    if (account == null || account.get("email") == null) {
       return "palette@palette.com";
     }
+
 
     String email = account.get("email").toString();
 

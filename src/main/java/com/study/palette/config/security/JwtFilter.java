@@ -30,7 +30,8 @@ public class JwtFilter extends OncePerRequestFilter {
       if (token != null) {
         Authentication auth = jwtTokenProvider.getAuthentication(
             jwtTokenProvider.validateToken(token).getSubject());
-
+        log.info("token : " + token);
+        log.info("auth : " + auth);
         SecurityContextHolder.getContext().setAuthentication(auth); // 정상 토큰이면 SecurityContext에 저장
       }
 

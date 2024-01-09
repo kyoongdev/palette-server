@@ -17,11 +17,9 @@ import lombok.Setter;
 public class MyInfoResponseDto {
 
   @Schema(description = "유저 ID")
-  @JsonIgnore
   private String id;
 
   @Schema(description = "유저 권한")
-  @JsonIgnore
   private Role role;
 
   @Schema(description = "프로필 이미지")
