@@ -2,6 +2,8 @@ package com.study.palette.module.users.controller;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.users.annotation.GetUserInfo;
+import com.study.palette.module.users.dto.CheckEmailExistsDto;
+import com.study.palette.module.users.dto.CheckEmailExistsRequestDto;
 import com.study.palette.module.users.dto.FindUserQuery;
 import com.study.palette.module.users.dto.MyInfoResponseDto;
 import com.study.palette.module.users.dto.UserChangePasswordDto;
@@ -9,6 +11,7 @@ import com.study.palette.module.users.dto.UserCreateRequestDto;
 import com.study.palette.module.users.dto.UserEmailDto;
 import com.study.palette.module.users.dto.UserFindEmailDto;
 import com.study.palette.module.users.dto.UserFindPasswordDto;
+import com.study.palette.module.users.dto.UserFindPasswordResultDTO;
 import com.study.palette.module.users.dto.UserProfileDto;
 import com.study.palette.module.users.dto.UserUpdateDto;
 import com.study.palette.module.users.entity.Users;
@@ -90,9 +93,24 @@ public class UserController {
   })
   @PostMapping("find-password")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public UserFindPasswordDto findPassword(
+  public UserFindPasswordResultDTO findPassword(
       @Valid @RequestBody UserFindPasswordDto userFindPasswordDto) {
     return userService.findPassword(userFindPasswordDto.getEmail());
+  }
+
+
+  @Operation(summary = "이메일 유무 확인", description = "이메일 유무 확인 api")
+  @ApiResponses(
+      value= {
+          @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema =  @Schema(implementation = CheckEmailExistsDto.class)))
+      }
+  )
+  @PostMapping("check-email")
+  @ResponseStatus(HttpStatus.OK
+  )
+  public CheckEmailExistsDto checkEmail(@Valid @RequestBody CheckEmailExistsRequestDto body) {
+    return userService.checkEmail(body);
+
   }
 
 
