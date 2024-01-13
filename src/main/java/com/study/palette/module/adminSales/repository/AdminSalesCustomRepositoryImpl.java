@@ -1,121 +1,108 @@
 package com.study.palette.module.adminSales.repository;
 
-import com.querydsl.core.Tuple;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.querydsl.sql.MySQLTemplates;
-import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.SQLQueryFactory;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.sql.JPASQLQuery;
+import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLTemplates;
 import com.study.palette.module.adminSales.dto.AdminSalesResponseDto;
 import com.study.palette.module.adminSales.service.AdminSalesConditions;
 import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
+import com.study.palette.module.artist.entity.QArtistInfo;
+import com.study.palette.module.mixMastering.entity.QMixMasteringInfo;
+import com.study.palette.module.mrBeat.entity.QMrBeatInfo;
+import com.study.palette.module.recording.entity.QRecordingInfo;
+import java.time.LocalDateTime;
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepository {
-  private final SQLQueryFactory queryFactory;
-  private final SQLTemplates templates = MySQLTemplates.builder().build();
+
+  private final SQLTemplates sqlTemplates;
+  private EntityManager entityManager;
 
   @Autowired
-  public AdminSalesCustomRepositoryImpl(SQLQueryFactory queryFactory) {
-    this.queryFactory = queryFactory;
+  public AdminSalesCustomRepositoryImpl(SQLTemplates sqlTemplates, EntityManager entityManager) {
+    this.sqlTemplates = sqlTemplates;
+    this.entityManager = entityManager;
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<AdminSalesResponseDto> findAllByServiceStatusAndCreatedAtDesc(AdminSalesConditions query, Pageable pageable) {
+    JPASQLQuery<AdminSalesResponseDto> sqlQuery = new JPASQLQuery<>(entityManager, sqlTemplates);
+    JPASQLQuery<AdminSalesResponseDto> sqlQueryUnion = new JPASQLQuery<>(entityManager, sqlTemplates);
 
-//    List<AdminSalesResponseDto> result = new ArrayList<>();
-//    boolean isRegistrationCompleted = query.isRegistrationCompleted();
-//    QArtistInfo artistInfo = QArtistInfo.artistInfo;
-//    QMixMasteringInfo mixMasteringInfo = QMixMasteringInfo.mixMasteringInfo;
-//    QRecordingInfo recordingInfo = QRecordingInfo.recordingInfo;
-//    QRecordingInfo mrBeatInfo = QRecordingInfo.recordingInfo;
+    QAlbumArtInfo albumArtInfo = new QAlbumArtInfo("AlbumArtInfo");
+    QRecordingInfo recordingInfo = new QRecordingInfo("RecordingInfo");
+    QArtistInfo artistInfo = new QArtistInfo("ArtistInfo");
+    QMrBeatInfo mrBeatInfo = new QMrBeatInfo("MrBeatInfo");
+    QMixMasteringInfo mixMasteringInfo = new QMixMasteringInfo("MixMasteringInfo");
 
-    // 1-1. 앨범아트
-//    result.addAll(queryFactory
-//        .select(Projections.constructor(AdminSalesResponseDto.class,
-//                albumArtInfo.serviceName,
-//                Expressions.stringTemplate("1 as serviceType"),
-//                albumArtInfo.createdAt
+    //union all 쿼리
+    List<AdminSalesResponseDto> result = sqlQuery
+        .select(
+            Projections.fields(AdminSalesResponseDto.class,
+                Expressions.stringTemplate("allServices.serviceName").as("serviceName"),
+                Expressions.numberTemplate(Integer.class, "allServices.serviceType").as("serviceType"),
+                Expressions.asDateTime("allServices.createdAt").as("createdAt")
+            )
+        )
+        .from(
+            sqlQueryUnion.unionAll(
+                SQLExpressions
+                    .select(
+                        albumArtInfo.serviceName.as("serviceName"),
+                        Expressions.numberTemplate(Integer.class, "1").as("serviceType"),
+                        albumArtInfo.createdAt.as("createdAt")
+                    )
+                    .from(albumArtInfo)
+                    .where(albumArtInfo.serviceStatus.eq(query.isRegistrationCompleted())),
+                SQLExpressions
+                    .select(
+                        recordingInfo.serviceName.as("serviceName"),
+                        Expressions.numberTemplate(Integer.class, "2").as("serviceType"),
+                        recordingInfo.createdAt.as("createdAt")
+                    )
+                    .from(recordingInfo)
+                    .where(recordingInfo.serviceStatus.eq(query.isRegistrationCompleted()))
+//        SQLExpressions
+//            .select(
+//                    artistInfo.serviceName,
+//                    Expressions.numberTemplate(Integer.class, "3 as serviceType"),
+//                    artistInfo.createdAt
 //            )
-//        )
-//        .from(albumArtInfo)
-//        .where(albumArtInfo.serviceStatus.eq(isRegistrationCompleted))
-//        .offset(pageable.getOffset())
-//        .limit(pageable.getPageSize())
-//        .orderBy(albumArtInfo.createdAt.desc())
-//        .fetch());
+//            .from(artistInfo)
+//            .where(artistInfo.serviceStatus.eq(query.isRegistrationCompleted())),
+//        SQLExpressions
+//            .select(
+//                    mrBeatInfo.serviceName,
+//                    Expressions.numberTemplate(Integer.class, "5 as serviceType"),
+//                    mrBeatInfo.createdAt
+//            )
+//            .from(mrBeatInfo)
+//            .where(mrBeatInfo.serviceStatus.eq(query.isRegistrationCompleted()))
+//                SQLExpressions
+//                    .select(
+//                        mixMasteringInfo.serviceName.as("serviceName"),
+//                        Expressions.numberTemplate(Integer.class, "4").as("serviceType"),
+//                        mixMasteringInfo.createdAt.as("createdAt")
+//                    )
+//                    .from(mixMasteringInfo)
+//                    .where(mixMasteringInfo.serviceStatus.eq(query.isRegistrationCompleted()))
+            ).as("allServices")
+        )
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
 
-    // 1-2. 아티스트
-//    result.addAll(queryFactory
-//        .select(Projections.constructor(AdminSalesResponseDto.class,
-//            artistInfo.serviceName,
-//            Expressions.stringTemplate("2 as serviceType"),
-//            artistInfo.createdAt,
-//            //TODO 추후 공휴일까지 포함하여 처리
-//            addBusinessDays(artistInfo.createdAt)))
-//        .from(artistInfo)
-//        .where(artistInfo.serviceStatus.eq(query.isRegistrationCompleted()))
-//        .offset(pageable.getOffset())
-//        .limit(pageable.getPageSize())
-//        .orderBy(artistInfo.createdAt.desc())
-//        .fetch());
+    System.out.println(result);
 
-    // 1-3. 믹스마스터링
-//    result.addAll(queryFactory
-//        .select(Projections.constructor(AdminSalesResponseDto.class,
-//            mixMasteringInfo.serviceName,
-//            Expressions.stringTemplate("3 as serviceType"),
-//            mixMasteringInfo.createdAt,
-//            //TODO 추후 공휴일까지 포함하여 처리
-//            addBusinessDays(mixMasteringInfo.createdAt)))
-//        .from(mixMasteringInfo)
-//        .where(mixMasteringInfo.serviceStatus.eq(query.isRegistrationCompleted()))
-//        .offset(pageable.getOffset())
-//        .limit(pageable.getPageSize())
-//        .orderBy(mixMasteringInfo.createdAt.desc())
-//        .fetch());
-
-    // 1-4. 녹음
-//    result.addAll(queryFactory
-//        .select(Projections.constructor(AdminSalesResponseDto.class,
-//            recordingInfo.serviceName,
-//            Expressions.stringTemplate("4 as serviceType"),
-//            recordingInfo.createdAt.coalesce(LocalDateTime.now()),
-//            //TODO 추후 공휴일까지 포함하여 처리
-//            addBusinessDays(recordingInfo.createdAt)))
-//        .from(recordingInfo)
-//        .where(recordingInfo.serviceStatus.eq(query.isRegistrationCompleted()))
-//        .offset(pageable.getOffset())
-//        .limit(pageable.getPageSize())
-//        .orderBy(recordingInfo.createdAt.desc())
-//        .fetch());
-
-    // 1-5. MR비트
-//    result.addAll(queryFactory
-//        .select(Projections.constructor(AdminSalesResponseDto.class,
-//            mrBeatInfo.serviceName,
-//            Expressions.stringTemplate("5 as serviceType,"),
-//            mrBeatInfo.createdAt,
-//            //TODO 추후 공휴일까지 포함하여 처리
-//            addBusinessDays(mrBeatInfo.createdAt)))
-//        .from(mrBeatInfo)
-//        .where(mrBeatInfo.serviceStatus.eq(query.isRegistrationCompleted()))
-//        .offset(pageable.getOffset())
-//        .limit(pageable.getPageSize())
-//        .orderBy(mrBeatInfo.createdAt.desc())
-//        .fetch());
-
-    // 2. 조회결과를 날짜순으로 정렬후 10개 빼고 삭제
-//    result.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
-//    if (result.size() > 10) {
-//      result.subList(10, result.size()).clear();
-//    }
-//
-//    return result;
+    return result;
   }
 }
