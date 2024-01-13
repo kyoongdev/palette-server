@@ -74,6 +74,9 @@ dependencies {
 
 // query dsl=============================================================
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-sql:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-sql-spring:${queryDslVersion}"
+
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
     annotationProcessor(
             "javax.persistence:javax.persistence-api",
