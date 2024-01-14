@@ -1,9 +1,9 @@
 package com.study.palette.module.adminSales.controller;
 
 import com.study.palette.common.dto.PaginationDto;
-import com.study.palette.module.adminSales.dto.FindAdminSalesQuery;
 import com.study.palette.module.adminSales.dto.AdminSalesCountResponseDto;
 import com.study.palette.module.adminSales.dto.AdminSalesResponseDto;
+import com.study.palette.module.adminSales.dto.FindAdminSalesQuery;
 import com.study.palette.module.adminSales.service.AdminSalesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -51,8 +51,8 @@ public class AdminSalesController {
   })
   @GetMapping("/count")
   public AdminSalesCountResponseDto serviceInfosCount(
-      @ParameterObject FindAdminSalesQuery query) {
-    return adminSalesService.getServicesCount(query);
+      boolean isRegistrationCompleted) {
+    return adminSalesService.getServicesCount(isRegistrationCompleted);
   }
 
 }

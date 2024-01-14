@@ -12,7 +12,7 @@ import com.study.palette.module.artist.entity.QArtistInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringInfo;
 import com.study.palette.module.mrBeat.entity.QMrBeatInfo;
 import com.study.palette.module.recording.entity.QRecordingInfo;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,10 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
             Projections.fields(AdminSalesResponseDto.class,
                 Expressions.stringTemplate("allServices.serviceName").as("serviceName"),
                 Expressions.numberTemplate(Integer.class, "allServices.serviceType").as("serviceType"),
-                Expressions.asDateTime("allServices.createdAt").as("createdAt")
+                // 원인은 모르지만 JPASQLQuery에서 만든 쿼리 리턴값은 TimeStamp 로 리턴되고 있음
+                // 밑에처럼 LocalDatTime 으로 명시를 해줘도 TimeStamp 로 리턴되는 매우 꼴받는 상황임 하..
+//                Expressions.dateTimeTemplate(LocalDateTime.class, "allServices.createdAt").as("createdAt")
+                Expressions.dateTimeTemplate(Timestamp.class, "allServices.createdAt").as("createdAt")
             )
         )
         .from(
@@ -60,48 +63,51 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
                         albumArtInfo.serviceName.as("serviceName"),
                         Expressions.numberTemplate(Integer.class, "1").as("serviceType"),
                         albumArtInfo.createdAt.as("createdAt")
+//                        albumArtInfo.registerDeadline.as("registerDeadline")
                     )
                     .from(albumArtInfo)
-                    .where(albumArtInfo.serviceStatus.eq(query.isRegistrationCompleted())),
+                    .where(albumArtInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
                 SQLExpressions
                     .select(
                         recordingInfo.serviceName.as("serviceName"),
                         Expressions.numberTemplate(Integer.class, "2").as("serviceType"),
                         recordingInfo.createdAt.as("createdAt")
+//                        recordingInfo.registerDeadline.as("registerDeadline")
                     )
                     .from(recordingInfo)
-                    .where(recordingInfo.serviceStatus.eq(query.isRegistrationCompleted()))
-//        SQLExpressions
-//            .select(
-//                    artistInfo.serviceName,
-//                    Expressions.numberTemplate(Integer.class, "3 as serviceType"),
-//                    artistInfo.createdAt
-//            )
-//            .from(artistInfo)
-//            .where(artistInfo.serviceStatus.eq(query.isRegistrationCompleted())),
-//        SQLExpressions
-//            .select(
-//                    mrBeatInfo.serviceName,
-//                    Expressions.numberTemplate(Integer.class, "5 as serviceType"),
-//                    mrBeatInfo.createdAt
-//            )
-//            .from(mrBeatInfo)
-//            .where(mrBeatInfo.serviceStatus.eq(query.isRegistrationCompleted()))
-//                SQLExpressions
-//                    .select(
-//                        mixMasteringInfo.serviceName.as("serviceName"),
-//                        Expressions.numberTemplate(Integer.class, "4").as("serviceType"),
-//                        mixMasteringInfo.createdAt.as("createdAt")
-//                    )
-//                    .from(mixMasteringInfo)
-//                    .where(mixMasteringInfo.serviceStatus.eq(query.isRegistrationCompleted()))
+                    .where(recordingInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
+                SQLExpressions
+                    .select(
+                        artistInfo.serviceName.as("serviceName"),
+                        Expressions.numberTemplate(Integer.class, "3").as("serviceType"),
+                        artistInfo.createdAt.as("createdAt")
+//                        artistInfo.registerDeadline.as("registerDeadline")
+                    )
+                    .from(artistInfo)
+                    .where(artistInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
+                SQLExpressions
+                    .select(
+                        mrBeatInfo.serviceName.as("serviceName"),
+                        Expressions.numberTemplate(Integer.class, "5").as("serviceType"),
+                        mrBeatInfo.createdAt.as("createdAt")
+//                        mrBeatInfo.registerDeadline.as("registerDeadline")
+                    )
+                    .from(mrBeatInfo)
+                    .where(mrBeatInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
+                SQLExpressions
+                    .select(
+                        mixMasteringInfo.serviceName.as("serviceName"),
+                        Expressions.numberTemplate(Integer.class, "4").as("serviceType"),
+                        mixMasteringInfo.createdAt.as("createdAt")
+//                        mixMasteringInfo.registerDeadline.as("registerDeadline")
+                    )
+                    .from(mixMasteringInfo)
+                    .where(mixMasteringInfo.serviceStatus.eq(query.getIsRegistrationCompleted()))
             ).as("allServices")
         )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .fetch();
-
-    System.out.println(result);
 
     return result;
   }

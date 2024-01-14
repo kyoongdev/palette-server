@@ -42,7 +42,7 @@ public class AdminSalesService {
   @Transactional(readOnly = true)
   public PaginationDto<AdminSalesResponseDto> getServices(AdminSalesConditions query,
       Pageable pageable) {
-    long count = getServicesCount(query).getAllCount();
+    long count = getServicesCount(query.getIsRegistrationCompleted()).getAllCount();
 
     if (count == 0) {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
@@ -57,12 +57,12 @@ public class AdminSalesService {
 
   // 판매글 목록 전체 카운트
   @Transactional(readOnly = true)
-  public AdminSalesCountResponseDto getServicesCount(AdminSalesConditions query) {
-    long albumArtCount = albumArtRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long artistCount = artistRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long mixMasteringCount = mixMasteringRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long recordingCount = recordingRepository.countByServiceStatus(query.isRegistrationCompleted());
-    long mrBeatCount = mrBeatRepository.countByServiceStatus(query.isRegistrationCompleted());
+  public AdminSalesCountResponseDto getServicesCount(boolean isRegistrationCompleted) {
+    long albumArtCount = albumArtRepository.countByServiceStatus(isRegistrationCompleted);
+    long artistCount = artistRepository.countByServiceStatus(isRegistrationCompleted);
+    long mixMasteringCount = mixMasteringRepository.countByServiceStatus(isRegistrationCompleted);
+    long recordingCount = recordingRepository.countByServiceStatus(isRegistrationCompleted);
+    long mrBeatCount = mrBeatRepository.countByServiceStatus(isRegistrationCompleted);
 
     return AdminSalesCountResponseDto.of(
         albumArtCount + artistCount + mixMasteringCount + recordingCount + mrBeatCount,
