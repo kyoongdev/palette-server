@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "admin service", description = "관리자 서비스 관리")
+@Tag(name = "[관리자] 서비스 관리", description = "관리자 서비스 관리")
 @RequestMapping("/admin/service")
 @RestController
 public class AdminSalesController {
