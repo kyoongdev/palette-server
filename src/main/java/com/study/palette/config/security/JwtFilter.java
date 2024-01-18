@@ -1,5 +1,7 @@
 package com.study.palette.config.security;
 
+import com.study.palette.common.exception.JwtErrorCode;
+import com.study.palette.common.exception.JwtTokenException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -26,19 +28,15 @@ public class JwtFilter extends OncePerRequestFilter {
       FilterChain filterChain
   ) throws ServletException, IOException {
     String token = jwtTokenProvider.resolveToken(request);
-    try {
-      if (token != null) {
-        Authentication auth = jwtTokenProvider.getAuthentication(
-            jwtTokenProvider.validateToken(token).getSubject());
-        log.info("token : " + token);
-        log.info("auth : " + auth);
-        SecurityContextHolder.getContext().setAuthentication(auth); // 정상 토큰이면 SecurityContext에 저장
-      }
-
-
-    } catch (Exception e) {
-      throw new RuntimeException(); // TODO 추후 예외 처리
+    if (token == null) {
+      throw new JwtTokenException(JwtErrorCode.INVALID_JWT_EXCEPTION);
     }
+
+    Authentication auth = jwtTokenProvider.getAuthentication(
+        jwtTokenProvider.validateToken(token).getSubject());
+    log.info("token : " + token);
+    log.info("auth : " + auth);
+    SecurityContextHolder.getContext().setAuthentication(auth); // 정상 토큰이면 SecurityContext에 저장
 
     filterChain.doFilter(request, response);
   }
