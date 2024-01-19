@@ -112,11 +112,10 @@ public class JwtTokenProvider {
    */
   public String resolveToken(HttpServletRequest req) throws JwtException {
     String bearerToken = req.getHeader("Authorization");
-    if (bearerToken == null) {
-      throw new JwtTokenException(JwtErrorCode.ANONYMOUS_JWT_TOKEN_EXCEPTION);
+    if (bearerToken != null) {
+      return bearerToken.substring(7);
     }
-
-    return bearerToken.substring(7);
+    return null;
   }
 
   /**
