@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.study.palette.common.dto.PageDto;
+import com.study.palette.common.enums.recording.CityCode;
 import com.study.palette.common.enums.recording.RecordingSort;
+import com.study.palette.common.enums.recording.RegionCode;
 import com.study.palette.module.recording.entity.QRecordingInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
@@ -17,6 +18,10 @@ public abstract class RecordingConditions extends PageDto {
 
   @JsonIgnore
   public int recordingSort;
+  @JsonIgnore
+  public int regionCode;
+  @JsonIgnore
+  public int cityCode;
 
   public BooleanExpression getRecordingSort(QRecordingInfo recordingInfo) {
     if (RecordingSort.findRecordingSort(this.recordingSort) == RecordingSort.ENGINEERING) {
@@ -28,15 +33,31 @@ public abstract class RecordingConditions extends PageDto {
     }
   }
 
-  public RecordingConditions(int recordingSort) {
+  public RegionCode getRegionCode(QRecordingInfo recordingInfo) {
+    return RegionCode.findRegionCode(this.regionCode);
+  }
+
+  public CityCode getCityCode(QRecordingInfo recordingInfo) {
+    return CityCode.findCityCode(this.regionCode, this.cityCode);
+  }
+
+  public RecordingConditions(int recordingSort, int regionCode, int cityCode) {
     this.recordingSort = recordingSort;
-    System.out.println("RecordingConditions 생성자 호출");
+    this.regionCode = regionCode;
+    this.cityCode = cityCode;
   }
 
   //Setter
   public void setRecordingSort(int recordingSort) {
     this.recordingSort = recordingSort;
-    System.out.println("RecordingConditions setRecordingSort 호출");
+  }
+
+  public void setRegionCode(int regionCode) {
+    this.regionCode = regionCode;
+  }
+
+  public void setCityCode(int cityCode) {
+    this.cityCode = cityCode;
   }
 
 }

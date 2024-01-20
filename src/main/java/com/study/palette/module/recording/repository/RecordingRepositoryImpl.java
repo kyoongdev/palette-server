@@ -3,7 +3,6 @@ package com.study.palette.module.recording.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.palette.module.recording.dto.info.RecordingResponseDto;
-import com.study.palette.module.recording.dto.query.FindRecordingQuery;
 import com.study.palette.module.recording.entity.QRecordingFile;
 import com.study.palette.module.recording.entity.QRecordingInfo;
 import com.study.palette.module.recording.entity.QRecordingLicenseInfo;
@@ -49,7 +48,11 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
             .and(recordingLicenseInfo.licenseType.eq(10)))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(query.getRecordingSort(recordingInfo))
+        .where(
+            query.getRecordingSort(recordingInfo)
+                .and(recordingInfo.studioRegionCode.eq(query.getRegionCode(recordingInfo)))
+                .and(recordingInfo.studioCityCode.eq(query.getCityCode(recordingInfo)))
+        )
         .groupBy(recordingInfo.id,
             recordingInfo.serviceName,
             recordingInfo.salesType,
