@@ -4,6 +4,7 @@ package com.study.palette.module.musician.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -52,7 +53,8 @@ public class UsersMusician {
 
     private boolean isAuthorized;
 
-    private LocalDate cratedAt;
+    @Column(columnDefinition = "datetime default now()")
+    private LocalDateTime createdAt;
 
     @OneToOne
     @JsonIgnore
