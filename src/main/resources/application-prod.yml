@@ -68,3 +68,10 @@ s3:
 server:
   host:
     front: http://localhost:3000
+
+#swagger Servers Info
+springdoc:
+  servers:
+    url: https://api.pa1ette.com
+    description: prod server url
+

@@ -1,6 +1,8 @@
 package com.study.palette.config.security;
 
 import com.study.palette.common.dto.TokenDto;
+import com.study.palette.common.exception.JwtErrorCode;
+import com.study.palette.common.exception.JwtTokenException;
 import com.study.palette.module.users.entity.RefreshToken;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.RefreshTokenRepository;
@@ -54,9 +56,7 @@ public class JwtTokenProvider {
   @Transactional
   public TokenDto createToken(Authentication authentication) {
     Users users = usersRepository.findById(UUID.fromString(authentication.getName()))
-        .orElseThrow(() -> {
-          return new RuntimeException("로그인에러");//TODO 추후 에러처리
-        });
+        .orElseThrow(() -> new JwtTokenException(JwtErrorCode.INVALID_JWT_EXCEPTION));
 
     Claims claims = Jwts.claims().setSubject(users.getId().toString());
     Date now = new Date();
@@ -78,7 +78,7 @@ public class JwtTokenProvider {
         .signWith(SignatureAlgorithm.HS256, secretKey)
         .compact();
 
-    //TODO refresh token 저장 전에 기존 refresh token 삭제
+    //refresh token 저장 전에 기존 refresh token 삭제
     refreshTokenRepository.deleteByUsersId(UUID.fromString(authentication.getName()));
 
     //refresh token 저장
@@ -101,20 +101,18 @@ public class JwtTokenProvider {
     try {
       return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     } catch (ExpiredJwtException e) {
-//            log.error(EXPIRED_JWT.getMessage());
-      throw new RuntimeException();// TODO 추후 예외 처리
+      throw new JwtTokenException(JwtErrorCode.EXPIRED_JWT_EXCEPTION);
     } catch (JwtException e) {
-//            log.error(INVALID_JWT.getMessage());
-      throw new RuntimeException();// TODO 추후 예외 처리
+      throw new JwtTokenException(JwtErrorCode.INVALID_JWT_EXCEPTION);
     }
   }
 
   /**
    * http 헤더로부터 bearer 토큰을 가져옴.
    */
-  public String resolveToken(HttpServletRequest req) {
+  public String resolveToken(HttpServletRequest req) throws JwtException {
     String bearerToken = req.getHeader("Authorization");
-    if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+    if (bearerToken != null) {
       return bearerToken.substring(7);
     }
     return null;
@@ -127,10 +125,10 @@ public class JwtTokenProvider {
     String accessTokenSubject = validateToken(tokenDto.getAccessToken()).getSubject();
     String refreshTokenSubject = validateToken(tokenDto.getRefreshToken()).getSubject();
 
-    if (accessTokenSubject.equals(refreshTokenSubject)) {
-      return refreshTokenSubject;
+    if (!accessTokenSubject.equals(refreshTokenSubject)) {
+      throw new JwtTokenException(JwtErrorCode.INVALID_JWT_EXCEPTION);
     }
-    return null;
+    return refreshTokenSubject;
   }
 
   /**
