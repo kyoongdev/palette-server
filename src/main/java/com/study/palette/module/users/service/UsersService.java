@@ -5,11 +5,14 @@ import com.study.palette.common.PaletteUtils;
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
 import com.study.palette.common.exception.CustomException;
+import com.study.palette.module.users.dto.CheckEmailExistsDto;
+import com.study.palette.module.users.dto.CheckEmailExistsRequestDto;
 import com.study.palette.module.users.dto.MyInfoResponseDto;
 import com.study.palette.module.users.dto.UserChangePasswordDto;
 import com.study.palette.module.users.dto.UserCreateRequestDto;
 import com.study.palette.module.users.dto.UserEmailDto;
 import com.study.palette.module.users.dto.UserFindPasswordDto;
+import com.study.palette.module.users.dto.UserFindPasswordResultDTO;
 import com.study.palette.module.users.dto.UserProfileDto;
 import com.study.palette.module.users.dto.UserUpdateDto;
 import com.study.palette.module.users.entity.Role;
@@ -98,6 +101,7 @@ public class UsersService {
         .role(users.getRole())
         .profileImage(users.getProfileImage())
         .nickname(users.getNickname())
+        .name(users.getName())
         .build();
   }
 
@@ -146,16 +150,24 @@ public class UsersService {
 
   //비밀번호 찾기
   @Transactional
-  public UserFindPasswordDto findPassword(String email) {
+  public UserFindPasswordResultDTO findPassword(String email) {
     Users user = usersRepository.findByEmail(email)
         .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
-    user.setPassword(passwordEncoder.encode(generatePassword()));
+
+    String newPassword= generatePassword();
+    user.setPassword(passwordEncoder.encode(newPassword));
     usersRepository.save(user);
 
-    //TODO 존재하는 이메일일시 임시 비밀번호 발송
 
-    return new UserFindPasswordDto(user.getEmail());
+    return new UserFindPasswordResultDTO(newPassword);
+  }
+
+  @Transactional
+  public CheckEmailExistsDto checkEmail(CheckEmailExistsRequestDto data){
+    Optional<Users> user = usersRepository.findByEmail(data.getEmail());
+
+    return new CheckEmailExistsDto(user.isPresent());
   }
 
   //비밀번호 변경 = 현재비밀번호 입력하여 같은지 확인후 변경처리 한다

@@ -30,8 +30,11 @@ public class ArtistResponseDto {
   @Schema(description = "요청수", example = "10000")
   private long requestCount;
 
+  @Schema(description = "프로필 이미지", example = "프로필 이미지")
+  private String profileImage;
+
   public ArtistResponseDto(String id, String serviceName, int salesType, String userName,
-      String fileUrl, int price, long requestCount) {
+      String fileUrl, int price, long requestCount, String profileImage) {
     this.id = id;
     this.serviceName = serviceName;
     this.salesType = salesType;
@@ -39,6 +42,7 @@ public class ArtistResponseDto {
     this.fileUrl = fileUrl;
     this.price = price;
     this.requestCount = requestCount;
+    this.profileImage = profileImage;
 
   }
 

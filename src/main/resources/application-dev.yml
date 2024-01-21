@@ -4,14 +4,14 @@ spring:
       on-profile: "devdb"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://pallete-dev-db.c9wbuwje8wxh.ap-northeast-2.rds.amazonaws.com:3306/palette?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://pallete-dev-db.c9wbuwje8wxh.ap-northeast-2.rds.amazonaws.com:3306/pallete?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: pallete
     password: VmCqzlvpklnDhRMLxrGp
   jpa:
     database: mysql
 #    show-sql: 'true'
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -40,7 +40,7 @@ spring:
           naver:
             client-id: ZOqkQlU6PifHl2LTWaeW
             client-secret: XTL8xnM5pa
-            redirect-uri: https://api-dev.pa1ette.com/oauth2/code/naver
+            redirect-uri: https://api-dev.pa1ette.com/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope: name, email
             client-name: Naver
@@ -68,4 +68,10 @@ s3:
 server:
   host:
     front: http://localhost:3000
+
+#swagger Servers Info
+springdoc:
+  servers:
+    url: https://api-dev.pa1ette.com
+    description: dev server url
 
