@@ -2,14 +2,14 @@ package com.study.palette.module.mixMastering.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.study.palette.module.mixMastering.dto.MixMasteringsDto;
-import com.study.palette.module.mixMastering.dto.query.FindMixMasteringQuery;
+import com.study.palette.module.mixMastering.dto.MixMasteringsResponseDto;
 import com.study.palette.module.mixMastering.entity.QMixMasteringFile;
 import com.study.palette.module.mixMastering.entity.QMixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.entity.QMixMasteringRequest;
 import com.study.palette.module.mixMastering.service.MixMasteringConditions;
 import com.study.palette.module.musician.entity.QUsersMusician;
+import com.study.palette.module.users.entity.QUsersFile;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,25 +29,26 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
   }
 
   @Override
-  public Page<MixMasteringsDto> findAll(MixMasteringConditions query, Pageable pageable) {
+  public Page<MixMasteringsResponseDto> findAll(MixMasteringConditions query, Pageable pageable) {
     QMixMasteringInfo mixMasteringInfo = QMixMasteringInfo.mixMasteringInfo;
     QMixMasteringFile mixMasteringFile = QMixMasteringFile.mixMasteringFile;
     QMixMasteringLicenseInfo mixMasteringLicenseInfo = QMixMasteringLicenseInfo.mixMasteringLicenseInfo;
     QUsersMusician userMusician = QUsersMusician.usersMusician;
     QMixMasteringRequest mixMasteringRequest = QMixMasteringRequest.mixMasteringRequest;
 
+    QUsersFile usersFile = QUsersFile.usersFile;
     /*
-    * 네임
-    * 아티스트
-    * 장르
-    * 작업전파일
-    * 작업후파일
-    * 가격
-    * 썸네일
-    * */
+     * 네임
+     * 아티스트
+     * 장르
+     * 작업전파일
+     * 작업후파일
+     * 가격
+     * 썸네일
+     * */
 
-    List<MixMasteringsDto> result = queryFactory
-        .select(Projections.constructor(MixMasteringsDto.class,
+    List<MixMasteringsResponseDto> result = queryFactory
+        .select(Projections.constructor(MixMasteringsResponseDto.class,
             mixMasteringInfo.id,
             mixMasteringInfo.serviceName,
             userMusician.name.as("artistName"),
@@ -56,7 +57,8 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
             mixMasteringInfo.afterJobMusic.as("afterJobMusic"),
             mixMasteringLicenseInfo.price.as("price"),
             mixMasteringFile.url.as("thumbnailUrl"),
-            mixMasteringRequest.id.count().as("requestCount")))
+            mixMasteringRequest.id.count().as("requestCount"),
+            usersFile.uploadFilePath.as("profileUrl")))
         .from(mixMasteringInfo)
         .leftJoin(mixMasteringRequest)
         .on(mixMasteringInfo.id.eq(mixMasteringRequest.mixMasteringInfo.id))
@@ -68,6 +70,9 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
             .and(mixMasteringLicenseInfo.licenseType.eq(10)))
         .leftJoin(userMusician)
         .on(mixMasteringInfo.users.id.eq(userMusician.users.id))
+        .leftJoin(usersFile)
+        .on(mixMasteringInfo.users.id.eq(usersFile.users.id)
+            .and(usersFile.isProfile.isTrue()))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .where(query.getGenreCondition(mixMasteringInfo))
@@ -78,7 +83,8 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
             mixMasteringInfo.beforeJobMusic,
             mixMasteringInfo.afterJobMusic,
             mixMasteringFile.url,
-            mixMasteringLicenseInfo.price)
+            mixMasteringLicenseInfo.price,
+            usersFile.uploadFilePath)
         .orderBy(query.getSort())
         .fetch();
 
