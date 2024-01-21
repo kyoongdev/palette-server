@@ -46,7 +46,7 @@ public class AdminSalesController {
   //판매글 목록 카운트 (parameter 에 따라 등록/신청 또는 등록된글로 나뉩니다)
   @Operation(summary = "판매글 목록 카운트 조회", description = "판매글 목록의 카운트를 조회합니다 (parameter 에 따라 등록/신청 또는 등록된글로 나뉩니다)")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AdminSalesCountResponseDto.class)))),
+      @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("/count")

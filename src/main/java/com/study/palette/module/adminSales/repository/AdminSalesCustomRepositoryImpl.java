@@ -52,7 +52,7 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
                 Expressions.numberTemplate(Integer.class, "allServices.serviceType").as("serviceType"),
                 // 원인은 모르지만 JPASQLQuery에서 만든 쿼리 리턴값은 TimeStamp 로 리턴되고 있음
                 // 밑에처럼 LocalDatTime 으로 명시를 해줘도 TimeStamp 로 리턴되는 매우 꼴받는 상황임 하..
-//                Expressions.dateTimeTemplate(LocalDateTime.class, "allServices.createdAt").as("createdAt")
+//                Expressions.dateTimeTemplate(LocalDateTime.class, "allServices.createdAt").as("createdAt") TODO 컬럼 추가후 반영
                 Expressions.dateTimeTemplate(Timestamp.class, "allServices.createdAt").as("createdAt")
             )
         )
