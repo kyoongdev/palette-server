@@ -49,7 +49,7 @@ $ sh ./docker/start-docker.sh
 
 ## Swagger 주소
 (임시 LocalHost:8080 포트 swagger url)
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/swagger-ui
 ## Git Flow
 
 - main : 메인 브랜치
