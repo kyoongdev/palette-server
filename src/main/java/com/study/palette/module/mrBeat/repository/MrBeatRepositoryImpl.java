@@ -13,6 +13,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -45,7 +46,10 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
             mrBeatFile.url.as("fileUrl"),
             mrBeatMusicFile.url.as("musicFileUrl"),
             mrBeatLicenseInfo.price.as("price"),
-            mrBeatRequest.id.count().as("requestCount")))
+            mrBeatRequest.id.count().as("requestCount"),
+            mrBeatInfo.users.name,
+            mrBeatInfo.users.profileImage
+            ))
         .from(mrBeatInfo)
         .leftJoin(mrBeatRequest)
         .on(mrBeatInfo.id.eq(mrBeatRequest.mrBeatInfo.id))
@@ -54,8 +58,7 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
         .leftJoin(mrBeatMusicFile)
         .on(mrBeatInfo.id.eq(mrBeatMusicFile.mrBeatInfo.id))
         .leftJoin(mrBeatLicenseInfo)
-        .on(mrBeatInfo.id.eq(mrBeatLicenseInfo.mrBeatInfo.id)
-            .and(mrBeatLicenseInfo.licenseType.eq(10)))
+        .on(mrBeatInfo.id.eq(mrBeatLicenseInfo.mrBeatInfo.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .where(mrBeatInfo.salesType.eq(query.getSalesType().getCode())
@@ -67,10 +70,12 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
             mrBeatInfo.users.name,
             mrBeatFile.url,
             mrBeatMusicFile.url,
-            mrBeatLicenseInfo.price)
+            mrBeatLicenseInfo.price,
+            mrBeatInfo.users.name,
+            mrBeatInfo.users.profileImage)
         .orderBy(query.getSort())
         .fetch();
 
-    return null;
+    return new PageImpl<>(result, pageable, result.size());
   }
 }

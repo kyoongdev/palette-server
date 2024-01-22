@@ -1,5 +1,6 @@
 package com.study.palette.module.mrBeat.dto;
 
+import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,14 @@ public class MrBeatResponseDto {
   @Schema(description = "요청수", example = "10000")
   private long requestCount;
 
+  @Schema(description = "유저 이름")
+  private String usersName;
+
+  @Schema(description = "유저 정보")
+  private String profileImage;
+
   public MrBeatResponseDto(String id, String serviceName, int genre, int mood, int salesType,
-      String fileUrl, String musicFileUrl, int price, long requestCount) {
+      String fileUrl, String musicFileUrl, int price, long requestCount, String usersName, String profileImage) {
     this.id = id;
     this.serviceName = serviceName;
     this.genre = genre;
@@ -38,6 +45,8 @@ public class MrBeatResponseDto {
     this.musicFileUrl = musicFileUrl;
     this.price = price;
     this.requestCount = requestCount;
+    this.usersName = usersName;
+    this.profileImage = profileImage;
 
   }
 

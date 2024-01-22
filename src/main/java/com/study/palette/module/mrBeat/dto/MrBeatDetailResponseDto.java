@@ -4,6 +4,7 @@ import com.study.palette.module.mrBeat.entity.MrBeatContact;
 import com.study.palette.module.mrBeat.entity.MrBeatFile;
 import com.study.palette.module.mrBeat.entity.MrBeatInfo;
 import com.study.palette.module.mrBeat.entity.MrBeatLicenseInfo;
+import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
@@ -31,6 +32,8 @@ public class MrBeatDetailResponseDto {
 
   private List<MrBeatContact> mrBeatContact;
 
+  private CommonUserDto users;
+
   public static MrBeatDetailResponseDto toEntity(MrBeatInfo mrBeatInfo) {
     return MrBeatDetailResponseDto.builder()
         .id(mrBeatInfo.getId())
@@ -40,6 +43,7 @@ public class MrBeatDetailResponseDto {
         .mrBeatFile(mrBeatInfo.getMrBeatFile())
         .mrBeatLicenseInfo(mrBeatInfo.getMrBeatLicenseInfo())
         .mrBeatContact(mrBeatInfo.getMrBeatContact())
+        .users(new CommonUserDto(mrBeatInfo.getUsers()))
         .build();
   }
 
