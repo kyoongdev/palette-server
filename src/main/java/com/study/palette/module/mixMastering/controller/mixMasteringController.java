@@ -4,7 +4,7 @@ import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.mixMastering.dto.CreateMixMasteringDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDetailDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDto;
-import com.study.palette.module.mixMastering.dto.MixMasteringsDto;
+import com.study.palette.module.mixMastering.dto.MixMasteringsResponseDto;
 import com.study.palette.module.mixMastering.dto.query.FindMixMasteringQuery;
 import com.study.palette.module.mixMastering.service.MixMasteringService;
 import com.study.palette.module.users.annotation.GetUserInfo;
@@ -51,7 +51,7 @@ public class mixMasteringController {
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @GetMapping("")
-  public PaginationDto<MixMasteringsDto> getMixMasteringList(
+  public PaginationDto<MixMasteringsResponseDto> getMixMasteringList(
       @ParameterObject FindMixMasteringQuery query) {
     return mixMasteringService.getMixMasterings(query, query.toPageable(Sort.by(Sort.Direction.DESC, "createdAt")));
   }

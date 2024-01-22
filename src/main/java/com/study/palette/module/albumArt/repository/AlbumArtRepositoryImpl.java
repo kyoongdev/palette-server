@@ -8,6 +8,8 @@ import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
 import com.study.palette.module.albumArt.service.AlbumArtConditions;
+import com.study.palette.module.musician.entity.QUsersMusician;
+import com.study.palette.module.users.entity.QUsersFile;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +34,19 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
     QAlbumArtFile albumArtFile = QAlbumArtFile.albumArtFile;
     QAlbumArtLicenseInfo albumArtLicenseInfo = QAlbumArtLicenseInfo.albumArtLicenseInfo;
     QAlbumArtRequest albumArtRequest = QAlbumArtRequest.albumArtRequest;
+    QUsersMusician userMusician = QUsersMusician.usersMusician;
+    QUsersFile usersFile = QUsersFile.usersFile;
 
     List<AlbumArtsResponseDto> result = queryFactory
         .select(Projections.constructor(AlbumArtsResponseDto.class,
             albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,
-            albumArtInfo.users.name.as("userName"),
-            albumArtFile.upoladFilePath.as("fileUrl"),
+            userMusician.name.as("musicianName"),
+            albumArtFile.upoladFilePath.as("thumbnailUrl"),
             albumArtLicenseInfo.price.as("price"),
-            albumArtRequest.id.count().as("requestCount")))
+            albumArtRequest.id.count().as("requestCount"),
+            usersFile.uploadFilePath.as("profileUrl")))
         .from(albumArtInfo)
         .leftJoin(albumArtRequest)
         .on(albumArtInfo.id.eq(albumArtRequest.albumArtInfo.id))
@@ -50,6 +55,11 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
             .and(albumArtFile.isThumbnail.isTrue()))
         .leftJoin(albumArtLicenseInfo)
         .on(albumArtInfo.id.eq(albumArtLicenseInfo.albumArtInfo.id))
+        .leftJoin(usersFile)
+        .on(albumArtInfo.users.id.eq(usersFile.users.id)
+            .and(usersFile.isProfile.isTrue()))
+        .leftJoin(userMusician)
+        .on(albumArtInfo.users.id.eq(userMusician.users.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .where(query.getSaleTypeCondition(albumArtInfo).
@@ -57,9 +67,10 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
         .groupBy(albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,
-            albumArtInfo.users.name,
             albumArtFile.upoladFilePath,
-            albumArtLicenseInfo.price)
+            albumArtLicenseInfo.price,
+            usersFile.uploadFilePath,
+            userMusician.name)
         .orderBy(query.getSort())
         .fetch();
 

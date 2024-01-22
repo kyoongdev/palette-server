@@ -42,13 +42,10 @@ public class MixMasteringFile {
   @Column(length = 256)
   private String url;
 
-
   private boolean isThumbnail;
-
 
   @Column(length = 4)
   private String suffix;
-
 
   @CreationTimestamp
   @CreatedDate

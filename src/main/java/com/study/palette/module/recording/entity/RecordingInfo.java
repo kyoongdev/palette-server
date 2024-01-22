@@ -76,8 +76,6 @@ public class RecordingInfo {
   @Column(length = 1000)
   private String serviceExplain;
 
-  private int salesType;
-
   @Column(columnDefinition = "boolean default false")
   private boolean serviceStatus;
 

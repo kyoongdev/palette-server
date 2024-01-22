@@ -1,15 +1,13 @@
 package com.study.palette.module.adminSales.dto;
 
 
-import com.study.palette.common.dto.PageDto;
+import com.study.palette.module.adminSales.service.AdminSalesConditions;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import javax.validation.constraints.NotNull;
 
-@Data
-public class FindAdminSalesQuery extends PageDto {
+public class FindAdminSalesQuery extends AdminSalesConditions {
 
-  @Schema(description = "서비스 타입")
-  String serviceType;
-  @Schema(description = "판매글 등록 완료 여부")
-  boolean isRegistrationCompleted;
+  @Schema(description = "판매글 등록 완료 여부", example = "true")
+  @NotNull
+  private Boolean isRegistrationCompleted;
 }

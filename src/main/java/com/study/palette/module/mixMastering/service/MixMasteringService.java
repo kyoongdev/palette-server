@@ -6,7 +6,7 @@ import com.study.palette.common.dto.PagingDto;
 import com.study.palette.module.mixMastering.dto.CreateMixMasteringDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDetailDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDto;
-import com.study.palette.module.mixMastering.dto.MixMasteringsDto;
+import com.study.palette.module.mixMastering.dto.MixMasteringsResponseDto;
 import com.study.palette.module.mixMastering.dto.query.FindMixMasteringQuery;
 import com.study.palette.module.mixMastering.entity.MixMasteringInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringRequest;
@@ -45,7 +45,7 @@ public class MixMasteringService {
 
   /* MixMastering 필터 포함 조회*/
   @Transactional(readOnly = true)
-  public PaginationDto<MixMasteringsDto> getMixMasterings(FindMixMasteringQuery query,
+  public PaginationDto<MixMasteringsResponseDto> getMixMasterings(FindMixMasteringQuery query,
       Pageable pageable) {
     Long count = mixMasteringRepository.count();
 
@@ -53,9 +53,9 @@ public class MixMasteringService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<MixMasteringsDto> mixmasterings = mixMasteringRepository.findAll(query, pageable)
+    List<MixMasteringsResponseDto> mixmasterings = mixMasteringRepository.findAll(query, pageable)
         .stream()
-        .map(data -> modelMapper.map(data, MixMasteringsDto.class))
+        .map(data -> modelMapper.map(data, MixMasteringsResponseDto.class))
         .collect(Collectors.toList());
 
     return PaginationDto.of(new PagingDto(pageable, count), mixmasterings);

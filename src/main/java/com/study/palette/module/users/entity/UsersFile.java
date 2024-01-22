@@ -39,6 +39,8 @@ public class UsersFile {
   @Column(length = 256)
   private String uploadFilePath;
 
+  private boolean isProfile;
+
   private int filterMasterCode;
 
   @Column(length = 4)

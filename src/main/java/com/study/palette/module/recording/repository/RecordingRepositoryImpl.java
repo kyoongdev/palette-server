@@ -2,11 +2,13 @@ package com.study.palette.module.recording.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.study.palette.module.musician.entity.QUsersMusician;
 import com.study.palette.module.recording.dto.info.RecordingResponseDto;
 import com.study.palette.module.recording.entity.QRecordingFile;
 import com.study.palette.module.recording.entity.QRecordingInfo;
 import com.study.palette.module.recording.entity.QRecordingLicenseInfo;
 import com.study.palette.module.recording.service.RecordingConditions;
+import com.study.palette.module.users.entity.QUsersFile;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +32,18 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
     QRecordingInfo recordingInfo = QRecordingInfo.recordingInfo;
     QRecordingFile recordingFile = QRecordingFile.recordingFile;
     QRecordingLicenseInfo recordingLicenseInfo = QRecordingLicenseInfo.recordingLicenseInfo;
+    QUsersFile usersFile = QUsersFile.usersFile;
+    QUsersMusician userMusician = QUsersMusician.usersMusician;
 
     List<RecordingResponseDto> result = queryFactory
         .select(Projections.constructor(RecordingResponseDto.class,
             recordingInfo.id,
             recordingInfo.serviceName,
-            recordingInfo.salesType,
-            recordingInfo.users.name.as("userName"),
-            recordingFile.upoladFilePath.as("fileUrl"),
-            recordingLicenseInfo.price.as("price")))
+            recordingInfo.isRecordingEngineering,
+            userMusician.name.as("musicianName"),
+            recordingFile.upoladFilePath.as("thumbnailUrl"),
+            recordingLicenseInfo.price.as("price"),
+            usersFile.uploadFilePath.as("profileUrl")))
         .from(recordingInfo)
         .leftJoin(recordingFile)
         .on(recordingInfo.id.eq(recordingFile.recordingInfo.id)
@@ -46,6 +51,11 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
         .leftJoin(recordingLicenseInfo)
         .on(recordingInfo.id.eq(recordingLicenseInfo.recordingInfo.id)
             .and(recordingLicenseInfo.licenseType.eq(10)))
+        .leftJoin(usersFile)
+        .on(recordingInfo.users.id.eq(usersFile.users.id)
+            .and(usersFile.isProfile.isTrue()))
+        .leftJoin(userMusician)
+        .on(recordingInfo.users.id.eq(userMusician.users.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .where(
@@ -55,10 +65,11 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
         )
         .groupBy(recordingInfo.id,
             recordingInfo.serviceName,
-            recordingInfo.salesType,
-            recordingInfo.users.name,
+            recordingInfo.isRecordingEngineering,
             recordingFile.upoladFilePath,
-            recordingLicenseInfo.price)
+            recordingLicenseInfo.price,
+            usersFile.uploadFilePath,
+            userMusician.name)
         .orderBy(recordingInfo.createdAt.desc())
         .fetch();
 
