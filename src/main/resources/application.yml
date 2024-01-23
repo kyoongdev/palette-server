@@ -5,7 +5,7 @@ spring:
       "dev": "devdb, common"
       "prod": "proddb, common"
     include: "jwt, aws"
-    active: local
+    active: dev
 ---
 
 spring: #공통환경
@@ -27,12 +27,10 @@ spring: #공통환경
 
 springdoc:
   swagger-ui:
-    #    path: /swagger-ui.html
-    #    path: /test-swagger
-
+    disable-swagger-default-url: true
+    path: /swagger-ui
     groups-order: asc
     operationsSorter: method
-    #    disable-swagger-default-url: true
     display-request-duration: true
   api-docs:
     path: /api-docs
