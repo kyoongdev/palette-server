@@ -20,6 +20,7 @@ import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.exception.UserErrorCode;
 import com.study.palette.module.users.repository.UsersRepository;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -102,7 +103,7 @@ public class UsersService {
         .profileImage(users.getProfileImage())
         .nickname(users.getNickname())
         .name(users.getName())
-        .socialType(String.valueOf(users.getSocialType()))
+        .socialType(Objects.isNull(users.getSocialType()) ? null : users.getSocialType().toString())
         .build();
   }
 
