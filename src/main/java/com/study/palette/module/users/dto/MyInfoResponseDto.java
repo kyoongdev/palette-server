@@ -2,6 +2,7 @@ package com.study.palette.module.users.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Role;
+import com.study.palette.module.users.entity.SocialType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +32,10 @@ public class MyInfoResponseDto {
   @Schema(description = "이름")
   private String name;
 
-//  @Schema(description = "소셜 로그인한 소셜 타입 식별자(Naver, Google, Kakao)")
-//  private SocialType socialType;    //소셜 로그인한 소셜 타입 식별자(Naver, Google, Kakao)
+  @Schema(description = "소셜 로그인한 소셜 타입 식별자(Naver, Google, Kakao)")
+  private String socialType;    //소셜 로그인한 소셜 타입 식별자(Naver, Google, Kakao)
+
+
 //  @Schema(description = "로그인한 소셜 타입 식별자(일반 로그인인 경우 null)")
 //  private String socialId;          // 로그인한 소셜 타입 식별자(일반 로그인인 경우 null)
 //  @Schema(description = "프로필 이미지 링크")

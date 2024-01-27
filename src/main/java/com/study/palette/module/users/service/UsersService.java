@@ -102,6 +102,7 @@ public class UsersService {
         .profileImage(users.getProfileImage())
         .nickname(users.getNickname())
         .name(users.getName())
+        .socialType(users.getSocialType().toString())
         .build();
   }
 
