@@ -15,12 +15,14 @@ public class UserUpdateDto {
   @Size(max = 11, message = "전화번호는 11자리를 넘을 수 없습니다.")
   private String phone;
   private boolean isAlarmAccept;
+  private String profileImage;
 
   @Builder
-  public UserUpdateDto(String email, String name, String phone, boolean isAlarmAccept) {
+  public UserUpdateDto(String email, String name, String phone, boolean isAlarmAccept, String profileImage) {
     this.email = email;
     this.name = name;
     this.phone = phone;
     this.isAlarmAccept = isAlarmAccept;
+    this.profileImage = profileImage;
   }
 }
