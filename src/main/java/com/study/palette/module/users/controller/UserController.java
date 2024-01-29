@@ -4,6 +4,8 @@ import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.module.users.annotation.GetUserInfo;
 import com.study.palette.module.users.dto.CheckEmailExistsDto;
 import com.study.palette.module.users.dto.CheckEmailExistsRequestDto;
+import com.study.palette.module.users.dto.CheckNickNameExistsDto;
+import com.study.palette.module.users.dto.CheckNickNameExistsRequestDto;
 import com.study.palette.module.users.dto.FindUserQuery;
 import com.study.palette.module.users.dto.MyInfoResponseDto;
 import com.study.palette.module.users.dto.UserChangePasswordDto;
@@ -156,6 +158,23 @@ public class UserController {
   void updateUser(@RequestBody UserUpdateDto user,
       @Parameter(hidden = true) @GetUserInfo Users users) {
     userService.updateUser(users.getId(), user);
+  }
+
+  /**
+   * 닉네임 유무 확인
+   */
+  @Operation(summary = "닉네임 유무 확인", description = "닉네임 유무 확인 api")
+  @ApiResponses(
+      value = {
+          @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CheckEmailExistsDto.class)))
+      }
+  )
+  @PostMapping("check-nickname")
+  @ResponseStatus(HttpStatus.OK
+  )
+  public CheckNickNameExistsDto checkNickName(@Valid @RequestBody CheckNickNameExistsRequestDto body) {
+    return userService.checkNickName(body);
+
   }
 
   /**

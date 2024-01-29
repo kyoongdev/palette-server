@@ -7,6 +7,8 @@ import com.study.palette.common.dto.PagingDto;
 import com.study.palette.common.exception.CustomException;
 import com.study.palette.module.users.dto.CheckEmailExistsDto;
 import com.study.palette.module.users.dto.CheckEmailExistsRequestDto;
+import com.study.palette.module.users.dto.CheckNickNameExistsDto;
+import com.study.palette.module.users.dto.CheckNickNameExistsRequestDto;
 import com.study.palette.module.users.dto.MyInfoResponseDto;
 import com.study.palette.module.users.dto.UserChangePasswordDto;
 import com.study.palette.module.users.dto.UserCreateRequestDto;
@@ -189,5 +191,13 @@ public class UsersService {
   //임의에 비밀번호 생성
   public String generatePassword() {
     return UUID.randomUUID().toString().substring(0, 8);
+  }
+
+  public CheckNickNameExistsDto checkNickName(CheckNickNameExistsRequestDto body) {
+
+    Optional<Users> user = usersRepository.findByNickname(body.getNickname());
+
+    return new CheckNickNameExistsDto(user.isPresent());
+
   }
 }

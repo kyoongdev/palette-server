@@ -25,4 +25,6 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
   void deleteById(UUID id);
 
   Optional<Users> findBySocialTypeAndSocialId(SocialType socialType, String id);
+
+  Optional<Users> findByNickname(String nickname);
 }
