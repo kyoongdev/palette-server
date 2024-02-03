@@ -49,8 +49,7 @@ public class ArtistController {
   @Operation(summary = "아티스트 조회", description = "아티스트 조회 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArtistResponseDto.class))),
-      @ApiResponse(responseCode = "400", description = "Bad Request")
-  })
+      @ApiResponse(responseCode = "400", description = "Bad Request")})
   @GetMapping("")
   //ResponseEntity -> PaginationDto
   //만들어둔 페이지네이션 객체 사용
@@ -65,8 +64,7 @@ public class ArtistController {
   @Operation(summary = "아티스트 상세", description = "아티스트 상세 조회 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json")),
-      @ApiResponse(responseCode = "400", description = "Bad Request")
-  })
+      @ApiResponse(responseCode = "400", description = "Bad Request")})
   @GetMapping("{id}/detail")
   //ResponseEntity -> PaginationDto
   //만들어둔 페이지네이션 객체 사용
@@ -79,8 +77,7 @@ public class ArtistController {
   @Operation(summary = "아티스트 생성", description = "아티스트 생성 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "생성 성공", content = @Content(mediaType = "application/json")),
-      @ApiResponse(responseCode = "400", description = "Bad Request")
-  })
+      @ApiResponse(responseCode = "400", description = "Bad Request")})
   @PostMapping(path = "")
   @PreAuthorize("hasRole('MUSICIAN')")
   public ResponseWithIdDto createArtist(@RequestBody() CreateArtistDto body,
@@ -94,8 +91,7 @@ public class ArtistController {
   @Operation(summary = "아티스트 삭제", description = "아티스트 삭제.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(mediaType = "application/json")),
-      @ApiResponse(responseCode = "400", description = "Bad Request")
-  })
+      @ApiResponse(responseCode = "400", description = "Bad Request")})
   @DeleteMapping("/{id}")
   public ResponseEntity<Boolean> artistDelete(@PathVariable String id,
       @Parameter(hidden = false) @GetUserInfo Users users) {
@@ -113,8 +109,7 @@ public class ArtistController {
   })
   @PatchMapping(path = "/{id}")
   public ResponseWithIdDto updateArtist(@PathVariable String id,
-      @RequestBody() UpdateArtistDto body,
-      @Parameter(hidden = true) @GetUserInfo Users users) {
+      @RequestBody() UpdateArtistDto body, @Parameter(hidden = true) @GetUserInfo Users users) {
 
     ResponseWithIdDto result = artistService.updateArtist(id, body, users);
 
@@ -125,13 +120,11 @@ public class ArtistController {
   @Operation(summary = "아티스트 구매의뢰", description = "아티스트 구매의뢰 메서드입니다.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "구매의뢰 성공", content = @Content(mediaType = "application/json")),
-      @ApiResponse(responseCode = "400", description = "Bad Request")
-  })
+      @ApiResponse(responseCode = "400", description = "Bad Request")})
   @PostMapping("/{id}/request")
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('MEMBER') or hasRole('MUSICIAN')")
-  public void createArtistRequest(@PathVariable String id,
-      @GetUserInfo Users users) throws Exception {
+  public void createArtistRequest(@PathVariable String id, @GetUserInfo Users users) {
     artistService.createArtistRequest(id, users);
   }
 

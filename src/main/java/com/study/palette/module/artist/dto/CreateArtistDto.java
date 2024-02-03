@@ -1,11 +1,12 @@
 package com.study.palette.module.artist.dto;
 
 
-import com.study.palette.module.artist.dto.artistFile.CreateArtistFileDto;
-import com.study.palette.module.artist.dto.artistInfo.CreateArtistLicenseDto;
+import com.study.palette.common.enums.ArtistSalesType;
+import com.study.palette.module.artist.dto.contact.CreateArtistContactDto;
+import com.study.palette.module.artist.dto.file.CreateArtistFileDto;
+import com.study.palette.module.artist.dto.license.CreateArtistLicenseDto;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
@@ -33,8 +34,6 @@ public class CreateArtistDto {
 
   private boolean serviceStatus;
 
-  private LocalDate createdAt;
-
   private List<CreateArtistFileDto> artistFileDto;
 
   @NotNull(message = "라이센스 정보를 입력해주세요.")
@@ -46,10 +45,9 @@ public class CreateArtistDto {
   public ArtistInfo toEntity(Users users) {
     return ArtistInfo.builder()
         .serviceName(this.getServiceName())
-        .salesType(this.getSalesType())
+        .salesType(ArtistSalesType.findArtistSalesType(this.getSalesType()))
         .serviceInfo(this.getServiceInfo())
         .serviceStatus(this.isServiceStatus())
-        .createdAt(this.getCreatedAt())
         .artistFile(new ArrayList<>())
         .artistReview(new ArrayList<>())
         .artistContact(new ArrayList<>())

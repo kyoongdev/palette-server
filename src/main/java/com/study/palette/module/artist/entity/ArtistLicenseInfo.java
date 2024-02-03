@@ -1,9 +1,11 @@
 package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.artist.dto.artistInfo.CreateArtistLicenseDto;
+import com.study.palette.common.enums.LicenseType;
+import com.study.palette.module.artist.dto.license.CreateArtistLicenseDto;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,15 +30,15 @@ public class ArtistLicenseInfo {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
-  private int licenseType;
+  private LicenseType licenseType;
 
   private int price;
 
   @Column(length = 20)
   private String serveFile;
-  ;
 
   private int updateCount;
 
@@ -52,8 +54,7 @@ public class ArtistLicenseInfo {
 
   private boolean isUseCommerical;
 
-  @Column(length = 50)
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "usersId")
@@ -68,9 +69,9 @@ public class ArtistLicenseInfo {
   @Builder
   public ArtistLicenseInfo(int licenseType, int price, String serveFile, int updateCount,
       int period, int draftCount, boolean isAssign, boolean isServeOriginFile,
-      boolean isOtherUseApproved, boolean isUseCommerical, LocalDate createdAt, Users users,
+      boolean isOtherUseApproved, boolean isUseCommerical, LocalDateTime createdAt, Users users,
       ArtistInfo artistInfo) {
-    this.licenseType = licenseType;
+    this.licenseType = LicenseType.findLicenseType(licenseType);
     this.price = price;
     this.serveFile = serveFile;
     this.updateCount = updateCount;

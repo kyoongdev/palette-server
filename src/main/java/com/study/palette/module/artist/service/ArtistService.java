@@ -14,18 +14,21 @@ import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
 import com.study.palette.module.artist.entity.ArtistLicenseInfo;
 import com.study.palette.module.artist.entity.ArtistRequest;
+import com.study.palette.module.artist.exception.ArtistErrorCode;
+import com.study.palette.module.artist.exception.ArtistException;
 import com.study.palette.module.artist.repository.ArtistRepository;
 import com.study.palette.module.artist.repository.ArtistRequestRepository;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ArtistService {
@@ -60,10 +63,8 @@ public class ArtistService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<ArtistResponseDto> artists = artistRepository.findAll(query, pageable)
-        .stream()
-        .map(data -> modelMapper.map(data, ArtistResponseDto.class))
-        .collect(Collectors.toList());
+    List<ArtistResponseDto> artists = artistRepository.findAll(query, pageable).stream()
+        .map(data -> modelMapper.map(data, ArtistResponseDto.class)).collect(Collectors.toList());
 
     PaginationDto<ArtistResponseDto> row = PaginationDto.of(new PagingDto(pageable, count),
         artists);
@@ -73,7 +74,8 @@ public class ArtistService {
 
   public ArtistDetailResponseDto findArtistsDetail(String id) {
 
-    ArtistInfo artists = artistRepository.findById(id).orElse(null);
+    ArtistInfo artists = artistRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new ArtistException(ArtistErrorCode.ARTIST_NOT_FOUND));
 
     ArtistDetailResponseDto artistDetail = ArtistDetailResponseDto.toEntity(artists);
 
@@ -87,16 +89,13 @@ public class ArtistService {
     ArtistInfo aritstInfo = createArtistDto.toEntity(users);
 
     List<ArtistLicenseInfo> artistLicenses = createArtistDto.getArtistLicenseInfo().stream()
-        .map(artistLicense -> ArtistLicenseInfo.from(artistLicense, aritstInfo))
-        .toList();
+        .map(artistLicense -> ArtistLicenseInfo.from(artistLicense, aritstInfo)).toList();
 
     List<ArtistContact> artistContacts = createArtistDto.getArtistContactDto().stream()
-        .map(artistContact -> ArtistContact.from(artistContact, aritstInfo))
-        .toList();
+        .map(artistContact -> ArtistContact.from(artistContact, aritstInfo)).toList();
 
     List<ArtistFile> artistFiles = createArtistDto.getArtistFileDto().stream()
-        .map(artistFile -> ArtistFile.from(artistFile, aritstInfo))
-        .toList();
+        .map(artistFile -> ArtistFile.from(artistFile, aritstInfo)).toList();
 
     aritstInfo.setArtistFile(artistFiles);
     aritstInfo.setArtistLicenseInfo(artistLicenses);
@@ -108,9 +107,15 @@ public class ArtistService {
 
   }
 
+  @Transactional
   public ResponseWithIdDto updateArtist(String id, UpdateArtistDto data, Users users) {
 
-    ArtistInfo artistInfo = artistRepository.findById(id).orElseThrow();
+    ArtistInfo artistInfo = artistRepository.findById(UUID.fromString(id)).orElseThrow(
+        () -> new ArtistException(ArtistErrorCode.ARTIST_NOT_FOUND));
+
+    if (!artistInfo.getUsers().getId().equals(users.getId())) {
+      throw new ArtistException(ArtistErrorCode.ARTIST_NOT_YOURS);
+    }
 
     PaletteUtils.myCopyProperties(data, artistInfo);
 
@@ -132,13 +137,19 @@ public class ArtistService {
 
     artistRepository.save(artistInfo);
 
-    return ResponseWithIdDto.builder().id(artistInfo.getId()).build();
+    return ResponseWithIdDto.builder().id(artistInfo.getId().toString()).build();
   }
 
 
-  public Boolean artistDelete(String id, Users users) {
+  @Transactional
+  public boolean artistDelete(String id, Users users) {
 
-    ArtistInfo artistInfo = artistRepository.findById(id).orElseThrow();
+    ArtistInfo artistInfo = artistRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new ArtistException(ArtistErrorCode.ARTIST_NOT_FOUND));
+
+    if (!artistInfo.getUsers().getId().equals(users.getId())) {
+      throw new ArtistException(ArtistErrorCode.ARTIST_NOT_YOURS);
+    }
 
     artistRepository.deleteById(id);
 
@@ -146,22 +157,21 @@ public class ArtistService {
   }
 
 
-  public void createArtistRequest(String id, Users users) throws Exception {
-    ArtistInfo artistInfo = artistRepository.findById(id).orElseThrow();
+  @Transactional
+  public void createArtistRequest(String id, Users users) {
+    ArtistInfo artistInfo = artistRepository.findById(UUID.fromString(id)).orElseThrow(
+        () -> new ArtistException(ArtistErrorCode.ARTIST_NOT_FOUND));
 
     //오늘 이미 구매의뢰를 했는지 체크
     Optional<ArtistRequest> artistRequest = artistRequestRepository.findByArtistInfoAndUserAndCreatedAt(
-        users, artistInfo, LocalDate.now());
+        users, artistInfo, LocalDateTime.now());
 
     if (artistRequest.isPresent()) {
-      throw new Exception("이미 구매의뢰를 하셨습니다.");
+      throw new ArtistException(ArtistErrorCode.ARTIST_REQUEST_ALREADY_EXISTS);
     }
 
-    artistRequestRepository.save(ArtistRequest.builder()
-        .artistInfo(artistInfo)
-        .users(users)
-        .createAt(LocalDate.now())
-        .build()
-    );
+    artistRequestRepository.save(
+        ArtistRequest.builder().artistInfo(artistInfo).users(users).createdAt(LocalDateTime.now())
+            .build());
   }
 }

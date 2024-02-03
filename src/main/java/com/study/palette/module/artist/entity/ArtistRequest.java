@@ -4,7 +4,7 @@ package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +31,7 @@ public class ArtistRequest {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private LocalDate createAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "userId")

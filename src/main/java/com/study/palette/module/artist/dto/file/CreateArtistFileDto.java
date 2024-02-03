@@ -1,4 +1,4 @@
-package com.study.palette.module.artist.dto.artistFile;
+package com.study.palette.module.artist.dto.file;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,7 +1,8 @@
 package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.artist.dto.CreateArtistContactDto;
+import com.study.palette.common.enums.Contact;
+import com.study.palette.module.artist.dto.contact.CreateArtistContactDto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -31,7 +32,7 @@ public class ArtistContact {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private int type;
+  private Contact type;
 
   private String content;
 
@@ -46,7 +47,7 @@ public class ArtistContact {
   public static ArtistContact from(CreateArtistContactDto artistContactDto,
       ArtistInfo artistInfo) {
     return builder()
-        .type(artistContactDto.getType().getContact())
+        .type(Contact.findContact(artistContactDto.getType()))
         .content(artistContactDto.getContent())
         .artistInfo(artistInfo).build();
 

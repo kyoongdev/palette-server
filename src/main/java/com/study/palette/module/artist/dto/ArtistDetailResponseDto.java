@@ -32,7 +32,7 @@ public class ArtistDetailResponseDto {
 
   public static ArtistDetailResponseDto toEntity(ArtistInfo artistInfo) {
     return ArtistDetailResponseDto.builder()
-        .id(artistInfo.getId())
+        .id(artistInfo.getId().toString())
         .serviceName(artistInfo.getServiceName())
         .serviceInfo(artistInfo.getServiceInfo())
         .editInfo(artistInfo.getEditInfo())

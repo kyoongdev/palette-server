@@ -53,7 +53,7 @@ public class ArtistRepositoryImpl implements ArtistCustomRepository {
         .on(artistInfo.id.eq(artistLicenseInfo.artistInfo.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(artistInfo.salesType.eq(query.getSaleType().getCode()))
+        .where(query.getSaleTypeCondition(artistInfo).and(artistInfo.serviceStatus.isTrue()))
         .groupBy(artistInfo.id,
             artistInfo.serviceName,
             artistInfo.salesType,

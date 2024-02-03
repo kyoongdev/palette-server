@@ -1,6 +1,5 @@
 package com.study.palette.config.dummydata;
 
-import com.study.palette.common.enums.Contact;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
@@ -12,10 +11,10 @@ import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.albumArt.entity.AlbumArtRequest;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
-import com.study.palette.module.artist.dto.CreateArtistContactDto;
+import com.study.palette.module.artist.dto.contact.CreateArtistContactDto;
 import com.study.palette.module.artist.dto.CreateArtistDto;
-import com.study.palette.module.artist.dto.artistFile.CreateArtistFileDto;
-import com.study.palette.module.artist.dto.artistInfo.CreateArtistLicenseDto;
+import com.study.palette.module.artist.dto.file.CreateArtistFileDto;
+import com.study.palette.module.artist.dto.license.CreateArtistLicenseDto;
 import com.study.palette.module.artist.entity.ArtistContact;
 import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
@@ -42,7 +41,6 @@ import com.study.palette.module.recording.repository.RecordingRepository;
 import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import com.study.palette.module.users.repository.UsersRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,18 +96,18 @@ public class InitData implements ApplicationRunner {
       for (int i = 0; i < 10; i++) {
 
         for (int j = 0; j < 3; j++) {
-          artistLicenseInfo.add(new CreateArtistLicenseDto(10, 1000, "servedFile" + i, 3, 1, 1, true, true, true));
+          artistLicenseInfo.add(new CreateArtistLicenseDto(j + 1, 1000, "servedFile" + i, 3, 1, 1, true, true, true));
         }
 
         for (int j = 0; j < 3; j++) {
-          artistContacts.add(new CreateArtistContactDto(Contact.findContact(j + 1), "010-1234-1234"));
+          artistContacts.add(new CreateArtistContactDto(j + 1, "010-1234-1234"));
         }
 
         for (int j = 0; j < 3; j++) {
           artistFiles.add(new CreateArtistFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", true));
         }
 
-        CreateArtistDto createArtistDto = new CreateArtistDto("serviceName", "serviceInfo", "editInfo", 2, true, LocalDate.now(), artistFiles, artistLicenseInfo, artistContacts);
+        CreateArtistDto createArtistDto = new CreateArtistDto("serviceName", "serviceInfo", "editInfo", 2, true, artistFiles, artistLicenseInfo, artistContacts);
 
         ArtistInfo artistInfo = createArtistDto.toEntity(initCommUser);
 

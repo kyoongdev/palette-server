@@ -1,9 +1,10 @@
 package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.artist.dto.artistFile.CreateArtistFileDto;
+import com.study.palette.module.artist.dto.file.CreateArtistFileDto;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +30,8 @@ public class ArtistFile {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
   private String url;
 
@@ -47,7 +49,8 @@ public class ArtistFile {
   private boolean isThumbnail;
 
   private boolean isUse;
-  private LocalDate createdAt;
+
+  private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "usersId")
@@ -68,7 +71,7 @@ public class ArtistFile {
         .suffix(artistFile.getSuffix())
         .isThumbnail(artistFile.isThumbnail())
         .isUse(true)
-        .createdAt(LocalDate.now())
+        .createdAt(LocalDateTime.now())
         .artistInfo(aritstInfo)
         .build();
   }

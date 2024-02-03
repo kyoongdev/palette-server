@@ -1,6 +1,8 @@
 package com.study.palette.module.artist.dto;
 
+import com.study.palette.common.enums.ArtistSalesType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,11 +35,11 @@ public class ArtistResponseDto {
   @Schema(description = "프로필 이미지", example = "프로필 이미지")
   private String profileImage;
 
-  public ArtistResponseDto(String id, String serviceName, int salesType, String userName,
+  public ArtistResponseDto(UUID id, String serviceName, ArtistSalesType salesType, String userName,
       String fileUrl, int price, long requestCount, String profileImage) {
-    this.id = id;
+    this.id = id.toString();
     this.serviceName = serviceName;
-    this.salesType = salesType;
+    this.salesType = salesType.getCode();
     this.userName = userName;
     this.fileUrl = fileUrl;
     this.price = price;

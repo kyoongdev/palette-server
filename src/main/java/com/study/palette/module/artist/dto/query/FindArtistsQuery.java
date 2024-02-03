@@ -2,6 +2,8 @@ package com.study.palette.module.artist.dto.query;
 
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.study.palette.common.dto.PageDto;
 import com.study.palette.common.enums.ArtistSalesType;
 import com.study.palette.common.enums.CustomSort;
@@ -16,11 +18,19 @@ import lombok.Data;
 public class FindArtistsQuery extends PageDto {
 
     @Schema(description = "판매유형", defaultValue = "")
-    private ArtistSalesType saleType;
+    private int saleType;
 
     @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
         "POPULAR"})
     private CustomSort sort;
+
+    public BooleanExpression getSaleTypeCondition(QArtistInfo artistInfo) {
+        if (ArtistSalesType.findArtistSalesType(this.saleType) == ArtistSalesType.ALL) {
+            return Expressions.TRUE.eq(Expressions.TRUE);
+        } else {
+            return artistInfo.salesType.eq(ArtistSalesType.findArtistSalesType(this.saleType));
+        }
+    }
 
     public OrderSpecifier<?>[] getSort() {
         if (this.sort == null) {

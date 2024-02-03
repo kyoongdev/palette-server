@@ -1,10 +1,13 @@
 package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.ArtistSalesType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +22,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -33,7 +37,8 @@ public class ArtistInfo {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
   @Column(length = 50)
   private String serviceName;
@@ -44,13 +49,13 @@ public class ArtistInfo {
   @Column(length = 1000)
   private String editInfo;
 
-  private int salesType;
+  private ArtistSalesType salesType;
 
   private boolean serviceStatus;
 
-  @Column(columnDefinition = "datetime default now()")
-  @CreatedDate
-  private LocalDate createdAt;
+  @CreationTimestamp
+  @Column(columnDefinition = "TIMESTAMP")
+  private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "usersId")

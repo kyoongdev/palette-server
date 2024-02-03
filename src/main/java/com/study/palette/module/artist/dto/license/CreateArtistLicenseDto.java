@@ -1,4 +1,4 @@
-package com.study.palette.module.artist.dto.artistInfo;
+package com.study.palette.module.artist.dto.license;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,8 @@
 package com.study.palette.module.artist.dto;
 
-import com.study.palette.module.artist.dto.artistFile.CreateArtistFileDto;
-import com.study.palette.module.artist.dto.artistInfo.CreateArtistLicenseDto;
+import com.study.palette.module.artist.dto.contact.CreateArtistContactDto;
+import com.study.palette.module.artist.dto.file.CreateArtistFileDto;
+import com.study.palette.module.artist.dto.license.CreateArtistLicenseDto;
 import java.util.List;
 import lombok.Data;
 
