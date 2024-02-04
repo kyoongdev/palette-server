@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface MrBeatRequestRepository extends JpaRepository<MrBeatRequest, String> {
 
-  @Query("select a from MrBeatRequest a where a.users = :users and a.mrBeatInfo = :mrBeatInfo and a.createAt = :now")
+  @Query("select a from MrBeatRequest a where a.users = :users and a.mrBeatInfo = :mrBeatInfo and a.createdAt = :now")
   Optional<MrBeatRequest> findByMrBeatInfoAndUserAndCreatedAt(MrBeatInfo mrBeatInfo,
       Users users, LocalDate now);
 

@@ -1,5 +1,9 @@
 package com.study.palette.module.mrBeat.dto;
 
+import com.study.palette.module.mrBeat.dto.contact.CreateMrBeatContactDto;
+import com.study.palette.module.mrBeat.dto.file.CreateMrBeatFileDto;
+import com.study.palette.module.mrBeat.dto.file.CreateMrBeatMusicFileDto;
+import com.study.palette.module.mrBeat.dto.license.CreateMrBeatLicenseInfoDto;
 import java.util.List;
 import lombok.Data;
 

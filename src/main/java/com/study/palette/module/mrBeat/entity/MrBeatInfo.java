@@ -1,10 +1,14 @@
 package com.study.palette.module.mrBeat.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.mrBeat.MrBeatGenreType;
+import com.study.palette.common.enums.mrBeat.MrBeatMoodType;
+import com.study.palette.common.enums.mrBeat.MrBeatSalesType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +24,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -34,21 +39,22 @@ public class MrBeatInfo {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
   @Column(length = 50)
   private String serviceName;
 
-  private int mood;
+  private MrBeatMoodType mood;
 
-  private int salesType;
+  private MrBeatSalesType salesType;
 
-  private int genre;
+  private MrBeatGenreType genre;
 
   private boolean serviceStatus;
 
-  @Column(columnDefinition = "datetime default now()")
-  @CreatedDate
+  @CreationTimestamp
+  @Column(columnDefinition = "TIMESTAMP")
   private LocalDateTime createdAt;
 
   @OneToMany(mappedBy = "mrBeatInfo", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -62,7 +68,7 @@ public class MrBeatInfo {
   private MrBeatFile mrBeatFile;
 
   @OneToOne(mappedBy = "mrBeatInfo", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  private MrBeatMusicFIle mrBeatMusicFile;
+  private MrBeatMusicFile mrBeatMusicFile;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "usersId")

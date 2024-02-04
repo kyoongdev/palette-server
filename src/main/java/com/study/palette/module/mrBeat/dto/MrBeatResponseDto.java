@@ -1,7 +1,11 @@
 package com.study.palette.module.mrBeat.dto;
 
+import com.study.palette.common.enums.mrBeat.MrBeatGenreType;
+import com.study.palette.common.enums.mrBeat.MrBeatMoodType;
+import com.study.palette.common.enums.mrBeat.MrBeatSalesType;
 import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,13 +38,13 @@ public class MrBeatResponseDto {
   @Schema(description = "유저 정보")
   private String profileImage;
 
-  public MrBeatResponseDto(String id, String serviceName, int genre, int mood, int salesType,
+  public MrBeatResponseDto(UUID id, String serviceName, MrBeatMoodType mood, MrBeatGenreType genre, MrBeatSalesType salesType,
       String fileUrl, String musicFileUrl, int price, long requestCount, String usersName, String profileImage) {
-    this.id = id;
+    this.id = id.toString();
     this.serviceName = serviceName;
-    this.genre = genre;
-    this.mood = mood;
-    this.salesType = salesType;
+    this.genre = genre.getCode();
+    this.mood = mood.getCode();
+    this.salesType = salesType.getCode();
     this.fileUrl = fileUrl;
     this.musicFileUrl = musicFileUrl;
     this.price = price;

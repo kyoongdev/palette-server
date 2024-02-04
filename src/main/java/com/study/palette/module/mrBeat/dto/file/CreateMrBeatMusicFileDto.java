@@ -1,8 +1,9 @@
-package com.study.palette.module.mrBeat.dto;
+package com.study.palette.module.mrBeat.dto.file;
 
 import com.study.palette.module.mrBeat.entity.MrBeatInfo;
-import com.study.palette.module.mrBeat.entity.MrBeatMusicFIle;
+import com.study.palette.module.mrBeat.entity.MrBeatMusicFile;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,14 +30,17 @@ public class CreateMrBeatMusicFileDto {
 
   private boolean isUse;
 
-  public MrBeatMusicFIle toEntity(MrBeatInfo mrBeatInfo) {
-    return MrBeatMusicFIle.builder()
+  private LocalDateTime createdAt;
+
+  public MrBeatMusicFile toEntity(MrBeatInfo mrBeatInfo) {
+    return MrBeatMusicFile.builder()
         .url(this.getUrl())
         .originFileName(this.getOriginFileName())
         .uploadFileName(this.getUploadFileName())
         .uploadFileSize(this.getUploadFileSize())
         .suffix(this.getSuffix())
         .isUse(this.isUse())
+        .createdAt(LocalDateTime.now())
         .mrBeatInfo(mrBeatInfo)
         .users(mrBeatInfo.getUsers())
         .build();

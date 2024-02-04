@@ -1,5 +1,6 @@
-package com.study.palette.module.mrBeat.dto;
+package com.study.palette.module.mrBeat.dto.license;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,5 @@ public class CreateMrBeatLicenseInfoDto {
   private int licenseType;
 
   private int price;
-
-  private String servedFile;
 
 }

@@ -1,7 +1,8 @@
 package com.study.palette.module.mrBeat.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.mrBeat.dto.CreateMrBeatContactDto;
+import com.study.palette.common.enums.Contact;
+import com.study.palette.module.mrBeat.dto.contact.CreateMrBeatContactDto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -31,11 +32,11 @@ public class MrBeatContact {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private int type;
+  private Contact type;
 
   private String content;
 
-  private LocalDateTime createAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "mrBeatInfoId")
@@ -46,8 +47,9 @@ public class MrBeatContact {
   public static MrBeatContact from(CreateMrBeatContactDto mrBeatContactDto,
       MrBeatInfo mrBeatInfo) {
     return builder()
-        .type(mrBeatContactDto.getType().getContact())
+        .type(Contact.findContact(mrBeatContactDto.getType()))
         .content(mrBeatContactDto.getContent())
+        .createdAt(LocalDateTime.now())
         .mrBeatInfo(mrBeatInfo).build();
 
   }

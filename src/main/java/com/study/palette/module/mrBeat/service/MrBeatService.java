@@ -13,14 +13,17 @@ import com.study.palette.module.mrBeat.entity.MrBeatContact;
 import com.study.palette.module.mrBeat.entity.MrBeatFile;
 import com.study.palette.module.mrBeat.entity.MrBeatInfo;
 import com.study.palette.module.mrBeat.entity.MrBeatLicenseInfo;
-import com.study.palette.module.mrBeat.entity.MrBeatMusicFIle;
+import com.study.palette.module.mrBeat.entity.MrBeatMusicFile;
 import com.study.palette.module.mrBeat.entity.MrBeatRequest;
+import com.study.palette.module.mrBeat.exception.MrBeatErrorCode;
+import com.study.palette.module.mrBeat.exception.MrBeatException;
 import com.study.palette.module.mrBeat.repository.MrBeatRepository;
 import com.study.palette.module.mrBeat.repository.MrBeatRequestRepository;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +56,22 @@ public class MrBeatService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<MrBeatResponseDto> mrBeat = mrBeatRepository.findAll(query, pageable)
-        .stream()
-        .map(data -> modelMapper.map(data, MrBeatResponseDto.class))
-        .collect(Collectors.toList());
+    List<MrBeatResponseDto> mrBeat = mrBeatRepository.findAll(query, pageable).stream()
+        .map(data -> modelMapper.map(data, MrBeatResponseDto.class)).collect(Collectors.toList());
 
     PaginationDto<MrBeatResponseDto> row = PaginationDto.of(new PagingDto(pageable, count), mrBeat);
 
     return row;
+  }
+
+  public MrBeatDetailResponseDto findMrBeatDetail(String id) {
+
+    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
+
+    MrBeatDetailResponseDto mrBeatDetail = MrBeatDetailResponseDto.toEntity(mrBeatInfo);
+
+    return mrBeatDetail;
   }
 
   @Transactional
@@ -69,16 +80,14 @@ public class MrBeatService {
     MrBeatInfo mrBeatInfo = createMrBeatDto.toEntity(users);
 
     List<MrBeatLicenseInfo> mrBeatLicneses = createMrBeatDto.getMrBeatLicenseInfo().stream()
-        .map(mrBeatLicense -> MrBeatLicenseInfo.from(mrBeatLicense, mrBeatInfo))
-        .toList();
+        .map(mrBeatLicense -> MrBeatLicenseInfo.from(mrBeatLicense, mrBeatInfo)).toList();
 
     List<MrBeatContact> mrBeatContacts = createMrBeatDto.getMrBeatContact().stream()
-        .map(mrBeatContact -> MrBeatContact.from(mrBeatContact, mrBeatInfo))
-        .toList();
+        .map(mrBeatContact -> MrBeatContact.from(mrBeatContact, mrBeatInfo)).toList();
 
     MrBeatFile mrBeatFile = createMrBeatDto.getMrBeatFile().toEntity(mrBeatInfo);
 
-    MrBeatMusicFIle mrBeatMusicFIle = createMrBeatDto.getMrBeatMusicFile().toEntity(mrBeatInfo);
+    MrBeatMusicFile mrBeatMusicFIle = createMrBeatDto.getMrBeatMusicFile().toEntity(mrBeatInfo);
 
     mrBeatInfo.setMrBeatLicenseInfo(mrBeatLicneses);
     mrBeatInfo.setMrBeatContact(mrBeatContacts);
@@ -87,13 +96,18 @@ public class MrBeatService {
 
     mrBeatRepository.save(mrBeatInfo);
 
-    return ResponseWithIdDto.builder().id(mrBeatInfo.getId()).build();
+    return ResponseWithIdDto.builder().id(mrBeatInfo.getId().toString()).build();
   }
 
   @Transactional
-  public ResponseWithIdDto updateMrBeat(String id, UpdateMrBeatDto updateMrBeatDto) {
+  public ResponseWithIdDto updateMrBeat(String id, UpdateMrBeatDto updateMrBeatDto, Users users) {
 
-    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(id).orElseThrow();
+    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
+
+    if (!mrBeatInfo.getUsers().getId().equals(users.getId())) {
+      throw new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_YOURS);
+    }
 
     PaletteUtils.myCopyProperties(updateMrBeatDto, mrBeatInfo);
 
@@ -110,49 +124,46 @@ public class MrBeatService {
 
     MrBeatFile mrBeatFile = updateMrBeatDto.getMrBeatFile().toEntity(mrBeatInfo);
 
-    MrBeatMusicFIle mrBeatMusicFIle = updateMrBeatDto.getMrBeatMusicFile().toEntity(mrBeatInfo);
+    MrBeatMusicFile mrBeatMusicFIle = updateMrBeatDto.getMrBeatMusicFile().toEntity(mrBeatInfo);
 
     mrBeatInfo.setMrBeatFile(mrBeatFile);
     mrBeatInfo.setMrBeatMusicFile(mrBeatMusicFIle);
     mrBeatRepository.save(mrBeatInfo);
 
-    return ResponseWithIdDto.builder().id(mrBeatInfo.getId()).build();
+    return ResponseWithIdDto.builder().id(mrBeatInfo.getId().toString()).build();
   }
 
   @Transactional
-  public void deleteMrBeat(String id) {
-    mrBeatRepository.deleteById(id);
+  public void deleteMrBeat(String id, Users users) {
+
+    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
+
+    if (!mrBeatInfo.getUsers().getId().equals(users.getId())) {
+      throw new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_YOURS);
+    }
+
+    mrBeatRepository.deleteById(UUID.fromString(id));
   }
 
+  @Transactional
   public void createMrBeatRequest(String id, Users users) {
 
-    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(id).orElseThrow();
+    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
 
     Optional<MrBeatRequest> mrBeatRequest = mrBeatRequestRepository.findByMrBeatInfoAndUserAndCreatedAt(
         mrBeatInfo, users, LocalDate.now());
 
     if (mrBeatRequest.isPresent()) {
-      throw new IllegalArgumentException("이미 구매의뢰를 하셨습니다.");
+      throw new MrBeatException(MrBeatErrorCode.MRBEAT_REQUEST_ALREADY_EXISTS);
     }
 
-    mrBeatRequestRepository.save(MrBeatRequest.builder()
-        .mrBeatInfo(mrBeatInfo)
-        .users(users)
-        .createAt(LocalDate.now())
-        .build());
+    mrBeatRequestRepository.save(
+        MrBeatRequest.builder().mrBeatInfo(mrBeatInfo).users(users).createdAt(LocalDate.now())
+            .build());
 
   }
 
-  public MrBeatDetailResponseDto findMrBeatDetail(String id) {
 
-    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(id).orElse(null);
-
-    if (mrBeatInfo == null) {
-      throw new IllegalArgumentException("존재하지 않는 mr/beat 입니다.");
-    }
-
-    MrBeatDetailResponseDto mrBeatDetail = MrBeatDetailResponseDto.toEntity(mrBeatInfo);
-
-    return mrBeatDetail;
-  }
 }

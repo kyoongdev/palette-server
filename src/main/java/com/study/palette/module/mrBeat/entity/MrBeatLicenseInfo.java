@@ -1,9 +1,11 @@
 package com.study.palette.module.mrBeat.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.module.mrBeat.dto.CreateMrBeatLicenseInfoDto;
+import com.study.palette.common.enums.LicenseType;
+import com.study.palette.module.mrBeat.dto.license.CreateMrBeatLicenseInfoDto;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,35 +30,16 @@ public class MrBeatLicenseInfo {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
-  private int licenseType;
+  private LicenseType licenseType;
 
   private int price;
 
-  @Column(length = 20)
-  private String servedFile;
-
-//    @ColumnDefault("true")
-//    private boolean isMakeNewSong;
-//
-//    @ColumnDefault("true")
-//    private boolean isUseCommercial;
-//
-//    @ColumnDefault("true")
-//    private boolean isBackgroundPlay;
-//
-//    @ColumnDefault("true")
-//    private boolean isMakeMusicVideo;
-//
-//    @ColumnDefault("false")
-//    private boolean isSellShare;
-//
-//    private boolean isArrangement;
-
   @Column(columnDefinition = "datetime default now()")
   @CreatedDate
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "mrBeatInfoId")
@@ -71,8 +54,9 @@ public class MrBeatLicenseInfo {
   public static MrBeatLicenseInfo from(CreateMrBeatLicenseInfoDto mrBeatLicenseInfoDto,
       MrBeatInfo mrBeatInfo) {
     return builder()
-        .licenseType(mrBeatLicenseInfoDto.getLicenseType())
+        .licenseType(LicenseType.findLicenseType(mrBeatLicenseInfoDto.getLicenseType()))
         .price(mrBeatLicenseInfoDto.getPrice())
+        .createdAt(LocalDateTime.now())
         .mrBeatInfo(mrBeatInfo).build();
   }
 

@@ -1,5 +1,6 @@
 package com.study.palette.module.mrBeat.dto;
 
+import com.study.palette.common.enums.mrBeat.MrBeatMoodType;
 import com.study.palette.module.mrBeat.entity.MrBeatContact;
 import com.study.palette.module.mrBeat.entity.MrBeatFile;
 import com.study.palette.module.mrBeat.entity.MrBeatInfo;
@@ -36,10 +37,10 @@ public class MrBeatDetailResponseDto {
 
   public static MrBeatDetailResponseDto toEntity(MrBeatInfo mrBeatInfo) {
     return MrBeatDetailResponseDto.builder()
-        .id(mrBeatInfo.getId())
+        .id(mrBeatInfo.getId().toString())
         .serviceName(mrBeatInfo.getServiceName())
-        .mood(mrBeatInfo.getMood())
-        .genre(mrBeatInfo.getGenre())
+        .mood(mrBeatInfo.getMood().getCode())
+        .genre(mrBeatInfo.getGenre().getCode())
         .mrBeatFile(mrBeatInfo.getMrBeatFile())
         .mrBeatLicenseInfo(mrBeatInfo.getMrBeatLicenseInfo())
         .mrBeatContact(mrBeatInfo.getMrBeatContact())

@@ -4,6 +4,7 @@ package com.study.palette.module.mrBeat.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,10 +31,10 @@ public class MrBeatRequest {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private LocalDate createAt;
+  private LocalDate createdAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
   private Users users;
 

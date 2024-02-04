@@ -7,7 +7,7 @@ import com.study.palette.module.mrBeat.dto.MrBeatResponseDto;
 import com.study.palette.module.mrBeat.entity.QMrBeatFile;
 import com.study.palette.module.mrBeat.entity.QMrBeatInfo;
 import com.study.palette.module.mrBeat.entity.QMrBeatLicenseInfo;
-import com.study.palette.module.mrBeat.entity.QMrBeatMusicFIle;
+import com.study.palette.module.mrBeat.entity.QMrBeatMusicFile;
 import com.study.palette.module.mrBeat.entity.QMrBeatRequest;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -32,7 +32,7 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
 
     QMrBeatInfo mrBeatInfo = QMrBeatInfo.mrBeatInfo;
     QMrBeatFile mrBeatFile = QMrBeatFile.mrBeatFile;
-    QMrBeatMusicFIle mrBeatMusicFile = QMrBeatMusicFIle.mrBeatMusicFIle;
+    QMrBeatMusicFile mrBeatMusicFile = QMrBeatMusicFile.mrBeatMusicFile;
     QMrBeatLicenseInfo mrBeatLicenseInfo = QMrBeatLicenseInfo.mrBeatLicenseInfo;
     QMrBeatRequest mrBeatRequest = QMrBeatRequest.mrBeatRequest;
 
@@ -61,9 +61,10 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
         .on(mrBeatInfo.id.eq(mrBeatLicenseInfo.mrBeatInfo.id))
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .where(mrBeatInfo.salesType.eq(query.getSalesType().getCode())
-            .and(mrBeatInfo.genre.eq(query.getMrBeatGenreType().getCode())
-                .and(mrBeatInfo.mood.eq(query.getMrBeatAtmosphereType().getCode()))))
+        .where(query.getSaleTypeCondition(mrBeatInfo)
+            .and(query.getGenreTypeCondition(mrBeatInfo))
+            .and(query.getMoodTypeCondition(mrBeatInfo))
+            .and(mrBeatInfo.serviceStatus.isTrue()))
         .groupBy(mrBeatInfo.id,
             mrBeatInfo.serviceName,
             mrBeatInfo.salesType,

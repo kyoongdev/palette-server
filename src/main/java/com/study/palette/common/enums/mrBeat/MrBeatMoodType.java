@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum MrBeatAtmosphereType {
+public enum MrBeatMoodType {
 
+  ALL(0, "전체"),
   HAPPY(1, "행복한"),
   BRIGHT(2, "밝은"),
   EXCITED(3, "신나는"),
@@ -22,6 +23,15 @@ public enum MrBeatAtmosphereType {
   private int code;
 
   private String name;
+
+  public static MrBeatMoodType findMrBeatMoodType(int code) {
+    for (MrBeatMoodType moodType : values()) {
+      if (moodType.getCode() == code) {
+        return moodType;
+      }
+    }
+    throw new RuntimeException("atmosphereType 은 0 ~ 11 까지만 가능합니다.");
+  }
 
 
 }

@@ -31,6 +31,17 @@ import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import com.study.palette.module.mixMastering.entity.MixMasteringRequest;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
 import com.study.palette.module.mixMastering.repository.MixMasteringRequestRepository;
+import com.study.palette.module.mrBeat.dto.CreateMrBeatDto;
+import com.study.palette.module.mrBeat.dto.contact.CreateMrBeatContactDto;
+import com.study.palette.module.mrBeat.dto.file.CreateMrBeatFileDto;
+import com.study.palette.module.mrBeat.dto.file.CreateMrBeatMusicFileDto;
+import com.study.palette.module.mrBeat.dto.license.CreateMrBeatLicenseInfoDto;
+import com.study.palette.module.mrBeat.entity.MrBeatContact;
+import com.study.palette.module.mrBeat.entity.MrBeatFile;
+import com.study.palette.module.mrBeat.entity.MrBeatInfo;
+import com.study.palette.module.mrBeat.entity.MrBeatLicenseInfo;
+import com.study.palette.module.mrBeat.entity.MrBeatMusicFile;
+import com.study.palette.module.mrBeat.repository.MrBeatRepository;
 import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
 import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
@@ -73,14 +84,65 @@ public class InitData implements ApplicationRunner {
 
   private final RecordingRepository recordingRepository;
 
+  private final MrBeatRepository mrBeatRepository;
+
   /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
   @Override
   public void run(ApplicationArguments args) throws Exception {
     //dummydata 생성 분기처리
     Users initCommUser = usersRepository.findByEmail("test@test").orElse(null);
+    Users initCommUser2 = usersRepository.findByEmail("test@test1").orElse(null);
+
+    if(initCommUser2 != null) {
+      log.info("이미 더미데이터가 존재합니다.");
+      return;
+    } else {
+      log.info("더미데이터 생성 시작");
+      initCommUser2 = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test1").password(passwordEncoder.encode("test1234")).name("테스트").build());
+
+      /* mrBeat */
+      List<CreateMrBeatLicenseInfoDto> mrBeatLicenseInfos = new ArrayList<>();
+      List<CreateMrBeatContactDto> mrBeatContacts = new ArrayList<>();
+      List<MrBeatInfo> mrBeatInfoList = new ArrayList<>();
+
+      for(int i = 0; i < 10; i++){
+
+        for(int j = 0; j < 3; j++){
+          mrBeatLicenseInfos.add(new CreateMrBeatLicenseInfoDto(j + 1, 1000));
+        }
+
+        for(int j = 0; j < 3; j++){
+          mrBeatContacts.add(new CreateMrBeatContactDto(j + 1, "010-1234-1234"));
+        }
+
+        CreateMrBeatFileDto createMrBeatFileDto = new CreateMrBeatFileDto("www.test.com", "testFileName", "uploadfilname", 1000, "jpg", true);
+        CreateMrBeatMusicFileDto createMrBeatMusicFileDto = new CreateMrBeatMusicFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "mp3", true, LocalDateTime.now());
+        CreateMrBeatDto createMrBeatDto = new CreateMrBeatDto("serviceName", 1, 1, 1, mrBeatLicenseInfos, mrBeatContacts, createMrBeatFileDto, createMrBeatMusicFileDto, true);
+
+        MrBeatInfo mrBeatInfo = createMrBeatDto.toEntity(initCommUser2);
+
+        List<MrBeatLicenseInfo> mrBeatLicneses = createMrBeatDto.getMrBeatLicenseInfo().stream().map(mrBeatLicense -> MrBeatLicenseInfo.from(mrBeatLicense, mrBeatInfo)).toList();
+        List<MrBeatContact> mrBeatContactsList = createMrBeatDto.getMrBeatContact().stream().map(mrBeatContact -> MrBeatContact.from(mrBeatContact, mrBeatInfo)).toList();
+        MrBeatFile mrBeatFile = createMrBeatDto.getMrBeatFile().toEntity(mrBeatInfo);
+        MrBeatMusicFile mrBeatMusicFIle = createMrBeatDto.getMrBeatMusicFile().toEntity(mrBeatInfo);
+
+        mrBeatInfo.setMrBeatLicenseInfo(mrBeatLicneses);
+        mrBeatInfo.setMrBeatContact(mrBeatContactsList);
+        mrBeatInfo.setMrBeatFile(mrBeatFile);
+        mrBeatInfo.setMrBeatMusicFile(mrBeatMusicFIle);
+        mrBeatInfoList.add(mrBeatInfo);
+
+        mrBeatLicenseInfos.clear();
+        mrBeatContacts.clear();
+      }
+
+      /* mrBeat save */
+      mrBeatRepository.saveAll(mrBeatInfoList);
+    }
 
     if (initCommUser != null) {
       log.info("이미 더미데이터가 존재합니다.");
+
       return;
     } else {
       log.info("더미데이터 생성 시작");
@@ -92,6 +154,7 @@ public class InitData implements ApplicationRunner {
       List<CreateArtistFileDto> artistFiles = new ArrayList<>();
       List<CreateArtistContactDto> artistContacts = new ArrayList<>();
       List<ArtistInfo> artistInfoList = new ArrayList<>();
+
 
       for (int i = 0; i < 10; i++) {
 

@@ -2,7 +2,8 @@ package com.study.palette.module.mrBeat.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,12 +23,13 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Getter
 @Builder
-public class MrBeatMusicFIle {
+public class MrBeatMusicFile {
 
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
   private String url;
 
@@ -47,7 +49,7 @@ public class MrBeatMusicFIle {
   @Column(columnDefinition = "tinyint(1) default 1")
   private boolean isUse;
 
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "usersId")
@@ -55,7 +57,7 @@ public class MrBeatMusicFIle {
   private Users users;
 
   @OneToOne
-  @JoinColumn(name = "mrBeatInfo")
+  @JoinColumn(name = "mrBeatInfoId")
   @JsonIgnore
   private MrBeatInfo mrBeatInfo;
 

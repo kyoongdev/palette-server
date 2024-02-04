@@ -98,10 +98,11 @@ public class MrBeatController {
   })
   @PatchMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('MUSICIAN')")
   public ResponseWithIdDto updateMrBeat(@PathVariable String id,
-      @RequestBody UpdateMrBeatDto body) {
+      @Parameter(hidden = true) @GetUserInfo Users users, @RequestBody UpdateMrBeatDto body) {
 
-    ResponseWithIdDto result = mrBeatService.updateMrBeat(id, body);
+    ResponseWithIdDto result = mrBeatService.updateMrBeat(id, body, users);
 
     return result;
 
@@ -109,13 +110,15 @@ public class MrBeatController {
 
   @Operation(summary = "mr/beat 삭제", description = "mr/beat 삭제 메서드입니다.")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "생성 성공", content = @Content(mediaType = "application/json")),
+      @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "400", description = "Bad Request")
   })
   @DeleteMapping(path = "{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteMrBeat(@PathVariable String id) {
-    mrBeatService.deleteMrBeat(id);
+  @PreAuthorize("hasRole('MUSICIAN')")
+  public void deleteMrBeat(@PathVariable String id,
+      @Parameter(hidden = true) @GetUserInfo Users users) {
+    mrBeatService.deleteMrBeat(id, users);
   }
 
   @Operation(summary = "mr/beat 구매의뢰", description = "mr/beat 구매의뢰 메서드입니다.")
