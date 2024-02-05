@@ -19,14 +19,14 @@ public class UpdateMusicianDto {
     private List<UserSnsRequestDto> snsAddress = new ArrayList<>();
     private List<Integer> positionType = new ArrayList<>();
 
-    public UsersMusician toEntity(Users user) {
-        return UsersMusician.builder()
-                .stageName(this.getStageName())
-                .name(this.getName())
-                .groupType(this.getGroupType())
-                .usersSns(new ArrayList<>())
-                .usersPosition(new ArrayList<>())
-                .users(user)
-                .build();
-    }
+//    public UsersMusician toEntity(Users user) {
+//        return UsersMusician.builder()
+//                .stageName(this.getStageName())
+//                .name(this.getName())
+//                .groupType(this.getGroupType())
+//                .usersSns(new ArrayList<>())
+//                .usersPosition(new ArrayList<>())
+//                .users(user)
+//                .build();
+//    }
 }

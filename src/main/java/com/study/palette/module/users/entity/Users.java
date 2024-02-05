@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -109,8 +110,7 @@ public class Users {
     this.usersMusician = usersMusician;
   }
 
-  @OneToOne
-  @JoinColumn(name = "usersMusician")
+  @OneToOne(mappedBy = "users", fetch = FetchType.LAZY)
   private UsersMusician usersMusician;
 
   @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)

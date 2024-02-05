@@ -1,7 +1,12 @@
 package com.study.palette.module.musician.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.musician.MusicianPostionType;
+import com.study.palette.module.musician.dto.CreateMusicianPositionTypeDto;
 import com.study.palette.module.users.entity.Users;
+import java.time.LocalDateTime;
+import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,17 +23,21 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor
 @Getter
 @Builder
-public class UsersPosition {
+public class UsersMusicianPosition {
 
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private String id;
+  @Column(columnDefinition = "BINARY(16)")
+  private UUID id;
 
-  private int positionType;
+  private MusicianPostionType postionType;
+
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "usersMusicianId")
+  @JsonIgnore
   private UsersMusician usersMusician;
 
   @ManyToOne
@@ -36,7 +45,12 @@ public class UsersPosition {
   @JsonIgnore
   private Users users;
 
-  public static UsersPosition from(Integer userPositionList, UsersMusician usersMusician) {
-    return builder().positionType(userPositionList).usersMusician(usersMusician).users(usersMusician.getUsers()).build();
+  public static UsersMusicianPosition from(CreateMusicianPositionTypeDto musicianPositionTypeDto,
+      UsersMusician usersMusician) {
+    return builder().postionType(MusicianPostionType.findPositionType(musicianPositionTypeDto.getType()))
+        .createdAt(LocalDateTime.now())
+        .usersMusician(usersMusician)
+        .users(usersMusician.getUsers()).build();
   }
+
 }

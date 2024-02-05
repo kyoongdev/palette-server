@@ -42,6 +42,17 @@ import com.study.palette.module.mrBeat.entity.MrBeatInfo;
 import com.study.palette.module.mrBeat.entity.MrBeatLicenseInfo;
 import com.study.palette.module.mrBeat.entity.MrBeatMusicFile;
 import com.study.palette.module.mrBeat.repository.MrBeatRepository;
+import com.study.palette.module.musician.dto.CreateMusicianAccountDto;
+import com.study.palette.module.musician.dto.CreateMusicianDto;
+import com.study.palette.module.musician.dto.CreateMusicianFileDto;
+import com.study.palette.module.musician.dto.CreateMusicianPositionTypeDto;
+import com.study.palette.module.musician.dto.MusicianSnsRequestDto;
+import com.study.palette.module.musician.entity.UsersMusician;
+import com.study.palette.module.musician.entity.UsersMusicianAccount;
+import com.study.palette.module.musician.entity.UsersMusicianFile;
+import com.study.palette.module.musician.entity.UsersMusicianPosition;
+import com.study.palette.module.musician.entity.UsersMusicianSns;
+import com.study.palette.module.musician.repository.UsersMusicianRepository;
 import com.study.palette.module.recording.dto.file.RecordingFileCreateRequestDto;
 import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
 import com.study.palette.module.recording.dto.license.RecordingLicenseInfoCreateRequestDto;
@@ -86,19 +97,23 @@ public class InitData implements ApplicationRunner {
 
   private final MrBeatRepository mrBeatRepository;
 
+  private final UsersMusicianRepository usersMusicianRepository;
+
   /* 더미데이터 생성 시 new 연산자를 사용하거나 builder 패턴을 사용해서 데이터를 만들어준 뒤 reposiotry에 save (최초 한번만 실행 후 주석 처리) 추후 문제 처리 하겠습니다.*/
   @Override
   public void run(ApplicationArguments args) throws Exception {
     //dummydata 생성 분기처리
     Users initCommUser = usersRepository.findByEmail("test@test").orElse(null);
-    Users initCommUser2 = usersRepository.findByEmail("test@test1").orElse(null);
 
-    if(initCommUser2 != null) {
+
+    if (initCommUser != null) {
       log.info("이미 더미데이터가 존재합니다.");
+
       return;
     } else {
       log.info("더미데이터 생성 시작");
-      initCommUser2 = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test1").password(passwordEncoder.encode("test1234")).name("테스트").build());
+
+      initCommUser = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test").password(passwordEncoder.encode("test1234")).name("홍길동").build());
 
       /* mrBeat */
       List<CreateMrBeatLicenseInfoDto> mrBeatLicenseInfos = new ArrayList<>();
@@ -119,7 +134,7 @@ public class InitData implements ApplicationRunner {
         CreateMrBeatMusicFileDto createMrBeatMusicFileDto = new CreateMrBeatMusicFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "mp3", true, LocalDateTime.now());
         CreateMrBeatDto createMrBeatDto = new CreateMrBeatDto("serviceName", 1, 1, 1, mrBeatLicenseInfos, mrBeatContacts, createMrBeatFileDto, createMrBeatMusicFileDto, true);
 
-        MrBeatInfo mrBeatInfo = createMrBeatDto.toEntity(initCommUser2);
+        MrBeatInfo mrBeatInfo = createMrBeatDto.toEntity(initCommUser);
 
         List<MrBeatLicenseInfo> mrBeatLicneses = createMrBeatDto.getMrBeatLicenseInfo().stream().map(mrBeatLicense -> MrBeatLicenseInfo.from(mrBeatLicense, mrBeatInfo)).toList();
         List<MrBeatContact> mrBeatContactsList = createMrBeatDto.getMrBeatContact().stream().map(mrBeatContact -> MrBeatContact.from(mrBeatContact, mrBeatInfo)).toList();
@@ -138,16 +153,6 @@ public class InitData implements ApplicationRunner {
 
       /* mrBeat save */
       mrBeatRepository.saveAll(mrBeatInfoList);
-    }
-
-    if (initCommUser != null) {
-      log.info("이미 더미데이터가 존재합니다.");
-
-      return;
-    } else {
-      log.info("더미데이터 생성 시작");
-
-      initCommUser = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test").password(passwordEncoder.encode("test1234")).name("홍길동").build());
 
       /* artist */
       List<CreateArtistLicenseDto> artistLicenseInfo = new ArrayList<>();
@@ -167,7 +172,7 @@ public class InitData implements ApplicationRunner {
         }
 
         for (int j = 0; j < 3; j++) {
-          artistFiles.add(new CreateArtistFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", true));
+          artistFiles.add(new CreateArtistFileDto("https://pallete-file.s3.ap-northeast-2.amazonaws.com/7c540940-8dcb-43e7-8a58-91c6066c860d.png", "test.png", "7c540940-8dcb-43e7-8a58-91c6066c860d.png", 1000, "png", true));
         }
 
         CreateArtistDto createArtistDto = new CreateArtistDto("serviceName", "serviceInfo", "editInfo", 2, true, artistFiles, artistLicenseInfo, artistContacts);
@@ -222,14 +227,14 @@ public class InitData implements ApplicationRunner {
             new AlbumArtLicenseInfoCreateRequestDto(j + 1, 1000, "servedFile" + i, 3, null, 3, true, true, true, true));
 
         albumArtFileCreateRequestDtos.add(//앨범아트 파일 생성
-            new AlbumArtFileCreateRequestDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", false));
+            new AlbumArtFileCreateRequestDto("https://pallete-file.s3.ap-northeast-2.amazonaws.com/9710afc8-d935-449e-8e3c-f60733ec5eec.png", "test2.png", "9710afc8-d935-449e-8e3c-f60733ec5eec.png", 1000, "png", false));
 
         mixMasteringLicenseInfos.add(//mixMastering 라이센스 생성
             new CreateMixMasteringLicenseDto(j + 1, 1000, "제공파일" + i, 3, 0, 3, true, true, true, true)
         );
 
         mixMasteringFiles.add(//mixMastering 파일 생성
-            new CreateMixMasteringFileDto("fileNameTest", "uploadFileName", 1000, "www.test.com", "jpg", false)
+            new CreateMixMasteringFileDto("test3.jpg", "79fdbc28-1a11-440d-b2b9-9798a26a5712.jpg", 1000, "https://pallete-file.s3.ap-northeast-2.amazonaws.com/79fdbc28-1a11-440d-b2b9-9798a26a5712.jpg", "jpg", false)
         );
 
         recordingLicenseInfos.add(//recording 라이센스 생성
@@ -310,5 +315,55 @@ public class InitData implements ApplicationRunner {
       albumArtRequestRepository.save(albumArtRequest);
       mixMasteringRequestRepository.save(mixMasteringRequest);
     }
+
+    /* musician */
+    List<CreateMusicianDto> musicianDtos = new ArrayList<>();
+    List<MusicianSnsRequestDto> musicianSnsRequestDtos = new ArrayList<>();
+    List<CreateMusicianPositionTypeDto> musicianPositionTypeDtos = new ArrayList<>();
+
+    List<UsersMusician> usersMusicianList = new ArrayList<>();
+
+    for (int i = 0; i < 10; i++) {
+
+      if(i > 0) {
+        initCommUser = usersRepository.save(Users.builder().role(Role.MUSICIAN).email("test@test" + i).password(passwordEncoder.encode("test1234")).name("홍길동" + i).build());
+      }
+
+      for (int j = 0; j < 3; j++) {
+        musicianSnsRequestDtos.add(new MusicianSnsRequestDto(j + 1, "www.test.com"));
+      }
+
+      for (int j = 0; j < 3; j++) {
+        musicianPositionTypeDtos.add(new CreateMusicianPositionTypeDto(1));
+      }
+
+      CreateMusicianFileDto createMusicianFileDto = new CreateMusicianFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", true);
+      CreateMusicianAccountDto createMusicianAccountDto = new CreateMusicianAccountDto(1, "1234-1234-1234", "홍길동" + i);
+      CreateMusicianDto createMusicianDto = new CreateMusicianDto("stageName" + i, "name" + i, 1, musicianSnsRequestDtos, musicianPositionTypeDtos, createMusicianFileDto, createMusicianAccountDto);
+
+
+
+      UsersMusician usersMusician = createMusicianDto.toEntity(initCommUser);
+
+      UsersMusicianFile usersMusicianFile = createMusicianDto.getCreateMusicianFileDto().toEntity(usersMusician);
+      UsersMusicianAccount usersMusicianAccount = createMusicianDto.getCreateMusicianAccountDto().toEntity(usersMusician);
+
+      List<UsersMusicianSns> snsList = createMusicianDto.getSnsAddress().stream().map(sns -> UsersMusicianSns.from(sns, usersMusician)).toList();
+      List<UsersMusicianPosition> positionList = createMusicianDto.getPositionType().stream().map(position -> UsersMusicianPosition.from(position, usersMusician)).toList();
+
+
+      usersMusician.setUsersMusicianSns(snsList);
+      usersMusician.setUsersMusicianPosition(positionList);
+      usersMusician.setUsersMusicianFile(usersMusicianFile);
+      usersMusician.setUsersMusicianAccount(usersMusicianAccount);
+      usersMusicianList.add(usersMusician);
+
+      musicianSnsRequestDtos.clear();
+      musicianPositionTypeDtos.clear();
+
+    }
+
+    /* musician save */
+    usersMusicianRepository.saveAll(usersMusicianList);
   }
 }
