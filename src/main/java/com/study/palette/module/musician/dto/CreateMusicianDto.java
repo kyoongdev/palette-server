@@ -1,5 +1,6 @@
 package com.study.palette.module.musician.dto;
 
+import com.study.palette.common.enums.musician.MusicianAuthorizedType;
 import com.study.palette.common.enums.musician.MusicianGroupType;
 import com.study.palette.module.musician.entity.UsersMusician;
 import com.study.palette.module.musician.entity.UsersMusicianAccount;
@@ -28,6 +29,9 @@ public class CreateMusicianDto {
   @Schema(description = "활동 인원", example = "1 : 솔로 2 : 그룹")
   private int groupType;
 
+  @Schema(description = "활동 인원", example = "1 : 승인대기 2 : 승인 3 : 반려")
+  private int isAuthorized;
+
   private List<MusicianSnsRequestDto> snsAddress;
 
   private List<CreateMusicianPositionTypeDto> positionType;
@@ -41,6 +45,7 @@ public class CreateMusicianDto {
         .stageName(this.getStageName())
         .name(this.getName())
         .groupType(MusicianGroupType.findMusicianGroupType(this.getGroupType()))
+        .isAuthorized(MusicianAuthorizedType.findMusicianAuthorizedType(this.getIsAuthorized()))
         .usersMusicianSns(new ArrayList<>())
         .usersMusicianPosition(new ArrayList<>())
         .usersMusicianFile(new UsersMusicianFile())

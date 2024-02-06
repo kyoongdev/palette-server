@@ -317,7 +317,6 @@ public class InitData implements ApplicationRunner {
     }
 
     /* musician */
-    List<CreateMusicianDto> musicianDtos = new ArrayList<>();
     List<MusicianSnsRequestDto> musicianSnsRequestDtos = new ArrayList<>();
     List<CreateMusicianPositionTypeDto> musicianPositionTypeDtos = new ArrayList<>();
 
@@ -337,9 +336,9 @@ public class InitData implements ApplicationRunner {
         musicianPositionTypeDtos.add(new CreateMusicianPositionTypeDto(1));
       }
 
-      CreateMusicianFileDto createMusicianFileDto = new CreateMusicianFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "jpg", true);
-      CreateMusicianAccountDto createMusicianAccountDto = new CreateMusicianAccountDto(1, "1234-1234-1234", "홍길동" + i);
-      CreateMusicianDto createMusicianDto = new CreateMusicianDto("stageName" + i, "name" + i, 1, musicianSnsRequestDtos, musicianPositionTypeDtos, createMusicianFileDto, createMusicianAccountDto);
+      CreateMusicianFileDto createMusicianFileDto = new CreateMusicianFileDto("www.test.com", "testfilenale", "uploadfilname", "uploadFilePath", 1000, "jpg", true);
+      CreateMusicianAccountDto createMusicianAccountDto = new CreateMusicianAccountDto(1, "123412341234", "홍길동" + i);
+      CreateMusicianDto createMusicianDto = new CreateMusicianDto("stageName" + i, "name" + i, 1, 1,musicianSnsRequestDtos, musicianPositionTypeDtos, createMusicianFileDto, createMusicianAccountDto);
 
 
 

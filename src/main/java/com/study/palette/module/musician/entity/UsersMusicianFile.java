@@ -44,8 +44,6 @@ public class UsersMusicianFile {
   @Column(length = 256)
   private String uploadFilePath;
 
-  private int fileType;
-
   @Column(length = 4)
   private String suffix;
 

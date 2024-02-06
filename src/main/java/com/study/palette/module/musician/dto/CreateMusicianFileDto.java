@@ -21,6 +21,9 @@ public class CreateMusicianFileDto {
   @Schema(description = "업로드 파일명", example = "artist_20210721123456.jpg")
   private String uploadFileName;
 
+  @Schema(description = "업로드 파일 경로", example = "artist/2021/07/21")
+  private String uploadFilePath;
+
   @Schema(description = "업로드 파일 크기", example = "1000")
   private int uploadFileSize;
 
@@ -35,10 +38,12 @@ public class CreateMusicianFileDto {
         .url(this.getUrl())
         .originFileName(this.getOriginFileName())
         .uploadFileName(this.getUploadFileName())
+        .uploadFilePath(this.getUploadFilePath())
         .uploadFileSize(this.getUploadFileSize())
         .suffix(this.getSuffix())
         .isUse(this.isUse())
         .usersMusician(usersMusician)
+        .users(usersMusician.getUsers())
         .createdAt(LocalDateTime.now())
         .build();
   }
