@@ -42,8 +42,6 @@ public class MrBeatFile {
 
   private int uploadFileSize;
 
-  private int fileType;
-
   @Column(length = 4)
   private String suffix;
 

@@ -31,7 +31,7 @@ public class MrBeatRequest {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "usersId")

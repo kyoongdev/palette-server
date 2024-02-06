@@ -21,6 +21,7 @@ import com.study.palette.module.mrBeat.repository.MrBeatRepository;
 import com.study.palette.module.mrBeat.repository.MrBeatRequestRepository;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -153,14 +154,14 @@ public class MrBeatService {
         .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
 
     Optional<MrBeatRequest> mrBeatRequest = mrBeatRequestRepository.findByMrBeatInfoAndUserAndCreatedAt(
-        mrBeatInfo, users, LocalDate.now());
+        mrBeatInfo, users, LocalDateTime.now());
 
     if (mrBeatRequest.isPresent()) {
       throw new MrBeatException(MrBeatErrorCode.MRBEAT_REQUEST_ALREADY_EXISTS);
     }
 
     mrBeatRequestRepository.save(
-        MrBeatRequest.builder().mrBeatInfo(mrBeatInfo).users(users).createdAt(LocalDate.now())
+        MrBeatRequest.builder().mrBeatInfo(mrBeatInfo).users(users).createdAt(LocalDateTime.now())
             .build());
 
   }
