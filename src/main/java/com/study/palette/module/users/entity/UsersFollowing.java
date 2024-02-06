@@ -1,6 +1,7 @@
 package com.study.palette.module.users.entity;
 
 import java.time.LocalDate;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ public class UsersFollowing {
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
   @Column(length = 24)
-  private String id;
+  private UUID id;
 
   private LocalDate createdAt;
   @Column(length = 24)
