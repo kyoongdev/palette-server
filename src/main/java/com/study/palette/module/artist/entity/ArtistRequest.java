@@ -34,7 +34,7 @@ public class ArtistRequest {
   private LocalDateTime createdAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
   private Users users;
 
