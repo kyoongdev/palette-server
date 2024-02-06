@@ -10,7 +10,6 @@ import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.albumArt.entity.QAlbumArtInfo;
 import com.study.palette.module.albumArt.entity.QAlbumArtRequest;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +20,7 @@ import lombok.Setter;
 public abstract class AlbumArtConditions extends PageDto {
 
   @JsonIgnore
-  private int saleType;
+  private int salesType;
   @JsonIgnore
   private int customSort;
 
@@ -34,22 +33,22 @@ public abstract class AlbumArtConditions extends PageDto {
   }
 
   public BooleanExpression getSaleTypeCondition(QAlbumArtInfo albumArtInfo) {
-    if (AlbumArtSaleType.findAlbumArtSaleType(this.saleType) == AlbumArtSaleType.ALL) {
+    if (AlbumArtSaleType.findAlbumArtSaleType(this.salesType) == AlbumArtSaleType.ALL) {
       return Expressions.TRUE.eq(Expressions.TRUE);
     } else {
-      return albumArtInfo.salesType.eq(AlbumArtSaleType.findAlbumArtSaleType(this.saleType));
+      return albumArtInfo.salesType.eq(AlbumArtSaleType.findAlbumArtSaleType(this.salesType));
     }
   }
 
-  public AlbumArtConditions(int saleType, int customSort) {
-    this.saleType = saleType;
+  public AlbumArtConditions(int salesType, int customSort) {
+    this.salesType = salesType;
     this.customSort = customSort;
     System.out.println("AlbumArtConditions 생성자 호출");
   }
 
   //setter
-  public void setSaleType(int saleType) {
-    this.saleType = saleType;
+  public void setSaleType(int salesType) {
+    this.salesType = salesType;
     System.out.println("AlbumArtConditions setSaleType 호출");
   }
 

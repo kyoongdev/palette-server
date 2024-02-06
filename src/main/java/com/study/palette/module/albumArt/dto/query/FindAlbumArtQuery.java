@@ -12,7 +12,7 @@ public class FindAlbumArtQuery extends AlbumArtConditions {
  */
   @Schema(description = "판매유형", defaultValue = "0")
   @Min(value = 0, message = "판매유형은 0 ~ 4 까지만 가능합니다.")
-  private int saleType;
+  private int salesType;
 
   /*
   인기순 = 매출액 순(매출액이 같은 경우 판매량 순)
@@ -30,8 +30,8 @@ public class FindAlbumArtQuery extends AlbumArtConditions {
   @Min(value = 0, message = "정렬은 0 ~ 3 까지만 가능합니다.")
   private int customSort;
 
-  public FindAlbumArtQuery(int saleType, int customSort) {
-    super(saleType, customSort);
+  public FindAlbumArtQuery(int salesType, int customSort) {
+    super(salesType, customSort);
     System.out.println("FindAlbumArtQuery 생성자 호출");
   }
 
