@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface MixMasteringRequestRepository extends JpaRepository<MixMasteringRequest, String> {
 
-  @Query("select a from MixMasteringRequest a where a.users = :users and a.mixMasteringInfo = :mixMasteringInfo and a.createAt = :now")
+  @Query("select a from MixMasteringRequest a where a.users = :users and a.mixMasteringInfo = :mixMasteringInfo and a.createdAt = :now")
   Optional<MixMasteringRequest> findByMixMasteringInfoAndUsersAndCreatedAt(Users user,
       MixMasteringInfo mixMasteringInfo, LocalDateTime now);
 }

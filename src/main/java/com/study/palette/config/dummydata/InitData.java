@@ -309,8 +309,8 @@ public class InitData implements ApplicationRunner {
       UUID serviceId = albumArtRepository.findByServiceName("serviceName" + randomValue2).getId();
       UUID serviceId2 = mixMasteringRepository.findByServiceName("serviceName" + randomValue2).getId();
 
-      AlbumArtRequest albumArtRequest = AlbumArtRequest.builder().albumArtInfo(albumArtRepository.findById(serviceId).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
-      MixMasteringRequest mixMasteringRequest = MixMasteringRequest.builder().mixMasteringInfo(mixMasteringRepository.findById(serviceId2).get()).users(initCommUser).createAt(LocalDateTime.now()).build();
+      AlbumArtRequest albumArtRequest = AlbumArtRequest.builder().albumArtInfo(albumArtRepository.findById(serviceId).get()).users(initCommUser).createdAt(LocalDateTime.now()).build();
+      MixMasteringRequest mixMasteringRequest = MixMasteringRequest.builder().mixMasteringInfo(mixMasteringRepository.findById(serviceId2).get()).users(initCommUser).createdAt(LocalDateTime.now()).build();
 
       albumArtRequestRepository.save(albumArtRequest);
       mixMasteringRequestRepository.save(mixMasteringRequest);

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AlbumArtRequestRepository extends JpaRepository<AlbumArtRequest, String> {
 
-  @Query("select a from AlbumArtRequest a where a.users = :users and a.albumArtInfo = :albumArtInfo and a.createAt = :now")
+  @Query("select a from AlbumArtRequest a where a.users = :users and a.albumArtInfo = :albumArtInfo and a.createdAt = :now")
   Optional<AlbumArtRequest> findByAlbumArtInfoAndUsersAndCreatedAt(Users users,
       AlbumArtInfo albumArtInfo, LocalDateTime now);
 }

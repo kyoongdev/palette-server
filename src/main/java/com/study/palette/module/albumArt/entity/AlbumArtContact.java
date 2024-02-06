@@ -38,7 +38,7 @@ public class AlbumArtContact {
 
   private String content;
 
-  private LocalDateTime createAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "albumArtInfoId")

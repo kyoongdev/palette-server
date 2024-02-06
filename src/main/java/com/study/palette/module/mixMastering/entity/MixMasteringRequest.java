@@ -29,10 +29,10 @@ public class MixMasteringRequest {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private LocalDateTime createAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
-  @JoinColumn(name = "userId")
+  @JoinColumn(name = "usersId")
   @JsonIgnore
   private Users users;
 

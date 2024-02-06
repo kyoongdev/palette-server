@@ -37,7 +37,7 @@ public class RecordingLicenseInfo {
 
   private int useTime;
 
-  private LocalDate createAt;
+  private LocalDate createdAt;
 
   @ManyToOne
   @JoinColumn(name = "usersId")

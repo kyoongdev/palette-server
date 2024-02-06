@@ -129,7 +129,7 @@ public class MixMasteringService {
     mixMasteringRequestRepository.save(MixMasteringRequest.builder()
         .mixMasteringInfo(mixMasteringInfo)
         .users(users)
-        .createAt(LocalDateTime.now())
+        .createdAt(LocalDateTime.now())
         .build()
     );
   }

@@ -111,7 +111,7 @@ public class AlbumArtService {
     albumArtRequestRepository.save(AlbumArtRequest.builder()
         .albumArtInfo(albumArtInfo)
         .users(users)
-        .createAt(LocalDateTime.now())
+        .createdAt(LocalDateTime.now())
         .build()
     );
   }

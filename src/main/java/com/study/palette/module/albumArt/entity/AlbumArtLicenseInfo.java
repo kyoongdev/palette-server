@@ -53,7 +53,7 @@ public class AlbumArtLicenseInfo {
 
   private boolean isOtherUseApproved;
 
-  private LocalDateTime createAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "usersId")
