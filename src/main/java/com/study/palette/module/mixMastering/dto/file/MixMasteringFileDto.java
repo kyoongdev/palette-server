@@ -4,9 +4,13 @@ package com.study.palette.module.mixMastering.dto.file;
 import com.study.palette.module.mixMastering.entity.MixMasteringFile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MixMasteringFileDto {
 
   @Schema(description = "파일 아이디")

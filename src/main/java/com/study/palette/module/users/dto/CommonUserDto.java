@@ -3,10 +3,14 @@ package com.study.palette.module.users.dto;
 
 import com.study.palette.module.users.entity.Users;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 // users relation에 사용하는 dto(기본 유저)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommonUserDto {
 
   @Schema(description = "아이디")

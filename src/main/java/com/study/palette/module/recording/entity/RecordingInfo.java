@@ -101,4 +101,8 @@ public class RecordingInfo {
   public void setRecordingFile(List<RecordingFile> recordingFile) {
     this.recordingFile = recordingFile;
   }
+
+  public void updateServiceStatus(boolean serviceStatus) {
+    this.serviceStatus = serviceStatus;
+  }
 }

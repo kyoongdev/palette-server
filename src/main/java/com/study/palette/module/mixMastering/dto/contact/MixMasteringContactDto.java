@@ -1,13 +1,17 @@
 package com.study.palette.module.mixMastering.dto.contact;
 
 
-import com.study.palette.common.enums.Contact;
 import com.study.palette.module.mixMastering.entity.MixMasteringContact;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MixMasteringContactDto {
+
   @Schema(description = "아이디")
   private String id;
 

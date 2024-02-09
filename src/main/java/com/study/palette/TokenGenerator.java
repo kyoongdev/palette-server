@@ -35,11 +35,15 @@ public class TokenGenerator implements CommandLineRunner {
     if (user != null) {
       log.info("이미 더미데이터가 존재합니다.");
       Authentication authentication = jwtTokenProvider.getAuthentication(user.getId().toString());
-      log.info("\n" + jwtTokenProvider.createToken(authentication).getAccessToken());
+      log.info("MUSICIAN : \n" + jwtTokenProvider.createToken(authentication).getAccessToken());
+
+      Users adminUser = usersRepository.findByEmail("adminEmail").orElse(null);
+      Authentication adminAuthentication = jwtTokenProvider.getAuthentication(adminUser.getId().toString());
+      log.info("ADMIN : \n" + jwtTokenProvider.createToken(adminAuthentication).getAccessToken());
       return;
     }
     // 여기에 초기 데이터 생성 로직을 작성
-    Users data = Users.builder()
+    Users musicianUsers = Users.builder()
         .email("testEmail")
         .password(passwordEncoder.encode("testPassword"))
         .role(Role.MUSICIAN)
@@ -49,10 +53,25 @@ public class TokenGenerator implements CommandLineRunner {
         .loginFailCount(0)
         .isLocked(false)
         .build();
-    usersRepository.save(data);
+    usersRepository.save(musicianUsers);
 
-    Authentication authentication = jwtTokenProvider.getAuthentication(data.getId().toString());
-    log.info("\n" + jwtTokenProvider.createToken(authentication).getAccessToken());
+    Users adminUsers = Users.builder()
+        .email("adminEmail")
+        .password(passwordEncoder.encode("testPassword"))
+        .role(Role.ADMIN)
+        .name("adminName")
+        .phone("adminPhone")
+        .isAlarmAccept(true)
+        .loginFailCount(0)
+        .isLocked(false)
+        .build();
+    usersRepository.save(adminUsers);
+
+    Authentication musicianAuthentication = jwtTokenProvider.getAuthentication(musicianUsers.getId().toString());
+    Authentication adminAuthentication = jwtTokenProvider.getAuthentication(adminUsers.getId().toString());
+
+    log.info("MUSICIAN : \n" + jwtTokenProvider.createToken(musicianAuthentication).getAccessToken());
+    log.info("ADMIN : \n" + jwtTokenProvider.createToken(adminAuthentication).getAccessToken());
 
   }
 }

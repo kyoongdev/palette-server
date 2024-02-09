@@ -67,14 +67,18 @@ public class MixMasteringInfo {
   @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MixMasteringLicenseInfo> mixMasteringLicenseInfos;
 
-  @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MixMasteringFile> mixMasteringFiles = new ArrayList<>();
 
-  @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "mixMasteringInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MixMasteringContact> mixMasteringContacts;
 
   @ManyToOne()
   @JoinColumn(name = "usersId")
   @JsonIgnore
   private Users users;
+
+  public void updateServiceStatus(boolean serviceStatus) {
+    this.serviceStatus = serviceStatus;
+  }
 }

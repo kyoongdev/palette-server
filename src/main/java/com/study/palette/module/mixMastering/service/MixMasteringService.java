@@ -3,6 +3,9 @@ package com.study.palette.module.mixMastering.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
+import com.study.palette.module.albumArt.entity.AlbumArtInfo;
+import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
+import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.mixMastering.dto.CreateMixMasteringDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDetailDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDto;
@@ -84,13 +87,13 @@ public class MixMasteringService {
   /* MixMastering 수정*/
   @Transactional
   public void updateMixMastering(String id, MixMasteringDto mixMasteringDto,
-      Users user) {
+      Users users) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUsers().getId().equals(user.getId())) {
+    if (!mixMasteringInfo.getUsers().getId().equals(users.getId()) && !users.getRole().getKey().equals("ROLE_ADMIN")) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
@@ -99,13 +102,13 @@ public class MixMasteringService {
 
   /* MixMastering 삭제*/
   @Transactional
-  public void deleteMixMastering(String id, Users user) {
+  public void deleteMixMastering(String id, Users users) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUsers().getId().equals(user.getId())) {
+    if (!mixMasteringInfo.getUsers().getId().equals(users.getId()) && !users.getRole().getKey().equals("ROLE_ADMIN")) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
@@ -132,5 +135,16 @@ public class MixMasteringService {
         .createdAt(LocalDateTime.now())
         .build()
     );
+  }
+
+  /* mixMastering 판매글 등록/신청 승인 반려 처리*/
+  @Transactional
+  public void updateServiceStatus(String id, boolean status) {
+    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+
+    mixMasteringInfo.updateServiceStatus(status);
+
+    mixMasteringRepository.save(mixMasteringInfo);
   }
 }

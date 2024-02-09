@@ -2,6 +2,7 @@ package com.study.palette.module.recording.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
+import com.study.palette.module.albumArt.entity.AlbumArtInfo;
 import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
 import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
@@ -96,5 +97,16 @@ public class RecordingService {
     }
 
     recordingRepository.delete(recordingInfo);
+  }
+
+  /* recording 판매글 등록/신청 승인 반려 처리*/
+  @Transactional
+  public void updateServiceStatus(String id, boolean status) {
+    RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+
+    recordingInfo.updateServiceStatus(status);
+
+    recordingRepository.save(recordingInfo);
   }
 }

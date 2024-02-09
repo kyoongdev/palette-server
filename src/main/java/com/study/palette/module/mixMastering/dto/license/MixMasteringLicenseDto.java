@@ -5,11 +5,15 @@ import com.study.palette.common.enums.LicenseType;
 import com.study.palette.module.mixMastering.entity.MixMasteringLicenseInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MixMasteringLicenseDto {
 
 
