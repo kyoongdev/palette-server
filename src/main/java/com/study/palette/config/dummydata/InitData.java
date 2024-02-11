@@ -1,5 +1,7 @@
 package com.study.palette.config.dummydata;
 
+import com.study.palette.common.enums.musician.ApprovalType;
+import com.study.palette.common.enums.musician.MusicianAuthorizedType;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactCreateDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileCreateRequestDto;
 import com.study.palette.module.albumArt.dto.info.AlbumArtCreateRequestDto;
@@ -120,19 +122,38 @@ public class InitData implements ApplicationRunner {
       List<CreateMrBeatContactDto> mrBeatContacts = new ArrayList<>();
       List<MrBeatInfo> mrBeatInfoList = new ArrayList<>();
 
-      for(int i = 0; i < 10; i++){
+      /* artist */
+      List<CreateArtistLicenseDto> artistLicenseInfo = new ArrayList<>();
+      List<CreateArtistFileDto> artistFiles = new ArrayList<>();
+      List<CreateArtistContactDto> artistContacts = new ArrayList<>();
+      List<ArtistInfo> artistInfoList = new ArrayList<>();
 
-        for(int j = 0; j < 3; j++){
+      for(int i = 0; i < 20; i++){
+
+        for(int j = 0; j < 3; j++) {
           mrBeatLicenseInfos.add(new CreateMrBeatLicenseInfoDto(j + 1, 1000));
+
+          mrBeatContacts.add(new CreateMrBeatContactDto(j + 1, "010-1234-1234"));
+
+          artistLicenseInfo.add(
+              new CreateArtistLicenseDto(j + 1, 1000, "servedFile" + i, 3, 1, 1, true, true, true));
+
+          artistContacts.add(new CreateArtistContactDto(j + 1, "010-1234-1234"));
+
+          artistFiles.add(new CreateArtistFileDto("https://pallete-file.s3.ap-northeast-2.amazonaws.com/7c540940-8dcb-43e7-8a58-91c6066c860d.png", "test.png", "7c540940-8dcb-43e7-8a58-91c6066c860d.png", 1000, "png", true));
         }
 
-        for(int j = 0; j < 3; j++){
-          mrBeatContacts.add(new CreateMrBeatContactDto(j + 1, "010-1234-1234"));
-        }
+        CreateArtistDto createArtistDto = new CreateArtistDto("serviceName", "serviceInfo", "editInfo", 2, artistFiles, artistLicenseInfo, artistContacts);
+
+        ArtistInfo artistInfo = createArtistDto.toEntity(initCommUser);
+
+        List<ArtistLicenseInfo> artistLicenseInfos = createArtistDto.getArtistLicenseInfo().stream().map(license -> ArtistLicenseInfo.from(license, artistInfo)).toList();
+        List<ArtistContact> artistContactList = createArtistDto.getArtistContactDto().stream().map(contact -> ArtistContact.from(contact, artistInfo)).toList();
+        List<ArtistFile> artistFileList = createArtistDto.getArtistFileDto().stream().map(file -> ArtistFile.from(file, artistInfo)).toList();
 
         CreateMrBeatFileDto createMrBeatFileDto = new CreateMrBeatFileDto("www.test.com", "testFileName", "uploadfilname", 1000, "jpg", true);
         CreateMrBeatMusicFileDto createMrBeatMusicFileDto = new CreateMrBeatMusicFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "mp3", true, LocalDateTime.now());
-        CreateMrBeatDto createMrBeatDto = new CreateMrBeatDto("serviceName", 1, 1, 1, mrBeatLicenseInfos, mrBeatContacts, createMrBeatFileDto, createMrBeatMusicFileDto, true);
+        CreateMrBeatDto createMrBeatDto = new CreateMrBeatDto("serviceName", 1, 1, 1, mrBeatLicenseInfos, mrBeatContacts, createMrBeatFileDto, createMrBeatMusicFileDto);
 
         MrBeatInfo mrBeatInfo = createMrBeatDto.toEntity(initCommUser);
 
@@ -141,60 +162,43 @@ public class InitData implements ApplicationRunner {
         MrBeatFile mrBeatFile = createMrBeatDto.getMrBeatFile().toEntity(mrBeatInfo);
         MrBeatMusicFile mrBeatMusicFIle = createMrBeatDto.getMrBeatMusicFile().toEntity(mrBeatInfo);
 
+        artistInfo.setArtistLicenseInfo(artistLicenseInfos);
+        artistInfo.setArtistContact(artistContactList);
+        artistInfo.setArtistFile(artistFileList);
+        artistInfo.updateIsSelling(true);
+        artistInfo.setApprovalStatus(ApprovalType.APPROVED);
+
+        if(i > 15) {
+          artistInfo.updateIsSelling(false);
+          artistInfo.setApprovalStatus(ApprovalType.REJECTED);
+          artistInfo.setRefusalReason("거부 사유입니다.");
+        }
+
         mrBeatInfo.setMrBeatLicenseInfo(mrBeatLicneses);
         mrBeatInfo.setMrBeatContact(mrBeatContactsList);
         mrBeatInfo.setMrBeatFile(mrBeatFile);
         mrBeatInfo.setMrBeatMusicFile(mrBeatMusicFIle);
-        mrBeatInfoList.add(mrBeatInfo);
+        mrBeatInfo.updateIsSelling(true);
+        mrBeatInfo.setApprovalStatus(ApprovalType.APPROVED);
 
+        if(i > 10) {
+          mrBeatInfo.updateIsSelling(false);
+          mrBeatInfo.setApprovalStatus(ApprovalType.REJECTED);
+          mrBeatInfo.setRefusalReason("거부 사유입니다.");
+        }
+
+        artistInfoList.add(artistInfo);
+        artistLicenseInfo.clear();
+        artistFiles.clear();
+        artistContacts.clear();
+
+        mrBeatInfoList.add(mrBeatInfo);
         mrBeatLicenseInfos.clear();
         mrBeatContacts.clear();
       }
 
       /* mrBeat save */
       mrBeatRepository.saveAll(mrBeatInfoList);
-
-      /* artist */
-      List<CreateArtistLicenseDto> artistLicenseInfo = new ArrayList<>();
-      List<CreateArtistFileDto> artistFiles = new ArrayList<>();
-      List<CreateArtistContactDto> artistContacts = new ArrayList<>();
-      List<ArtistInfo> artistInfoList = new ArrayList<>();
-
-
-      for (int i = 0; i < 10; i++) {
-
-        for (int j = 0; j < 3; j++) {
-          artistLicenseInfo.add(new CreateArtistLicenseDto(j + 1, 1000, "servedFile" + i, 3, 1, 1, true, true, true));
-        }
-
-        for (int j = 0; j < 3; j++) {
-          artistContacts.add(new CreateArtistContactDto(j + 1, "010-1234-1234"));
-        }
-
-        for (int j = 0; j < 3; j++) {
-          artistFiles.add(new CreateArtistFileDto("https://pallete-file.s3.ap-northeast-2.amazonaws.com/7c540940-8dcb-43e7-8a58-91c6066c860d.png", "test.png", "7c540940-8dcb-43e7-8a58-91c6066c860d.png", 1000, "png", true));
-        }
-
-        CreateArtistDto createArtistDto = new CreateArtistDto("serviceName", "serviceInfo", "editInfo", 2, true, artistFiles, artistLicenseInfo, artistContacts);
-
-        ArtistInfo artistInfo = createArtistDto.toEntity(initCommUser);
-
-        List<ArtistLicenseInfo> artistLicenseInfos = createArtistDto.getArtistLicenseInfo().stream().map(license -> ArtistLicenseInfo.from(license, artistInfo)).toList();
-
-        List<ArtistContact> artistContactList = createArtistDto.getArtistContactDto().stream().map(contact -> ArtistContact.from(contact, artistInfo)).toList();
-
-        List<ArtistFile> artistFileList = createArtistDto.getArtistFileDto().stream().map(file -> ArtistFile.from(file, artistInfo)).toList();
-
-        artistInfo.setArtistLicenseInfo(artistLicenseInfos);
-        artistInfo.setArtistContact(artistContactList);
-        artistInfo.setArtistFile(artistFileList);
-        artistInfoList.add(artistInfo);
-
-        artistLicenseInfo.clear();
-        artistFiles.clear();
-        artistContacts.clear();
-
-      }
 
       /* artist save*/
       artistRepository.saveAll(artistInfoList);
@@ -265,6 +269,14 @@ public class InitData implements ApplicationRunner {
       albumArtInfo.setAlbumArtContact(contacts);
       albumArtInfo.setAlbumArtFiles(files);
       albumArtInfo.updateIsSelling(true);
+      albumArtInfo.setApprovalStatus(ApprovalType.APPROVED);
+
+      if(i > 40) {
+        albumArtInfo.updateIsSelling(false);
+        albumArtInfo.setApprovalStatus(ApprovalType.REJECTED);
+        albumArtInfo.setRefusalReason("거부 사유입니다.");
+      }
+
       albumArtInfos.add(albumArtInfo);
       albumArtLicenseCreateRequestDtos.clear();
       albumArtContactCreateDtos.clear();
@@ -281,6 +293,14 @@ public class InitData implements ApplicationRunner {
       mixMasteringInfo.setMixMasteringContacts(mixMasteringContact);
       mixMasteringInfo.setMixMasteringFiles(mixMasteringFile);
       mixMasteringInfo.updateIsSelling(true);
+      mixMasteringInfo.setApprovalStatus(ApprovalType.APPROVED);
+
+      if(i > 40) {
+        mixMasteringInfo.updateIsSelling(false);
+        mixMasteringInfo.setApprovalStatus(ApprovalType.REJECTED);
+        mixMasteringInfo.setRefusalReason("거부 사유입니다.");
+      }
+
       mixMasteringInfos.add(mixMasteringInfo);
       mixMasteringLicenseInfos.clear();
       mixMasteringContacts.clear();
@@ -295,6 +315,14 @@ public class InitData implements ApplicationRunner {
       recordingInfo.setRecordingLicenseInfo(recordingLicenseInfo);
       recordingInfo.setRecordingFile(recordingFile);
       recordingInfo.updateIsSelling(true);
+      recordingInfo.setApprovalStatus(ApprovalType.APPROVED);
+
+      if(i > 40) {
+        recordingInfo.updateIsSelling(false);
+        recordingInfo.setApprovalStatus(ApprovalType.REJECTED);
+        recordingInfo.setRefusalReason("거부 사유입니다.");
+      }
+
       recordingInfos.add(recordingInfo);
       recordingLicenseInfos.clear();
       recordingFiles.clear();
@@ -341,7 +369,7 @@ public class InitData implements ApplicationRunner {
 
       CreateMusicianFileDto createMusicianFileDto = new CreateMusicianFileDto("www.test.com", "testfilenale", "uploadfilname", "uploadFilePath", 1000, "jpg", true);
       CreateMusicianAccountDto createMusicianAccountDto = new CreateMusicianAccountDto(1, "123412341234", "홍길동" + i);
-      CreateMusicianDto createMusicianDto = new CreateMusicianDto("stageName" + i, "name" + i, 1, 1,musicianSnsRequestDtos, musicianPositionTypeDtos, createMusicianFileDto, createMusicianAccountDto);
+      CreateMusicianDto createMusicianDto = new CreateMusicianDto("stageName" + i, "name" + i, 1, musicianSnsRequestDtos, musicianPositionTypeDtos, createMusicianFileDto, createMusicianAccountDto);
 
 
 
@@ -358,6 +386,7 @@ public class InitData implements ApplicationRunner {
       usersMusician.setUsersMusicianPosition(positionList);
       usersMusician.setUsersMusicianFile(usersMusicianFile);
       usersMusician.setUsersMusicianAccount(usersMusicianAccount);
+      usersMusician.setIsAuthorized(MusicianAuthorizedType.APPROVED);
       usersMusicianList.add(usersMusician);
 
       musicianSnsRequestDtos.clear();

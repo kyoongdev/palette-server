@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.enums.mrBeat.MrBeatGenreType;
 import com.study.palette.common.enums.mrBeat.MrBeatMoodType;
 import com.study.palette.common.enums.mrBeat.MrBeatSalesType;
+import com.study.palette.common.enums.musician.ApprovalType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @AllArgsConstructor
@@ -51,7 +51,14 @@ public class MrBeatInfo {
 
   private MrBeatGenreType genre;
 
-  private boolean serviceStatus;
+  // 판매여부
+  @Column(columnDefinition = "boolean default false")
+  private boolean isSelling;
+
+  // 서비스 상태
+  private ApprovalType approvalStatus;
+  // 서비스 거부 사유
+  private String refusalReason;
 
   @CreationTimestamp
   @Column(columnDefinition = "TIMESTAMP")
@@ -74,6 +81,10 @@ public class MrBeatInfo {
   @JoinColumn(name = "usersId")
   @JsonIgnore
   private Users users;
+
+  public void updateIsSelling(boolean isSelling) {
+    this.isSelling = isSelling;
+  }
 
 
 }

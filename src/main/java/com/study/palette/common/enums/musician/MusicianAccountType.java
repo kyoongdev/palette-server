@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public enum MusicianAccountType {
-  KB(0, "국민은행"),
-  SHINHAN(1, "신한은행"),
-  WOORI(2, "우리은행"),
-  KAKAO(3, "카카오뱅크"),
-  NONGHYUP(4, "농협은행"),
-  KEB(5, "외환은행"),
-  SC(6, "SC은행"),
-  CITY(7, "시티은행"),
-  KDB(8, "산업은행"),
-  HANA(9, "하나은행"),
-  TOSS(10, "토스뱅크"),
-  ETC(11, "기타");
+  KB(1, "국민은행"),
+  SHINHAN(2, "신한은행"),
+  WOORI(3, "우리은행"),
+  KAKAO(4, "카카오뱅크"),
+  NONGHYUP(5, "농협은행"),
+  KEB(6, "외환은행"),
+  SC(7, "SC은행"),
+  CITY(8, "시티은행"),
+  KDB(9, "산업은행"),
+  HANA(10, "하나은행"),
+  TOSS(11, "토스뱅크"),
+  ETC(12, "기타");
 
   private int code;
 
@@ -35,4 +35,5 @@ public enum MusicianAccountType {
     }
     throw new RuntimeException("musicianAccount 는 1 ~ 12 까지만 가능합니다.");
   }
+  
 }

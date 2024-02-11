@@ -73,6 +73,7 @@ public class ArtistFile {
         .isUse(true)
         .createdAt(LocalDateTime.now())
         .artistInfo(aritstInfo)
+        .users(aritstInfo.getUsers())
         .build();
   }
 }

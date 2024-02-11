@@ -64,7 +64,7 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
         .where(query.getSaleTypeCondition(mrBeatInfo)
             .and(query.getGenreTypeCondition(mrBeatInfo))
             .and(query.getMoodTypeCondition(mrBeatInfo))
-            .and(mrBeatInfo.serviceStatus.isTrue()))
+            .and(mrBeatInfo.isSelling.isTrue()))
         .groupBy(mrBeatInfo.id,
             mrBeatInfo.serviceName,
             mrBeatInfo.salesType,

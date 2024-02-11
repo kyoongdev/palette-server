@@ -52,6 +52,7 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8' // Model mapper 라이브러리
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'// aws 라이브러리
     implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.4'
 
 
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'

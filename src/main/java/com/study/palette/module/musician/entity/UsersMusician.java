@@ -4,7 +4,6 @@ package com.study.palette.module.musician.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.enums.musician.MusicianAuthorizedType;
 import com.study.palette.common.enums.musician.MusicianGroupType;
-import com.study.palette.common.enums.musician.MusicianServiceReviewType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,15 +23,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 public class UsersMusician {
 
@@ -67,7 +66,7 @@ public class UsersMusician {
   @Column(length = 3000)
   private String introduction;
 
-  @ColumnDefault("1")
+
   private MusicianAuthorizedType isAuthorized;
 
   @CreationTimestamp

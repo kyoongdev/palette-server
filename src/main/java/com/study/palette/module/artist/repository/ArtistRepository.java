@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface ArtistRepository extends JpaRepository<ArtistInfo, String>, ArtistCustomRepository {
 
   Long countBySalesType(int fiterCode);
-  long countByServiceStatus(boolean registrationCompleted);
+  long countByIsSelling(boolean registrationCompleted);
   List<ArtistInfo> findAllBySalesType(int fiterCode, Pageable pageable);
 
   Optional<ArtistInfo> findById(UUID id);

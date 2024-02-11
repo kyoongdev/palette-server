@@ -3,6 +3,7 @@ package com.study.palette.module.mrBeat.dto;
 import com.study.palette.common.enums.mrBeat.MrBeatGenreType;
 import com.study.palette.common.enums.mrBeat.MrBeatMoodType;
 import com.study.palette.common.enums.mrBeat.MrBeatSalesType;
+import com.study.palette.common.enums.musician.ApprovalType;
 import com.study.palette.module.mrBeat.dto.contact.CreateMrBeatContactDto;
 import com.study.palette.module.mrBeat.dto.file.CreateMrBeatFileDto;
 import com.study.palette.module.mrBeat.dto.file.CreateMrBeatMusicFileDto;
@@ -45,7 +46,6 @@ public class CreateMrBeatDto {
   @NotNull(message = "음원을 등록해주세요.")
   private CreateMrBeatMusicFileDto mrBeatMusicFile;
 
-  public boolean serviceStatus;
 
   public MrBeatInfo toEntity(Users users) {
     return MrBeatInfo.builder()
@@ -53,7 +53,7 @@ public class CreateMrBeatDto {
         .salesType(MrBeatSalesType.findMrBeatSalesType(this.getSalesType()))
         .genre(MrBeatGenreType.findMrBeatGenreType(this.getGenre()))
         .mood(MrBeatMoodType.findMrBeatMoodType(this.getMood()))
-        .serviceStatus(this.isServiceStatus())
+        .approvalStatus(ApprovalType.findMarketApprovalType(1))
         .createdAt(LocalDateTime.now())
         .mrBeatFile(new MrBeatFile())
         .mrBeatContact(new ArrayList<>())

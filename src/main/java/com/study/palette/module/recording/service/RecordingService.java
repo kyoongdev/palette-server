@@ -2,6 +2,7 @@ package com.study.palette.module.recording.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
+import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
 import com.study.palette.module.recording.dto.info.RecordingCreateResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingDetailResponseDto;
@@ -109,5 +110,12 @@ public class RecordingService {
     recordingInfo.updateIsSelling(status);
 
     recordingRepository.save(recordingInfo);
+  }
+
+  public ApprovingServiceDetailResponseDto approvingServiceDetail(String id) {
+    RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
+
+    return new ApprovingServiceDetailResponseDto(recordingInfo);
   }
 }

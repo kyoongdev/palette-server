@@ -99,6 +99,7 @@ public class ArtistLicenseInfo {
         .isServeOriginFile(artistLicenseInfoDto.isServeOriginFile())
         .isOtherUseApproved(artistLicenseInfoDto.isServeOriginFile())
         .isUseCommerical(artistLicenseInfoDto.isUseCommerical())
-        .artistInfo(artistInfo).build();
+        .artistInfo(artistInfo)
+        .users(artistInfo.getUsers()).build();
   }
 }

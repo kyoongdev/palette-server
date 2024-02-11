@@ -9,9 +9,9 @@ public enum MusicianAuthorizedType {
 
   // 음악인 인증 상태
   // 1: 인증대기, 2: 인증완료, 3: 인증거절
-  WAITING(0, "인증대기"),
-  APPROVED(1, "승인"),
-  REJECTED(2, "반려");
+  WAITING(1, "인증대기"),
+  APPROVED(2, "승인"),
+  REJECTED(3, "반려");
 
   private final int code;
   private final String name;

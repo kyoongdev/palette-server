@@ -14,6 +14,7 @@ import com.study.palette.module.mixMastering.exception.MixMasteringErrorCode;
 import com.study.palette.module.mixMastering.exception.MixMasteringException;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
 import com.study.palette.module.mixMastering.repository.MixMasteringRequestRepository;
+import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -148,5 +149,12 @@ public class MixMasteringService {
     mixMasteringInfo.updateIsSelling(status);
 
     mixMasteringRepository.save(mixMasteringInfo);
+  }
+
+  public ApprovingServiceDetailResponseDto approvingServiceDetail(String id) {
+    MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
+
+    return new ApprovingServiceDetailResponseDto(mixMasteringInfo);
   }
 }

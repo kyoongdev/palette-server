@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum MusicianGroupType {
 
-  SOLO(0, "솔로"),
-  GROUP(1, "그룹");
+  SOLO(1, "솔로"),
+  GROUP(2, "그룹");
 
   private int code;
 

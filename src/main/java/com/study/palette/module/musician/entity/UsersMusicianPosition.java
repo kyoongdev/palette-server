@@ -1,7 +1,7 @@
 package com.study.palette.module.musician.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.study.palette.common.enums.musician.MusicianPostionType;
+import com.study.palette.common.enums.adminSales.ServiceType;
 import com.study.palette.module.musician.dto.CreateMusicianPositionTypeDto;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class UsersMusicianPosition {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private MusicianPostionType postionType;
+  private ServiceType postionType;
 
   private LocalDateTime createdAt;
 
@@ -47,7 +47,7 @@ public class UsersMusicianPosition {
 
   public static UsersMusicianPosition from(CreateMusicianPositionTypeDto musicianPositionTypeDto,
       UsersMusician usersMusician) {
-    return builder().postionType(MusicianPostionType.findPositionType(musicianPositionTypeDto.getType()))
+    return builder().postionType(ServiceType.findServiceType(musicianPositionTypeDto.getType()))
         .createdAt(LocalDateTime.now())
         .usersMusician(usersMusician)
         .users(usersMusician.getUsers()).build();

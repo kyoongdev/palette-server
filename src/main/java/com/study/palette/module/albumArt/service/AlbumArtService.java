@@ -13,6 +13,7 @@ import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
 import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
+import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -144,5 +145,12 @@ public class AlbumArtService {
     albumArtInfo.updateIsSelling(status);
 
     albumArtRepository.save(albumArtInfo);
+  }
+
+  public ApprovingServiceDetailResponseDto approvingServiceDetail(String id) {
+    AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+
+    return new ApprovingServiceDetailResponseDto(albumArtInfo);
   }
 }

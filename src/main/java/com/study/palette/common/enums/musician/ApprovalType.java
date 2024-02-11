@@ -8,11 +8,11 @@ import lombok.Getter;
 public enum ApprovalType {
 
   // 재능마켓 서비스 상태
-  // 0: 승인대기, 1: 비승인, 2: 판매중지
-  WAITING(1, "승인대기"),
-  REJECTED(2, "비승인"),
-  STOPPED(3, "판매중지"),
-  APPROVED(4, "승인완료");
+  // 0: 승인대기, 1: 비승인, 2: 판매중지, 3: 승인완료
+  WAITING(0, "승인대기"),
+  REJECTED(1, "비승인"),
+  STOPPED(2, "판매중지"),
+  APPROVED(3, "승인완료");
 
 
   private final int code;

@@ -29,9 +29,6 @@ public class CreateMusicianDto {
   @Schema(description = "활동 인원", example = "1 : 솔로 2 : 그룹")
   private int groupType;
 
-  @Schema(description = "활동 인원", example = "1 : 승인대기 2 : 승인 3 : 반려")
-  private int isAuthorized;
-
   private List<MusicianSnsRequestDto> snsAddress;
 
   private List<CreateMusicianPositionTypeDto> positionType;
@@ -45,7 +42,7 @@ public class CreateMusicianDto {
         .stageName(this.getStageName())
         .name(this.getName())
         .groupType(MusicianGroupType.findMusicianGroupType(this.getGroupType()))
-        .isAuthorized(MusicianAuthorizedType.findMusicianAuthorizedType(this.getIsAuthorized()))
+        .isAuthorized(MusicianAuthorizedType.findMusicianAuthorizedType(1))
         .usersMusicianSns(new ArrayList<>())
         .usersMusicianPosition(new ArrayList<>())
         .usersMusicianFile(new UsersMusicianFile())

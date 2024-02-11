@@ -84,7 +84,7 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
 //                        artistInfo.registerDeadline.as("registerDeadline")
                     )
                     .from(artistInfo)
-                    .where(artistInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
+                    .where(artistInfo.isSelling.eq(query.getIsRegistrationCompleted())),
                 SQLExpressions
                     .select(
                         mrBeatInfo.serviceName.as("serviceName"),
@@ -93,7 +93,7 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
 //                        mrBeatInfo.registerDeadline.as("registerDeadline")
                     )
                     .from(mrBeatInfo)
-                    .where(mrBeatInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
+                    .where(mrBeatInfo.isSelling.eq(query.getIsRegistrationCompleted())),
                 SQLExpressions
                     .select(
                         mixMasteringInfo.serviceName.as("serviceName"),

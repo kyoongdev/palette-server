@@ -16,7 +16,7 @@ public class UpdateArtistDto {
 
   private int salesType;
 
-  private boolean serviceStatus;
+  private boolean isSelling;
 
   private String userName;
 

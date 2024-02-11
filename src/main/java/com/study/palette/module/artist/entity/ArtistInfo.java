@@ -2,8 +2,8 @@ package com.study.palette.module.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.enums.ArtistSalesType;
+import com.study.palette.common.enums.musician.ApprovalType;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @NoArgsConstructor
@@ -51,7 +50,14 @@ public class ArtistInfo {
 
   private ArtistSalesType salesType;
 
-  private boolean serviceStatus;
+  // 판매여부
+  @Column(columnDefinition = "boolean default false")
+  private boolean isSelling;
+
+  // 서비스 상태
+  private ApprovalType approvalStatus;
+  // 서비스 거부 사유
+  private String refusalReason;
 
   @CreationTimestamp
   @Column(columnDefinition = "TIMESTAMP")
@@ -73,5 +79,9 @@ public class ArtistInfo {
 
   @OneToMany(mappedBy = "artistInfo", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ArtistContact> artistContact = new ArrayList<>();
+
+  public void updateIsSelling(boolean isSelling) {
+    this.isSelling = isSelling;
+  }
 
 }

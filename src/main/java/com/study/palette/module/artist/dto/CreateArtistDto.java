@@ -2,6 +2,7 @@ package com.study.palette.module.artist.dto;
 
 
 import com.study.palette.common.enums.ArtistSalesType;
+import com.study.palette.common.enums.musician.ApprovalType;
 import com.study.palette.module.artist.dto.contact.CreateArtistContactDto;
 import com.study.palette.module.artist.dto.file.CreateArtistFileDto;
 import com.study.palette.module.artist.dto.license.CreateArtistLicenseDto;
@@ -32,8 +33,6 @@ public class CreateArtistDto {
 
   private int salesType;
 
-  private boolean serviceStatus;
-
   private List<CreateArtistFileDto> artistFileDto;
 
   @NotNull(message = "라이센스 정보를 입력해주세요.")
@@ -46,8 +45,9 @@ public class CreateArtistDto {
     return ArtistInfo.builder()
         .serviceName(this.getServiceName())
         .salesType(ArtistSalesType.findArtistSalesType(this.getSalesType()))
+        .editInfo(this.getEditInfo())
+//        .approvalStatus(ApprovalType.findMarketApprovalType(1))
         .serviceInfo(this.getServiceInfo())
-        .serviceStatus(this.isServiceStatus())
         .artistFile(new ArrayList<>())
         .artistReview(new ArrayList<>())
         .artistContact(new ArrayList<>())

@@ -19,8 +19,8 @@ import com.study.palette.module.mrBeat.exception.MrBeatErrorCode;
 import com.study.palette.module.mrBeat.exception.MrBeatException;
 import com.study.palette.module.mrBeat.repository.MrBeatRepository;
 import com.study.palette.module.mrBeat.repository.MrBeatRequestRepository;
+import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
 import com.study.palette.module.users.entity.Users;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -166,5 +167,24 @@ public class MrBeatService {
 
   }
 
+  /* 뮤지션 판매 일시중지 판매재개 */
+  @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
+  public void updateIsSelling(String id, boolean status) {
 
+    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
+
+    mrBeatInfo.updateIsSelling(status);
+    mrBeatRepository.save(mrBeatInfo);
+  }
+
+
+  public ApprovingServiceDetailResponseDto approvingServiceDetail(String id) {
+
+    MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
+
+    return new ApprovingServiceDetailResponseDto(mrBeatInfo);
+  }
 }

@@ -62,8 +62,8 @@ public class AdminSalesService {
     long mixMasteringCount = mixMasteringRepository.countByIsSelling(isRegistrationCompleted);
     long recordingCount = recordingRepository.countByIsSelling(isRegistrationCompleted);
     //TODO 추후 네이밍 수정 후 serviceStatus -> isSelling 로 변경
-    long artistCount = artistRepository.countByServiceStatus(isRegistrationCompleted);
-    long mrBeatCount = mrBeatRepository.countByServiceStatus(isRegistrationCompleted);
+    long artistCount = artistRepository.countByIsSelling(isRegistrationCompleted);
+    long mrBeatCount = mrBeatRepository.countByIsSelling(isRegistrationCompleted);
 
     return AdminSalesCountResponseDto.of(
         albumArtCount + artistCount + mixMasteringCount + recordingCount + mrBeatCount,
