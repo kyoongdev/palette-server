@@ -3,9 +3,6 @@ package com.study.palette.module.mixMastering.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
-import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.mixMastering.dto.CreateMixMasteringDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDetailDto;
 import com.study.palette.module.mixMastering.dto.MixMasteringDto;
@@ -141,7 +138,7 @@ public class MixMasteringService {
   @Transactional
   public void updateServiceStatus(String id, boolean status) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
-        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+        .orElseThrow(() -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     mixMasteringInfo.updateServiceStatus(status);
 

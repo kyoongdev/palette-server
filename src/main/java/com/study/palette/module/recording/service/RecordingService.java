@@ -2,15 +2,11 @@ package com.study.palette.module.recording.service;
 
 import com.study.palette.common.dto.PaginationDto;
 import com.study.palette.common.dto.PagingDto;
-import com.study.palette.module.albumArt.entity.AlbumArtInfo;
-import com.study.palette.module.albumArt.exception.AlbumArtErrorCode;
-import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.recording.dto.info.RecordingCreateRequestDto;
 import com.study.palette.module.recording.dto.info.RecordingCreateResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingDetailResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingResponseDto;
 import com.study.palette.module.recording.dto.info.RecordingUpdateRequestDto;
-import com.study.palette.module.recording.dto.query.FindRecordingQuery;
 import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.recording.exception.RecordingErrorCode;
 import com.study.palette.module.recording.exception.RecordingException;
@@ -103,7 +99,7 @@ public class RecordingService {
   @Transactional
   public void updateServiceStatus(String id, boolean status) {
     RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
-        .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
+        .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
 
     recordingInfo.updateServiceStatus(status);
 
