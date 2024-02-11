@@ -54,7 +54,7 @@ public class MixMasteringDetailDto {
     this.beforeJobMusic = mixMasteringInfo.getBeforeJobMusic();
     this.afterJobMusic = mixMasteringInfo.getAfterJobMusic();
     this.sericeStatus = mixMasteringInfo.isServiceStatus();
-    this.genre = mixMasteringInfo.getGenre().getGenre();
+    this.genre = mixMasteringInfo.getGenre().getCode();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUsers());
     this.reviews = mixMasteringInfo.getMixMasteringReviews().stream().map(MixMasteringReviewDto::new).toList();

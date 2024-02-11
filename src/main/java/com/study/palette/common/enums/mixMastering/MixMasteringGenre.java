@@ -11,20 +11,20 @@ public enum MixMasteringGenre {
   INDI(7),
   FORK(8),
   ETC(9);
-  private int genre;
+  private int code;
 
-  MixMasteringGenre(int genre) {
-    this.genre = genre;
+  MixMasteringGenre(int code) {
+    this.code = code;
   }
 
-  public int getGenre() {
-    return this.genre;
+  public int getCode() {
+    return this.code;
   }
 
-  public static MixMasteringGenre findMixMasteringGenre(int genre) {
+  public static MixMasteringGenre findMixMasteringGenre(int code) {
 
     for (MixMasteringGenre mixMasteringGenre : MixMasteringGenre.values()) {
-      if (mixMasteringGenre.genre == genre) {
+      if (mixMasteringGenre.code == code) {
         return mixMasteringGenre;
       }
     }
