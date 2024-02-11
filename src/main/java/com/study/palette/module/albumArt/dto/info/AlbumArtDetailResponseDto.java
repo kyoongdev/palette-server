@@ -1,5 +1,6 @@
 package com.study.palette.module.albumArt.dto.info;
 
+import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.albumArt.dto.contact.AlbumArtContactDto;
 import com.study.palette.module.albumArt.dto.file.AlbumArtFileDto;
 import com.study.palette.module.albumArt.dto.license.AlbumArtLicenseInfoWithIdDto;
@@ -21,6 +22,8 @@ public class AlbumArtDetailResponseDto {
   private String serviceName;
   @Schema(description = "서비스 설명", example = "테스트 서비스 설명")
   private String serviceExplain;
+  @Schema(description = "작업분야")
+  private int salesType;
   @Schema(description = "수정관련 안내", example = "테스트 수정관련 안내")
   private String editInfo;
   @Schema(description = "서비스 상태", example = "true")
@@ -42,6 +45,7 @@ public class AlbumArtDetailResponseDto {
     this.serviceName = albumArtInfo.getServiceName();
     this.serviceExplain = albumArtInfo.getServiceExplain();
     this.editInfo = albumArtInfo.getEditInfo();
+    this.salesType = albumArtInfo.getSalesType().getCode();
     this.serviceStatus = albumArtInfo.isServiceStatus();
     this.createdAt = albumArtInfo.getCreatedAt();
     this.albumArtLicenseInfoResponseDto = albumArtInfo.getAlbumArtLicenseInfo().stream()
