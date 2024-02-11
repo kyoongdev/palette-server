@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +72,7 @@ public class AlbumArtService {
 
   /* AlbumArt 등록*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN')")
   public AlbumArtCreateResponseDto createAlbumArt(AlbumArtCreateRequestDto albumArtCreateRequestDto,
       Users users) {
     return new AlbumArtCreateResponseDto(
@@ -79,13 +81,14 @@ public class AlbumArtService {
 
   /* AlbumArt 수정*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void updateAlbumArt(String id, AlbumArtUpdateRequestDto albumArtUpdateRequestDto,
       Users users) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!albumArtInfo.getUsers().getId().equals(users.getId()) && !users.getRole().getKey().equals("ROLE_ADMIN")) {
+    if (!albumArtInfo.getUsers().getId().equals(users.getId())) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
@@ -118,12 +121,13 @@ public class AlbumArtService {
 
   /* AlbumArt 삭제*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void deleteAlbumArt(String id, Users users) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!albumArtInfo.getUsers().getId().equals(users.getId()) && !users.getRole().getKey().equals("ROLE_ADMIN")) {
+    if (!albumArtInfo.getUsers().getId().equals(users.getId())) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
@@ -132,6 +136,7 @@ public class AlbumArtService {
 
   /* AlbumArt 판매글 등록/신청 승인 반려 처리*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void updateServiceStatus(String id, boolean status) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));

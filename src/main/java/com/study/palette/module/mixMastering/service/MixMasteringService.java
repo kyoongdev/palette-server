@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,6 +76,7 @@ public class MixMasteringService {
 
   /* MixMastering 등록*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN')")
   public MixMasteringDto createMixMastering(
       CreateMixMasteringDto createMixMasteringDto, Users users) {
     return new MixMasteringDto(
@@ -83,6 +85,7 @@ public class MixMasteringService {
 
   /* MixMastering 수정*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void updateMixMastering(String id, MixMasteringDto mixMasteringDto,
       Users users) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
@@ -90,7 +93,7 @@ public class MixMasteringService {
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUsers().getId().equals(users.getId()) && !users.getRole().getKey().equals("ROLE_ADMIN")) {
+    if (!mixMasteringInfo.getUsers().getId().equals(users.getId())) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
@@ -99,13 +102,14 @@ public class MixMasteringService {
 
   /* MixMastering 삭제*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void deleteMixMastering(String id, Users users) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUsers().getId().equals(users.getId()) && !users.getRole().getKey().equals("ROLE_ADMIN")) {
+    if (!mixMasteringInfo.getUsers().getId().equals(users.getId())) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
@@ -136,6 +140,7 @@ public class MixMasteringService {
 
   /* mixMastering 판매글 등록/신청 승인 반려 처리*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void updateServiceStatus(String id, boolean status) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));

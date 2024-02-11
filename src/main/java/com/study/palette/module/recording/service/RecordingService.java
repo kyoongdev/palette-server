@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +61,7 @@ public class RecordingService {
 
   /* Recording 등록*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN')")
   public RecordingCreateResponseDto createRecording(
       RecordingCreateRequestDto recordingCreateRequestDto, Users users) {
     return new RecordingCreateResponseDto(
@@ -68,6 +70,7 @@ public class RecordingService {
 
   /* Recording 수정*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void updateRecording(String id, RecordingUpdateRequestDto recordingUpdateRequestDto,
       Users users) {
     RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
@@ -83,6 +86,7 @@ public class RecordingService {
 
   /* Recording 삭제*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void deleteRecording(String id, Users users) {
     RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
@@ -97,6 +101,7 @@ public class RecordingService {
 
   /* recording 판매글 등록/신청 승인 반려 처리*/
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public void updateServiceStatus(String id, boolean status) {
     RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
