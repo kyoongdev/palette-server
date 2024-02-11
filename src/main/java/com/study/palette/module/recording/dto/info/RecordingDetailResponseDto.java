@@ -26,6 +26,8 @@ public class RecordingDetailResponseDto {
   private RegionCode studioRegionCode;
   @Schema(description = "스튜디오 도시 코드")
   private CityCode studioCityCode;
+  @Schema(description = "스튜디오 예약링크")
+  private String studioReservationUrl;
   @Schema(description = "녹음 엔지니어링 여부")
   private boolean isRecordingEngineering;
   @Schema(description = "서비스 설명")
@@ -45,6 +47,7 @@ public class RecordingDetailResponseDto {
     this.studioName = recordingInfo.getStudioName();
     this.studioRegionCode = recordingInfo.getStudioRegionCode();
     this.studioCityCode = recordingInfo.getStudioCityCode();
+    this.studioReservationUrl = recordingInfo.getStudioReservationUrl();
     this.isRecordingEngineering = recordingInfo.isRecordingEngineering();
     this.serviceExplain = recordingInfo.getServiceExplain();
     this.createdAt = recordingInfo.getCreatedAt();
