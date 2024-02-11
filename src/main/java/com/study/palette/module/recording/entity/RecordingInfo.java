@@ -91,7 +91,7 @@ public class RecordingInfo {
   @OneToMany(mappedBy = "recordingInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RecordingFile> recordingFile = new ArrayList<>();
 
-  @OneToMany(mappedBy = "recordingInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "recordingInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RecordingLicenseInfo> recordingLicenseInfo = new ArrayList<>();
 
   public void setRecordingLicenseInfo(List<RecordingLicenseInfo> recordingLicenseInfos) {
