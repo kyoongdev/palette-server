@@ -2,6 +2,7 @@ package com.study.palette.module.recording.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.study.palette.common.enums.musician.ApprovalType;
 import com.study.palette.common.enums.recording.CityCode;
 import com.study.palette.common.enums.recording.RegionCode;
 import com.study.palette.module.users.entity.Users;
@@ -76,8 +77,13 @@ public class RecordingInfo {
   @Column(length = 1000)
   private String serviceExplain;
 
+  // 판매여부
   @Column(columnDefinition = "boolean default false")
-  private boolean serviceStatus;
+  private boolean isSelling;
+  // 서비스 상태
+  private ApprovalType approvalStatus;
+  // 서비스 거부 사유
+  private String refusalReason;
 
   @Column(columnDefinition = "datetime default now()")
   @CreatedDate
@@ -102,7 +108,7 @@ public class RecordingInfo {
     this.recordingFile = recordingFile;
   }
 
-  public void updateServiceStatus(boolean serviceStatus) {
-    this.serviceStatus = serviceStatus;
+  public void updateIsSelling(boolean isSelling) {
+    this.isSelling = isSelling;
   }
 }

@@ -3,6 +3,7 @@ package com.study.palette.module.mixMastering.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.enums.mixMastering.MixMasteringGenre;
+import com.study.palette.common.enums.musician.ApprovalType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,8 +53,13 @@ public class MixMasteringInfo {
   //수정 관련 안내
   @Column(length = 1000)
   private String editInfo;
-  //서비스 상태
-  private boolean serviceStatus;
+  // 판매여부
+  @Column(columnDefinition = "boolean default false")
+  private boolean isSelling;
+  // 서비스 상태
+  private ApprovalType approvalStatus;
+  // 서비스 거부 사유
+  private String refusalReason;
   //장르
   @Column(length = 1)
   private MixMasteringGenre genre;
@@ -78,7 +84,7 @@ public class MixMasteringInfo {
   @JsonIgnore
   private Users users;
 
-  public void updateServiceStatus(boolean serviceStatus) {
-    this.serviceStatus = serviceStatus;
+  public void updateIsSelling(boolean isSelling) {
+    this.isSelling = isSelling;
   }
 }

@@ -2,6 +2,7 @@ package com.study.palette.module.albumArt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
+import com.study.palette.common.enums.musician.ApprovalType;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @AllArgsConstructor
@@ -50,7 +50,13 @@ public class AlbumArtInfo {
   @Column(length = 1000)
   private String editInfo;
 
-  private boolean serviceStatus;
+  // 판매여부
+  @Column(columnDefinition = "boolean default false")
+  private boolean isSelling;
+  // 서비스 상태
+  private ApprovalType approvalStatus;
+  // 서비스 거부 사유
+  private String refusalReason;
 
   @CreationTimestamp
   @Column(columnDefinition = "TIMESTAMP")
@@ -82,7 +88,7 @@ public class AlbumArtInfo {
     this.albumArtFile = albumArtFiles;
   }
 
-  public void updateServiceStatus(boolean serviceStatus) {
-    this.serviceStatus = serviceStatus;
+  public void updateIsSelling(boolean isSelling) {
+    this.isSelling = isSelling;
   }
 }
