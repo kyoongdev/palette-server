@@ -12,6 +12,6 @@ public interface MixMasteringRepository extends JpaRepository<MixMasteringInfo, 
     MixMasteringCustomRepository {
 
   Optional<MixMasteringInfo> findById(UUID id);
-  long countByServiceStatus(boolean registrationCompleted);
+  long countByIsSelling(boolean registrationCompleted);
   MixMasteringInfo findByServiceName(String serviceName);
 }

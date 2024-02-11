@@ -66,7 +66,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
         .from(usersMusician)
         .leftJoin(albumArtInfo)
         .on(Expressions.template(UUID.class, "UsersMusician.usersId").eq(Expressions.template(UUID.class, "AlbumArtInfo.usersId"))
-            .and(albumArtInfo.serviceStatus.eq(true)))
+            .and(albumArtInfo.isSelling.eq(true)))
         .leftJoin(
             JPAExpressions
                 .selectDistinct(
@@ -207,7 +207,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
         .from(usersMusician)
         .leftJoin(mixMasteringInfo)
         .on(Expressions.template(UUID.class, "UsersMusician.usersId").eq(Expressions.template(UUID.class, "MixMasteringInfo.usersId"))
-            .and(mixMasteringInfo.serviceStatus.eq(true)))
+            .and(mixMasteringInfo.isSelling.eq(true)))
         .leftJoin(
             JPAExpressions
                 .selectDistinct(

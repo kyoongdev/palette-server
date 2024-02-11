@@ -48,20 +48,21 @@ public class AdminSalesService {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
     }
 
-    List<AdminSalesResponseDto> allByServiceStatusAndCreatedAtDesc = adminServiceCustomRepository.findAllByServiceStatusAndCreatedAtDesc(query, pageable);
+    List<AdminSalesResponseDto> result = adminServiceCustomRepository.findAllByIsSellingAndCreatedAtDesc(query, pageable);
 
     //pageable
     return PaginationDto.of(new PagingDto(pageable, count),
-        allByServiceStatusAndCreatedAtDesc);
+        result);
   }
 
   // 판매글 목록 전체 카운트
   @Transactional(readOnly = true)
   public AdminSalesCountResponseDto getServicesCount(boolean isRegistrationCompleted) {
-    long albumArtCount = albumArtRepository.countByServiceStatus(isRegistrationCompleted);
+    long albumArtCount = albumArtRepository.countByIsSelling(isRegistrationCompleted);
+    long mixMasteringCount = mixMasteringRepository.countByIsSelling(isRegistrationCompleted);
+    long recordingCount = recordingRepository.countByIsSelling(isRegistrationCompleted);
+    //TODO 추후 네이밍 수정 후 serviceStatus -> isSelling 로 변경
     long artistCount = artistRepository.countByServiceStatus(isRegistrationCompleted);
-    long mixMasteringCount = mixMasteringRepository.countByServiceStatus(isRegistrationCompleted);
-    long recordingCount = recordingRepository.countByServiceStatus(isRegistrationCompleted);
     long mrBeatCount = mrBeatRepository.countByServiceStatus(isRegistrationCompleted);
 
     return AdminSalesCountResponseDto.of(

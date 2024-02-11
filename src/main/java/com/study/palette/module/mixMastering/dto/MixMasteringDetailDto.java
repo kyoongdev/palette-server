@@ -23,8 +23,6 @@ public class MixMasteringDetailDto {
   private String serviceExplain;
   @Schema(description = "수정 관련 안내")
   private String editInfo;
-  @Schema(description = "서비스 상태")
-  private boolean sericeStatus;
   @Schema(description = "작업 전 음원")
   private String beforeJobMusic;
   @Schema(description = "작업 후 음원")
@@ -53,7 +51,6 @@ public class MixMasteringDetailDto {
     this.editInfo = mixMasteringInfo.getEditInfo();
     this.beforeJobMusic = mixMasteringInfo.getBeforeJobMusic();
     this.afterJobMusic = mixMasteringInfo.getAfterJobMusic();
-    this.sericeStatus = mixMasteringInfo.isServiceStatus();
     this.genre = mixMasteringInfo.getGenre().getCode();
     this.createdAt = mixMasteringInfo.getCreatedAt();
     this.user = new CommonUserDto(mixMasteringInfo.getUsers());

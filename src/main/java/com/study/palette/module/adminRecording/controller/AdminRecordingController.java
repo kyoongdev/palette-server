@@ -55,7 +55,7 @@ public class AdminRecordingController {
   @PatchMapping("{id}/status")
   @PreAuthorize("hasRole('ADMIN')")
   public void recordingInfoDetail(@PathVariable String id, @RequestBody boolean status) {
-    recordingService.updateServiceStatus(id, status);
+    recordingService.updateIsSelling(id, status);
   }
 
   //레코딩 판매글 수정

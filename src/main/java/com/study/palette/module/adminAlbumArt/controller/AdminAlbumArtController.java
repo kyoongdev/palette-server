@@ -56,7 +56,7 @@ public class AdminAlbumArtController {
   @PatchMapping("{id}/status")
   @PreAuthorize("hasRole('ADMIN')")
   public void albumArtInfoDetail(@PathVariable String id, @RequestBody boolean status) {
-    albumArtService.updateServiceStatus(id, status);
+    albumArtService.updateIsSelling(id, status);
   }
 
   //앨범아트 판매글 수정

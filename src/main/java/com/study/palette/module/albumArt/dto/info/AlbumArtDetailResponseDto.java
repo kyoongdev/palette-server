@@ -26,8 +26,6 @@ public class AlbumArtDetailResponseDto {
   private int salesType;
   @Schema(description = "수정관련 안내", example = "테스트 수정관련 안내")
   private String editInfo;
-  @Schema(description = "서비스 상태", example = "true")
-  private boolean serviceStatus;
   @Schema(description = "앨범아트 생성일", example = "2021-07-21T12:34:56")
   private LocalDateTime createdAt;
   @Schema(description = "앨범아트 파일")
@@ -46,7 +44,6 @@ public class AlbumArtDetailResponseDto {
     this.serviceExplain = albumArtInfo.getServiceExplain();
     this.editInfo = albumArtInfo.getEditInfo();
     this.salesType = albumArtInfo.getSalesType().getCode();
-    this.serviceStatus = albumArtInfo.isServiceStatus();
     this.createdAt = albumArtInfo.getCreatedAt();
     this.albumArtLicenseInfoResponseDto = albumArtInfo.getAlbumArtLicenseInfo().stream()
         .map(AlbumArtLicenseInfoWithIdDto::new).toList();

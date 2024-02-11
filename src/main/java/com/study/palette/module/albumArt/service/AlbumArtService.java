@@ -137,11 +137,11 @@ public class AlbumArtService {
   /* AlbumArt 판매글 등록/신청 승인 반려 처리*/
   @Transactional
   @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
-  public void updateServiceStatus(String id, boolean status) {
+  public void updateIsSelling(String id, boolean status) {
     AlbumArtInfo albumArtInfo = albumArtRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
-    albumArtInfo.updateServiceStatus(status);
+    albumArtInfo.updateIsSelling(status);
 
     albumArtRepository.save(albumArtInfo);
   }

@@ -11,6 +11,7 @@ import com.study.palette.module.albumArt.entity.AlbumArtLicenseInfo;
 import com.study.palette.module.users.entity.Users;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,13 +36,10 @@ public class AlbumArtCreateRequestDto {
   public List<AlbumArtContactCreateDto> albumArtContact = new ArrayList<>();
   public List<AlbumArtFileCreateRequestDto> albumArtFiles = new ArrayList<>();
 
-  public boolean serviceStatus;
-
   public AlbumArtInfo toEntity(Users users) {
     AlbumArtInfo albumArtInfo = AlbumArtInfo.builder()
         .serviceName(this.getServiceName())
         .serviceExplain(this.getServiceExplain())
-        .serviceStatus(this.isServiceStatus())
         .salesType(AlbumArtSaleType.findAlbumArtSaleType(this.getSalesType()))
         .editInfo(this.getEditInfo())
         .users(users)

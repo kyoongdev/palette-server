@@ -255,7 +255,7 @@ public class InitData implements ApplicationRunner {
       }
 
       //앨범아트 생성
-      AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto("serviceName" + i, "serviceExplain", 2, "editInfo", albumArtLicenseCreateRequestDtos, albumArtContactCreateDtos, albumArtFileCreateRequestDtos, true);
+      AlbumArtCreateRequestDto albumArtCreateRequestDto = new AlbumArtCreateRequestDto("serviceName" + i, "serviceExplain", 2, "editInfo", albumArtLicenseCreateRequestDtos, albumArtContactCreateDtos, albumArtFileCreateRequestDtos);
 
       AlbumArtInfo albumArtInfo = albumArtCreateRequestDto.toEntity(initCommUser);
       List<AlbumArtLicenseInfo> licenses = albumArtCreateRequestDto.getAlbumArtLicenseInfo().stream().map(license -> AlbumArtLicenseInfo.from(license, albumArtInfo)).toList();
@@ -264,13 +264,14 @@ public class InitData implements ApplicationRunner {
       albumArtInfo.setAlbumArtLicenseInfo(licenses);
       albumArtInfo.setAlbumArtContact(contacts);
       albumArtInfo.setAlbumArtFiles(files);
+      albumArtInfo.updateIsSelling(true);
       albumArtInfos.add(albumArtInfo);
       albumArtLicenseCreateRequestDtos.clear();
       albumArtContactCreateDtos.clear();
       albumArtFileCreateRequestDtos.clear();
 
       //mixMastering 생성
-      CreateMixMasteringDto createMixMasteringDto = new CreateMixMasteringDto("serviceName" + i, "serviceExplain", "editInfo", true, "beforeJobMusic", "afterJobMusic", 1, mixMasteringLicenseInfos, mixMasteringFiles, mixMasteringContacts);
+      CreateMixMasteringDto createMixMasteringDto = new CreateMixMasteringDto("serviceName" + i, "serviceExplain", "editInfo", "beforeJobMusic", "afterJobMusic", 1, mixMasteringLicenseInfos, mixMasteringFiles, mixMasteringContacts);
 
       MixMasteringInfo mixMasteringInfo = createMixMasteringDto.toEntity(initCommUser);
       List<MixMasteringLicenseInfo> mixMasteringLicenseInfo = mixMasteringLicenseInfos.stream().map(license -> MixMasteringLicenseInfo.from(license, mixMasteringInfo)).toList();
@@ -279,6 +280,7 @@ public class InitData implements ApplicationRunner {
       mixMasteringInfo.setMixMasteringLicenseInfos(mixMasteringLicenseInfo);
       mixMasteringInfo.setMixMasteringContacts(mixMasteringContact);
       mixMasteringInfo.setMixMasteringFiles(mixMasteringFile);
+      mixMasteringInfo.updateIsSelling(true);
       mixMasteringInfos.add(mixMasteringInfo);
       mixMasteringLicenseInfos.clear();
       mixMasteringContacts.clear();
@@ -292,6 +294,7 @@ public class InitData implements ApplicationRunner {
       List<RecordingFile> recordingFile = recordingFiles.stream().map(file -> RecordingFile.from(file, recordingInfo)).toList();
       recordingInfo.setRecordingLicenseInfo(recordingLicenseInfo);
       recordingInfo.setRecordingFile(recordingFile);
+      recordingInfo.updateIsSelling(true);
       recordingInfos.add(recordingInfo);
       recordingLicenseInfos.clear();
       recordingFiles.clear();

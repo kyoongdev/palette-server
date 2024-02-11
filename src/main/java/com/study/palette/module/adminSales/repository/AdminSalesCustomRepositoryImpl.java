@@ -34,7 +34,7 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
 
   @Override
   @Transactional(readOnly = true)
-  public List<AdminSalesResponseDto> findAllByServiceStatusAndCreatedAtDesc(AdminSalesConditions query, Pageable pageable) {
+  public List<AdminSalesResponseDto> findAllByIsSellingAndCreatedAtDesc(AdminSalesConditions query, Pageable pageable) {
     JPASQLQuery<AdminSalesResponseDto> sqlQuery = new JPASQLQuery<>(entityManager, sqlTemplates);
     JPASQLQuery<AdminSalesResponseDto> sqlQueryUnion = new JPASQLQuery<>(entityManager, sqlTemplates);
 
@@ -66,7 +66,7 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
 //                        albumArtInfo.registerDeadline.as("registerDeadline")
                     )
                     .from(albumArtInfo)
-                    .where(albumArtInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
+                    .where(albumArtInfo.isSelling.eq(query.getIsRegistrationCompleted())),
                 SQLExpressions
                     .select(
                         recordingInfo.serviceName.as("serviceName"),
@@ -75,7 +75,7 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
 //                        recordingInfo.registerDeadline.as("registerDeadline")
                     )
                     .from(recordingInfo)
-                    .where(recordingInfo.serviceStatus.eq(query.getIsRegistrationCompleted())),
+                    .where(recordingInfo.isSelling.eq(query.getIsRegistrationCompleted())),
                 SQLExpressions
                     .select(
                         artistInfo.serviceName.as("serviceName"),
@@ -102,7 +102,7 @@ public class AdminSalesCustomRepositoryImpl implements AdminSalesCustomRepositor
 //                        mixMasteringInfo.registerDeadline.as("registerDeadline")
                     )
                     .from(mixMasteringInfo)
-                    .where(mixMasteringInfo.serviceStatus.eq(query.getIsRegistrationCompleted()))
+                    .where(mixMasteringInfo.isSelling.eq(query.getIsRegistrationCompleted()))
             ).as("allServices")
         )
         .offset(pageable.getOffset())

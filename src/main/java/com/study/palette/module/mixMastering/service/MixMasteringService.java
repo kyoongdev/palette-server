@@ -141,11 +141,11 @@ public class MixMasteringService {
   /* mixMastering 판매글 등록/신청 승인 반려 처리*/
   @Transactional
   @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
-  public void updateServiceStatus(String id, boolean status) {
+  public void updateIsSelling(String id, boolean status) {
     MixMasteringInfo mixMasteringInfo = mixMasteringRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
-    mixMasteringInfo.updateServiceStatus(status);
+    mixMasteringInfo.updateIsSelling(status);
 
     mixMasteringRepository.save(mixMasteringInfo);
   }

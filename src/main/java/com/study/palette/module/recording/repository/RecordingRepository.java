@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecordingRepository extends JpaRepository<RecordingInfo, String>,
     RecordingCustomRepository {
-  long countByServiceStatus(boolean registrationCompleted);
+  long countByIsSelling(boolean registrationCompleted);
   Optional<RecordingInfo> findById(UUID id);
 }

@@ -55,7 +55,7 @@ public class AdminMixMasteringController {
   @PatchMapping("{id}/status")
   @PreAuthorize("hasRole('ADMIN')")
   public void mixMasteringInfoDetail(@PathVariable String id, @RequestBody boolean status) {
-    mixMasteringService.updateServiceStatus(id, status);
+    mixMasteringService.updateIsSelling(id, status);
   }
 
   //[관리자] 믹스마스터링 판매글 수정

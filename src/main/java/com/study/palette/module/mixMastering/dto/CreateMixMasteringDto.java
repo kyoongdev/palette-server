@@ -24,8 +24,6 @@ public class CreateMixMasteringDto {
   private String serviceExplain;
   @Schema(description = "수정 관련 안내")
   private String editInfo;
-  @Schema(description = "서비스 상태")
-  private boolean sericeStatus;
   @Schema(description = "작업 전 음원")
   private String beforeJobMusic;
   @Schema(description = "작업 후 음원")
@@ -46,7 +44,6 @@ public class CreateMixMasteringDto {
         .afterJobMusic(this.afterJobMusic)
         .serviceExplain(this.serviceExplain)
         .editInfo(this.editInfo)
-        .serviceStatus(this.sericeStatus)
         .genre(MixMasteringGenre.findMixMasteringGenre(this.genre))
         .users(user)
         .build();

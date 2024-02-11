@@ -102,11 +102,11 @@ public class RecordingService {
   /* recording 판매글 등록/신청 승인 반려 처리*/
   @Transactional
   @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
-  public void updateServiceStatus(String id, boolean status) {
+  public void updateIsSelling(String id, boolean status) {
     RecordingInfo recordingInfo = recordingRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
 
-    recordingInfo.updateServiceStatus(status);
+    recordingInfo.updateIsSelling(status);
 
     recordingRepository.save(recordingInfo);
   }

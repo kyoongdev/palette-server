@@ -6,5 +6,5 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface AdminSalesCustomRepository {
-  List<AdminSalesResponseDto> findAllByServiceStatusAndCreatedAtDesc(AdminSalesConditions query, Pageable pageable);
+  List<AdminSalesResponseDto> findAllByIsSellingAndCreatedAtDesc(AdminSalesConditions query, Pageable pageable);
 }
