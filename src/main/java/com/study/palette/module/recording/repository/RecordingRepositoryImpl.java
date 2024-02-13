@@ -41,9 +41,9 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
             recordingInfo.serviceName,
             recordingInfo.isRecordingEngineering,
             userMusician.name.as("musicianName"),
-            recordingFile.upoladFilePath.as("thumbnailUrl"),
+            recordingFile.url.as("thumbnailUrl"),
             recordingLicenseInfo.price.as("price"),
-            usersFile.uploadFilePath.as("profileUrl")))
+            usersFile.url.as("profileUrl")))
         .from(recordingInfo)
         .leftJoin(recordingFile)
         .on(recordingInfo.id.eq(recordingFile.recordingInfo.id)
@@ -66,9 +66,9 @@ public class RecordingRepositoryImpl implements RecordingCustomRepository {
         .groupBy(recordingInfo.id,
             recordingInfo.serviceName,
             recordingInfo.isRecordingEngineering,
-            recordingFile.upoladFilePath,
+            recordingFile.url,
             recordingLicenseInfo.price,
-            usersFile.uploadFilePath,
+            usersFile.url,
             userMusician.name)
         .orderBy(recordingInfo.createdAt.desc())
         .fetch();

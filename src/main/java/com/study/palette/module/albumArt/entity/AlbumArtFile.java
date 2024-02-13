@@ -40,7 +40,7 @@ public class AlbumArtFile {
   private int uploadFileSize;
 
   @Column(length = 256)
-  private String upoladFilePath;
+  private String url;
 
   private int fileMasterCode;
 
@@ -71,7 +71,7 @@ public class AlbumArtFile {
         .originFileName(dto.getOriginFileName())
         .uploadFileName(dto.getUploadFileName())
         .uploadFileSize(dto.getUploadFileSize())
-        .upoladFilePath(dto.getUrl())
+        .url(dto.getUrl())
         .fileMasterCode(1)
         .suffix(dto.getSuffix())
         .isUse(true)
@@ -86,7 +86,7 @@ public class AlbumArtFile {
         .originFileName(dto.getOriginFileName())
         .uploadFileName(dto.getUploadFileName())
         .uploadFileSize(dto.getUploadFileSize())
-        .upoladFilePath(dto.getUrl())
+        .url(dto.getUrl())
         .fileMasterCode(1)
         .suffix(dto.getSuffix())
         .isUse(true)

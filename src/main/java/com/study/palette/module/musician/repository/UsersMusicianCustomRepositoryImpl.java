@@ -404,7 +404,7 @@ public class UsersMusicianCustomRepositoryImpl implements UsersMusicianCustomRep
                         albumArtInfo.serviceName.as("serviceName"),
                         Expressions.numberTemplate(Integer.class, "5").as("serviceType"),
                         users.name.as("name"),
-                        albumArtFile.upoladFilePath.as("fileUrl"),
+                        albumArtFile.url.as("fileUrl"),
                         Expressions.template(Integer.class, "sub_query_order.price").as("price"),
                         albumArtInfo.createdAt.as("createdAt")
                     )

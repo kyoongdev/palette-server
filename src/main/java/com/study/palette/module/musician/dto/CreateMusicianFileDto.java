@@ -38,7 +38,7 @@ public class CreateMusicianFileDto {
         .url(this.getUrl())
         .originFileName(this.getOriginFileName())
         .uploadFileName(this.getUploadFileName())
-        .uploadFilePath(this.getUploadFilePath())
+        .url(this.getUrl())
         .uploadFileSize(this.getUploadFileSize())
         .suffix(this.getSuffix())
         .isUse(this.isUse())

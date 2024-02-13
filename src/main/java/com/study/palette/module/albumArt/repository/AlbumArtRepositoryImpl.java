@@ -43,10 +43,10 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
             albumArtInfo.serviceName,
             albumArtInfo.salesType,
             userMusician.name.as("musicianName"),
-            albumArtFile.upoladFilePath.as("thumbnailUrl"),
+            albumArtFile.url.as("thumbnailUrl"),
             albumArtLicenseInfo.price.as("price"),
             albumArtRequest.id.count().as("requestCount"),
-            usersFile.uploadFilePath.as("profileUrl")))
+            usersFile.url.as("profileUrl")))
         .from(albumArtInfo)
         .leftJoin(albumArtRequest)
         .on(albumArtInfo.id.eq(albumArtRequest.albumArtInfo.id))
@@ -67,9 +67,9 @@ public class AlbumArtRepositoryImpl implements AlbumArtCustomRepository {
         .groupBy(albumArtInfo.id,
             albumArtInfo.serviceName,
             albumArtInfo.salesType,
-            albumArtFile.upoladFilePath,
+            albumArtFile.url,
             albumArtLicenseInfo.price,
-            usersFile.uploadFilePath,
+            usersFile.url,
             userMusician.name)
         .orderBy(query.getSort())
         .fetch();

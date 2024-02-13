@@ -33,8 +33,6 @@ public class ArtistFile {
   @Column(columnDefinition = "BINARY(16)")
   private UUID id;
 
-  private String url;
-
   @Column(length = 256)
   private String originFileName;
 
@@ -42,6 +40,9 @@ public class ArtistFile {
   private String uploadFileName;
 
   private int uploadFileSize;
+
+  @Column(length = 256)
+  private String url;
 
   @Column(length = 4)
   private String suffix;

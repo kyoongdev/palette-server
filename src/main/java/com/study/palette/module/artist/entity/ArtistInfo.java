@@ -56,6 +56,7 @@ public class ArtistInfo {
 
   // 서비스 상태
   private ApprovalType approvalStatus;
+
   // 서비스 거부 사유
   private String refusalReason;
 

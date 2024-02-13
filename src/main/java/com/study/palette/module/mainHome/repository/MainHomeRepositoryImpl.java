@@ -60,7 +60,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
             Expressions.template(byte[].class, "UsersMusician.id"),
 //            usersMusician.id.as("id"),
             SQLExpressions.rowNumber().over().orderBy(usersMusician.id.count()).as("rankNumber"),
-            usersFile.uploadFilePath.as("profileUrl"),
+            usersFile.url.as("profileUrl"),
             usersMusician.name.as("musicianName")
         ))
         .from(usersMusician)
@@ -81,7 +81,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
         .leftJoin(usersFile)
         .on(Expressions.template(UUID.class, "AlbumArtInfo.usersId").eq(Expressions.template(UUID.class, "UsersFile.usersId"))
             .and(usersFile.isProfile.eq(true)))
-        .groupBy(usersMusician.id, usersFile.uploadFilePath, usersMusician.name)
+        .groupBy(usersMusician.id, usersFile.url, usersMusician.name)
         .limit(5)
         .fetch();
 
@@ -105,7 +105,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
     List<MusicianRankDto> result = sqlQuery.select(Projections.constructor(MusicianRankDto.class,
             Expressions.template(byte[].class, "UsersMusician.id"),
             SQLExpressions.rowNumber().over().orderBy(usersMusician.id.count()).as("rankNumber"),
-            usersFile.uploadFilePath.as("profileUrl"),
+            usersFile.url.as("profileUrl"),
             usersMusician.name.as("musicianName")
         ))
         .from(usersMusician)
@@ -126,7 +126,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
         .leftJoin(usersFile)
         .on(Expressions.template(UUID.class, "ArtistInfo.usersId").eq(Expressions.template(UUID.class, "UsersFile.usersId"))
             .and(usersFile.isProfile.eq(true)))
-        .groupBy(usersMusician.id, usersFile.uploadFilePath, usersMusician.name)
+        .groupBy(usersMusician.id, usersFile.url, usersMusician.name)
         .limit(5)
         .fetch();
 
@@ -156,7 +156,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
     List<MusicianRankDto> result = sqlQuery.select(Projections.constructor(MusicianRankDto.class,
             Expressions.template(byte[].class, "UsersMusician.id"),
             SQLExpressions.rowNumber().over().orderBy(usersMusician.id.count()).as("rankNumber"),
-            usersFile.uploadFilePath.as("profileUrl"),
+            usersFile.url.as("profileUrl"),
             usersMusician.name.as("musicianName")
         ))
         .from(usersMusician)
@@ -177,7 +177,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
         .leftJoin(usersFile)
         .on(Expressions.template(UUID.class, "MrBeatInfo.usersId").eq(Expressions.template(UUID.class, "UsersFile.usersId"))
             .and(usersFile.isProfile.eq(true)))
-        .groupBy(usersMusician.id, usersFile.uploadFilePath, usersMusician.name)
+        .groupBy(usersMusician.id, usersFile.url, usersMusician.name)
         .limit(5)
         .fetch();
 
@@ -201,7 +201,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
     List<MusicianRankDto> result = sqlQuery.select(Projections.constructor(MusicianRankDto.class,
             Expressions.template(byte[].class, "UsersMusician.id"),
             SQLExpressions.rowNumber().over().orderBy(usersMusician.id.count()).as("rankNumber"),
-            usersFile.uploadFilePath.as("profileUrl"),
+            usersFile.url.as("profileUrl"),
             usersMusician.name.as("musicianName")
         ))
         .from(usersMusician)
@@ -222,7 +222,7 @@ public class MainHomeRepositoryImpl implements MainHomeRepository {
         .leftJoin(usersFile)
         .on(Expressions.template(UUID.class, "MixMasteringInfo.usersId").eq(Expressions.template(UUID.class, "UsersFile.usersId"))
             .and(usersFile.isProfile.eq(true)))
-        .groupBy(usersMusician.id, usersFile.uploadFilePath, usersMusician.name)
+        .groupBy(usersMusician.id, usersFile.url, usersMusician.name)
         .limit(5)
         .fetch();
 

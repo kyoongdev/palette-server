@@ -36,7 +36,7 @@ public class ServiceProgressFile {
     private int uploadFileSize;
 
     @Column(length = 256)
-    private String uploadFilePath;
+    private String url;
 
     private int FilterMasterCode;
 

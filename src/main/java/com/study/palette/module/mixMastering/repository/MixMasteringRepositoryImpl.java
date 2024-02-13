@@ -58,7 +58,7 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
             mixMasteringLicenseInfo.price.as("price"),
             mixMasteringFile.url.as("thumbnailUrl"),
             mixMasteringRequest.id.count().as("requestCount"),
-            usersFile.uploadFilePath.as("profileUrl")))
+            usersFile.url.as("profileUrl")))
         .from(mixMasteringInfo)
         .leftJoin(mixMasteringRequest)
         .on(mixMasteringInfo.id.eq(mixMasteringRequest.mixMasteringInfo.id))
@@ -84,7 +84,7 @@ public class MixMasteringRepositoryImpl implements MixMasteringCustomRepository 
             mixMasteringInfo.afterJobMusic,
             mixMasteringFile.url,
             mixMasteringLicenseInfo.price,
-            usersFile.uploadFilePath)
+            usersFile.url)
         .orderBy(query.getSort())
         .fetch();
 
