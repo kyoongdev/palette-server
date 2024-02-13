@@ -38,7 +38,7 @@ public class ArtistLicenseInfo {
   private int price;
 
   @Column(length = 20)
-  private String serveFile;
+  private String servedFile;
 
   private int updateCount;
 
@@ -67,13 +67,13 @@ public class ArtistLicenseInfo {
   private ArtistInfo artistInfo;
 
   @Builder
-  public ArtistLicenseInfo(int licenseType, int price, String serveFile, int updateCount,
+  public ArtistLicenseInfo(int licenseType, int price, String servedFile, int updateCount,
       int period, int draftCount, boolean isAssign, boolean isServeOriginFile,
       boolean isOtherUseApproved, boolean isUseCommerical, LocalDateTime createdAt, Users users,
       ArtistInfo artistInfo) {
     this.licenseType = LicenseType.findLicenseType(licenseType);
     this.price = price;
-    this.serveFile = serveFile;
+    this.servedFile = servedFile;
     this.updateCount = updateCount;
     this.period = period;
     this.draftCount = draftCount;
@@ -91,7 +91,7 @@ public class ArtistLicenseInfo {
     return builder()
         .licenseType(artistLicenseInfoDto.getLicenseType())
         .price(artistLicenseInfoDto.getPrice())
-        .serveFile(artistLicenseInfoDto.getServeFile())
+        .servedFile(artistLicenseInfoDto.getServedFile())
         .updateCount(artistLicenseInfoDto.getUpdateCount())
         .period(artistLicenseInfoDto.getPeriod())
         .draftCount(artistLicenseInfoDto.getDraftCount())
@@ -99,6 +99,7 @@ public class ArtistLicenseInfo {
         .isServeOriginFile(artistLicenseInfoDto.isServeOriginFile())
         .isOtherUseApproved(artistLicenseInfoDto.isServeOriginFile())
         .isUseCommerical(artistLicenseInfoDto.isUseCommerical())
+        .createdAt(LocalDateTime.now())
         .artistInfo(artistInfo)
         .users(artistInfo.getUsers()).build();
   }

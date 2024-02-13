@@ -13,7 +13,7 @@ public class CreateArtistLicenseDto {
 
   private int price;
 
-  private String serveFile;
+  private String servedFile;
 
   private int updateCount;
 
