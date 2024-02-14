@@ -24,7 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -44,13 +43,13 @@ public class UsersMusician {
   @OneToMany(mappedBy = "usersMusician", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
   private List<UsersMusicianPosition> usersMusicianPosition = new ArrayList<>();
 
-  @OneToMany(mappedBy = "usersMusician", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToMany(mappedBy = "usersMusician", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
   private List<UsersMusicianSns> usersMusicianSns = new ArrayList<>();
 
-  @OneToOne(mappedBy = "usersMusician", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToOne(mappedBy = "usersMusician", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
   private UsersMusicianFile usersMusicianFile;
 
-  @OneToOne(mappedBy = "usersMusician", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToOne(mappedBy = "usersMusician", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
   private UsersMusicianAccount usersMusicianAccount;
 
   @Column(length = 100)
