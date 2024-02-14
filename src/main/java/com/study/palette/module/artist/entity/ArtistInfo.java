@@ -69,16 +69,16 @@ public class ArtistInfo {
   @JsonIgnore
   private Users users;
 
-  @OneToMany(mappedBy = "artistInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "artistInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ArtistFile> artistFile = new ArrayList<>();
 
-  @OneToMany(mappedBy = "artistInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "artistInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ArtistLicenseInfo> artistLicenseInfo = new ArrayList<>();
 
-  @OneToMany(mappedBy = "artistInfo", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "artistInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<ArtistReview> artistReview = new ArrayList<>();
 
-  @OneToMany(mappedBy = "artistInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "artistInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ArtistContact> artistContact = new ArrayList<>();
 
   public void updateIsSelling(boolean isSelling) {

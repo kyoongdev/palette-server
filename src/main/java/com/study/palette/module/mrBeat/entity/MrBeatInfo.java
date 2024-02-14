@@ -64,17 +64,17 @@ public class MrBeatInfo {
   @Column(columnDefinition = "TIMESTAMP")
   private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "mrBeatInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "mrBeatInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MrBeatLicenseInfo> mrBeatLicenseInfo = new ArrayList<>();
 
-  @OneToMany(mappedBy = "mrBeatInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "mrBeatInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MrBeatContact> mrBeatContact = new ArrayList<>();
 
 
-  @OneToOne(mappedBy = "mrBeatInfo", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToOne(mappedBy = "mrBeatInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private MrBeatFile mrBeatFile;
 
-  @OneToOne(mappedBy = "mrBeatInfo", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToOne(mappedBy = "mrBeatInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private MrBeatMusicFile mrBeatMusicFile;
 
   @ManyToOne(fetch = FetchType.LAZY)
