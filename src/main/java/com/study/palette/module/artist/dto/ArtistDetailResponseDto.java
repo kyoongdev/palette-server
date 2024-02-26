@@ -18,6 +18,8 @@ public class ArtistDetailResponseDto {
 
   private String serviceName;
 
+  private int salesType;
+
   private String serviceInfo;
 
   private String editInfo;
@@ -34,6 +36,7 @@ public class ArtistDetailResponseDto {
     return ArtistDetailResponseDto.builder()
         .id(artistInfo.getId().toString())
         .serviceName(artistInfo.getServiceName())
+        .salesType(artistInfo.getSalesType().getCode())
         .serviceInfo(artistInfo.getServiceInfo())
         .editInfo(artistInfo.getEditInfo())
         .artistFile(artistInfo.getArtistFile())

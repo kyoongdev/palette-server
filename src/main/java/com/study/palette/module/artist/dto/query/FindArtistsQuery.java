@@ -18,17 +18,17 @@ import lombok.Data;
 public class FindArtistsQuery extends PageDto {
 
     @Schema(description = "판매유형", defaultValue = "")
-    private int saleType;
+    private int salesType;
 
     @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
         "POPULAR"})
     private CustomSort sort;
 
     public BooleanExpression getSaleTypeCondition(QArtistInfo artistInfo) {
-        if (ArtistSalesType.findArtistSalesType(this.saleType) == ArtistSalesType.ALL) {
+        if (ArtistSalesType.findArtistSalesType(this.salesType) == ArtistSalesType.ALL) {
             return Expressions.TRUE.eq(Expressions.TRUE);
         } else {
-            return artistInfo.salesType.eq(ArtistSalesType.findArtistSalesType(this.saleType));
+            return artistInfo.salesType.eq(ArtistSalesType.findArtistSalesType(this.salesType));
         }
     }
 
