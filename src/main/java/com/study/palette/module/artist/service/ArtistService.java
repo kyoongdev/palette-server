@@ -110,6 +110,7 @@ public class ArtistService {
   }
 
   @Transactional
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
   public ResponseWithIdDto updateArtist(String id, UpdateArtistDto data, Users users) {
 
     ArtistInfo artistInfo = artistRepository.findById(UUID.fromString(id)).orElseThrow(
@@ -144,7 +145,8 @@ public class ArtistService {
 
 
   @Transactional
-  public boolean artistDelete(String id, Users users) {
+  @PreAuthorize("hasRole('MUSICIAN') or hasRole('ADMIN')")
+  public void artistDelete(String id, Users users) {
 
     ArtistInfo artistInfo = artistRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new ArtistException(ArtistErrorCode.ARTIST_NOT_FOUND));
@@ -153,9 +155,7 @@ public class ArtistService {
       throw new ArtistException(ArtistErrorCode.ARTIST_NOT_YOURS);
     }
 
-    artistRepository.deleteById(id);
-
-    return true;
+    artistRepository.deleteById(UUID.fromString(id));
   }
 
 

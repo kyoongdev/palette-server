@@ -16,6 +16,8 @@ public interface ArtistRepository extends JpaRepository<ArtistInfo, String>, Art
   long countByIsSelling(boolean registrationCompleted);
   List<ArtistInfo> findAllBySalesType(int fiterCode, Pageable pageable);
 
+  Optional<ArtistInfo> deleteById(UUID id);
+
   Optional<ArtistInfo> findById(UUID id);
 
 

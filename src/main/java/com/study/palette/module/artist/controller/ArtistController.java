@@ -93,12 +93,11 @@ public class ArtistController {
       @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "400", description = "Bad Request")})
   @DeleteMapping("/{id}")
-  public ResponseEntity<Boolean> artistDelete(@PathVariable String id,
-      @Parameter(hidden = false) @GetUserInfo Users users) {
+  public void artistDelete(@PathVariable String id,
+      @Parameter(hidden = true) @GetUserInfo Users users) {
 
-    Boolean result = artistService.artistDelete(id, users);
+    artistService.artistDelete(id, users);
 
-    return ResponseEntity.ok(result);
   }
 
   @Operation(summary = "아티스트 수정", description = "아티스트 수정 메서드입니다.")
