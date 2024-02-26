@@ -14,6 +14,7 @@ import com.study.palette.module.albumArt.exception.AlbumArtException;
 import com.study.palette.module.albumArt.repository.AlbumArtRepository;
 import com.study.palette.module.albumArt.repository.AlbumArtRequestRepository;
 import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
+import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -89,7 +90,7 @@ public class AlbumArtService {
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!albumArtInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !albumArtInfo.getUsers().getId().equals(users.getId())) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 
@@ -128,7 +129,7 @@ public class AlbumArtService {
         .orElseThrow(() -> new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!albumArtInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !albumArtInfo.getUsers().getId().equals(users.getId())) {
       throw new AlbumArtException(AlbumArtErrorCode.ALBUM_ART_NOT_YOURS);
     }
 

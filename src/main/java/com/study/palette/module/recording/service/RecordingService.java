@@ -12,6 +12,7 @@ import com.study.palette.module.recording.entity.RecordingInfo;
 import com.study.palette.module.recording.exception.RecordingErrorCode;
 import com.study.palette.module.recording.exception.RecordingException;
 import com.study.palette.module.recording.repository.RecordingRepository;
+import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import java.util.List;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public class RecordingService {
         .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!recordingInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !recordingInfo.getUsers().getId().equals(users.getId())) {
       throw new RecordingException(RecordingErrorCode.RECORDING_NOT_YOURS);
     }
 
@@ -93,7 +94,7 @@ public class RecordingService {
         .orElseThrow(() -> new RecordingException(RecordingErrorCode.RECORDING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!recordingInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !recordingInfo.getUsers().getId().equals(users.getId())) {
       throw new RecordingException(RecordingErrorCode.RECORDING_NOT_YOURS);
     }
 

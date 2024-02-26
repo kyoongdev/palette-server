@@ -15,6 +15,7 @@ import com.study.palette.module.mixMastering.exception.MixMasteringException;
 import com.study.palette.module.mixMastering.repository.MixMasteringRepository;
 import com.study.palette.module.mixMastering.repository.MixMasteringRequestRepository;
 import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
+import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -94,7 +95,7 @@ public class MixMasteringService {
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !mixMasteringInfo.getUsers().getId().equals(users.getId())) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
@@ -110,7 +111,7 @@ public class MixMasteringService {
             () -> new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_FOUND));
 
     //본인이 작성한 글인지 체크
-    if (!mixMasteringInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !mixMasteringInfo.getUsers().getId().equals(users.getId())) {
       throw new MixMasteringException(MixMasteringErrorCode.MIX_MASTERING_NOT_YOURS);
     }
 
