@@ -19,6 +19,7 @@ import com.study.palette.module.artist.exception.ArtistException;
 import com.study.palette.module.artist.repository.ArtistRepository;
 import com.study.palette.module.artist.repository.ArtistRequestRepository;
 import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
+import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -116,7 +117,7 @@ public class ArtistService {
     ArtistInfo artistInfo = artistRepository.findById(UUID.fromString(id)).orElseThrow(
         () -> new ArtistException(ArtistErrorCode.ARTIST_NOT_FOUND));
 
-    if (!artistInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN == !artistInfo.getUsers().getId().equals(users.getId())) {
       throw new ArtistException(ArtistErrorCode.ARTIST_NOT_YOURS);
     }
 
@@ -151,7 +152,7 @@ public class ArtistService {
     ArtistInfo artistInfo = artistRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new ArtistException(ArtistErrorCode.ARTIST_NOT_FOUND));
 
-    if (!artistInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !artistInfo.getUsers().getId().equals(users.getId())) {
       throw new ArtistException(ArtistErrorCode.ARTIST_NOT_YOURS);
     }
 

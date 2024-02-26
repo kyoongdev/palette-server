@@ -20,6 +20,7 @@ import com.study.palette.module.mrBeat.exception.MrBeatException;
 import com.study.palette.module.mrBeat.repository.MrBeatRepository;
 import com.study.palette.module.mrBeat.repository.MrBeatRequestRepository;
 import com.study.palette.module.musician.dto.ApprovingServiceDetailResponseDto;
+import com.study.palette.module.users.entity.Role;
 import com.study.palette.module.users.entity.Users;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -107,7 +108,7 @@ public class MrBeatService {
     MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
 
-    if (!mrBeatInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !mrBeatInfo.getUsers().getId().equals(users.getId())) {
       throw new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_YOURS);
     }
 
@@ -141,7 +142,7 @@ public class MrBeatService {
     MrBeatInfo mrBeatInfo = mrBeatRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_FOUND));
 
-    if (!mrBeatInfo.getUsers().getId().equals(users.getId())) {
+    if (users.getRole() == Role.MUSICIAN && !mrBeatInfo.getUsers().getId().equals(users.getId())) {
       throw new MrBeatException(MrBeatErrorCode.MRBEAT_NOT_YOURS);
     }
 
