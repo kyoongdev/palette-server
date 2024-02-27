@@ -43,7 +43,7 @@ public class MrBeatDetailResponseDto {
         .genre(mrBeatInfo.getGenre().getCode())
         .mrBeatFile(mrBeatInfo.getMrBeatFile())
         .mrBeatLicenseInfo(mrBeatInfo.getMrBeatLicenseInfo())
-        .mrBeatContact(mrBeatInfo.getMrBeatContact())
+        .mrBeatContact(mrBeatInfo.getMrBeatContact().stream().toList())
         .users(new CommonUserDto(mrBeatInfo.getUsers()))
         .build();
   }

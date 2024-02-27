@@ -1,5 +1,6 @@
 package com.study.palette.module.artist.dto;
 
+import com.study.palette.module.artist.dto.contact.ArtistContactDto;
 import com.study.palette.module.artist.entity.ArtistContact;
 import com.study.palette.module.artist.entity.ArtistFile;
 import com.study.palette.module.artist.entity.ArtistInfo;
@@ -28,7 +29,7 @@ public class ArtistDetailResponseDto {
 
   private List<ArtistLicenseInfo> artistLicenseInfo;
 
-  private List<ArtistContact> artistContact;
+  private List<ArtistContactDto> artistContactDto;
 
   private CommonUserDto commonUserDto;
 
@@ -40,7 +41,8 @@ public class ArtistDetailResponseDto {
         .serviceInfo(artistInfo.getServiceInfo())
         .editInfo(artistInfo.getEditInfo())
         .artistFile(artistInfo.getArtistFile())
-        .artistContact(artistInfo.getArtistContact())
+        .artistContactDto(artistInfo.getArtistContact().stream()
+            .map(ArtistContactDto::new).toList())
         .artistLicenseInfo(artistInfo.getArtistLicenseInfo())
         .commonUserDto(new CommonUserDto(artistInfo.getUsers()))
         .build();
