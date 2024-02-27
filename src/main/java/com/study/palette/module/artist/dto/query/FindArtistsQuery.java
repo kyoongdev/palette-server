@@ -17,12 +17,11 @@ import lombok.Data;
 @Data
 public class FindArtistsQuery extends PageDto {
 
-    @Schema(description = "판매유형", defaultValue = "")
+    @Schema(description = "판매유형", defaultValue = "0")
     private int salesType;
 
-    @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
-        "POPULAR"})
-    private CustomSort sort;
+    @Schema(description = "정렬", defaultValue = "0")
+    private int customSort;
 
     public BooleanExpression getSaleTypeCondition(QArtistInfo artistInfo) {
         if (ArtistSalesType.findArtistSalesType(this.salesType) == ArtistSalesType.ALL) {
@@ -33,13 +32,10 @@ public class FindArtistsQuery extends PageDto {
     }
 
     public OrderSpecifier<?>[] getSort() {
-        if (this.sort == null) {
-        }
-
-        if (this.sort == CustomSort.POPULAR) {
-            return new OrderSpecifier[]{QArtistRequest.artistRequest.id.count().desc()};
-        } else { // 신규등록
+        if (CustomSort.findCustomSort(this.customSort) == CustomSort.ALL) {
             return new OrderSpecifier[]{QArtistInfo.artistInfo.createdAt.desc()};
+        } else {
+            return new OrderSpecifier[]{QArtistRequest.artistRequest.id.count().desc()};
         }
     }
 

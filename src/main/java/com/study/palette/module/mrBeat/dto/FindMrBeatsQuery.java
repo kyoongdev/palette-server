@@ -19,19 +19,18 @@ import lombok.Data;
 public class FindMrBeatsQuery extends PageDto {
 
   //장르
-  @Schema(description = "장르")
+  @Schema(description = "장르", defaultValue = "0")
   private int genreType;
 
   //분위기
-  @Schema(description = "분위기")
+  @Schema(description = "분위기", defaultValue = "0")
   private int moodType;
 
-  @Schema(description = "판매 유형")
+  @Schema(description = "판매 유형", defaultValue = "0")
   private int salesType;
 
-  @Schema(description = "정렬", defaultValue = "NEW", type = "string", allowableValues = {"NEW",
-      "POPULAR"})
-  private CustomSort customSort;
+  @Schema(description = "정렬", defaultValue = "0")
+  private int customSort;
 
   public BooleanExpression getSaleTypeCondition(QMrBeatInfo mrBeatInfo) {
     if (MrBeatSalesType.findMrBeatSalesType(this.salesType) == MrBeatSalesType.ALL) {
@@ -60,7 +59,7 @@ public class FindMrBeatsQuery extends PageDto {
 
 
   public OrderSpecifier<?>[] getSort() {
-    if (this.customSort == CustomSort.POPULAR) {
+    if (CustomSort.findCustomSort(this.customSort) == CustomSort.POPULAR) {
       return new OrderSpecifier[]{QMrBeatRequest.mrBeatRequest.id.count().desc()};
     } else { // 신규등록
       return new OrderSpecifier[]{QMrBeatInfo.mrBeatInfo.createdAt.desc()};
