@@ -53,7 +53,7 @@ public class ArtistService {
   }
 
   /* artistInfo artistInfo 필터 정보 조회*/
-  public PaginationDto<ArtistResponseDto> findArtists(FindArtistsQuery query, Pageable pageable) {
+  public PaginationDto<ArtistResponseDto> findArtists(ArtistConditions query, Pageable pageable) {
     //페이지네이션을 이용해서 정보를 조회하기 위해서는
     //크게
     // count: 해당 요청에 맞는 "전체 데이터 개수"

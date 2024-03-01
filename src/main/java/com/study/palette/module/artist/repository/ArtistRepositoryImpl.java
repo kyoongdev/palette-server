@@ -8,6 +8,7 @@ import com.study.palette.module.artist.entity.QArtistFile;
 import com.study.palette.module.artist.entity.QArtistInfo;
 import com.study.palette.module.artist.entity.QArtistLicenseInfo;
 import com.study.palette.module.artist.entity.QArtistRequest;
+import com.study.palette.module.artist.service.ArtistConditions;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ArtistRepositoryImpl implements ArtistCustomRepository {
   }
 
   @Override
-  public Page<ArtistResponseDto> findAll(FindArtistsQuery query, Pageable pageable) {
+  public Page<ArtistResponseDto> findAll(ArtistConditions query, Pageable pageable) {
     QArtistInfo artistInfo = QArtistInfo.artistInfo;
     QArtistFile artistFile = QArtistFile.artistFile;
     QArtistLicenseInfo artistLicenseInfo = QArtistLicenseInfo.artistLicenseInfo;

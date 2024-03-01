@@ -10,12 +10,13 @@ import com.study.palette.common.enums.CustomSort;
 import com.study.palette.common.enums.albumArt.AlbumArtSaleType;
 import com.study.palette.module.artist.entity.QArtistInfo;
 import com.study.palette.module.artist.entity.QArtistRequest;
+import com.study.palette.module.artist.service.ArtistConditions;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
 @Data
-public class FindArtistsQuery extends PageDto {
+public class FindArtistsQuery extends ArtistConditions {
 
     @Schema(description = "판매유형", defaultValue = "0")
     private int salesType;
@@ -23,20 +24,9 @@ public class FindArtistsQuery extends PageDto {
     @Schema(description = "정렬", defaultValue = "0")
     private int customSort;
 
-    public BooleanExpression getSaleTypeCondition(QArtistInfo artistInfo) {
-        if (ArtistSalesType.findArtistSalesType(this.salesType) == ArtistSalesType.ALL) {
-            return Expressions.TRUE.eq(Expressions.TRUE);
-        } else {
-            return artistInfo.salesType.eq(ArtistSalesType.findArtistSalesType(this.salesType));
-        }
-    }
-
-    public OrderSpecifier<?>[] getSort() {
-        if (CustomSort.findCustomSort(this.customSort) == CustomSort.ALL) {
-            return new OrderSpecifier[]{QArtistInfo.artistInfo.createdAt.desc()};
-        } else {
-            return new OrderSpecifier[]{QArtistRequest.artistRequest.id.count().desc()};
-        }
+    public FindArtistsQuery(int salesType, int customSort) {
+        super(salesType, customSort);
+        System.out.println("FindArtistsQuery 생성자 호출");
     }
 
 }
