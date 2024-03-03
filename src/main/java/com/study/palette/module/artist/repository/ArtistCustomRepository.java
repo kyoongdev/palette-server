@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ArtistCustomRepository {
 
+  long count(ArtistConditions query);
   Page<ArtistResponseDto> findAll(ArtistConditions query, Pageable pageable);
 
 }

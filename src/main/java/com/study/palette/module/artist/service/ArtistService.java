@@ -60,7 +60,7 @@ public class ArtistService {
     // page : 현재 요청의 "페이지 번호"
     // limit : 한 페이지에 보여줄 "데이터 개수"
     //가 필요합니다.
-    Long count = artistRepository.count();
+    Long count = artistRepository.count(query);
 
     if (count == 0) {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());

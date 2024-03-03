@@ -83,4 +83,20 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
 
     return new PageImpl<>(result, pageable, result.size());
   }
+
+  @Override
+  public long count(MrBeatConditions query) {
+
+    QMrBeatInfo mrBeatInfo = QMrBeatInfo.mrBeatInfo;
+
+    long result = queryFactory.select(mrBeatInfo.id.count())
+        .from(mrBeatInfo)
+        .where(query.getSaleTypeCondition(mrBeatInfo)
+            .and(query.getGenreTypeCondition(mrBeatInfo))
+            .and(query.getMoodTypeCondition(mrBeatInfo))
+            .and(mrBeatInfo.isSelling.isTrue()))
+        .fetchOne();
+
+    return result;
+  }
 }

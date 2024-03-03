@@ -28,6 +28,21 @@ public class ArtistRepositoryImpl implements ArtistCustomRepository {
   }
 
   @Override
+  public long count(ArtistConditions query) {
+
+    QArtistInfo artistInfo = QArtistInfo.artistInfo;
+
+    long result = queryFactory
+        .select(artistInfo.id.count())
+        .from(artistInfo)
+        .where(query.getSaleTypeCondition(artistInfo)
+            .and(artistInfo.isSelling.isTrue()))
+        .fetchOne();
+    
+    return result;
+  }
+
+  @Override
   public Page<ArtistResponseDto> findAll(ArtistConditions query, Pageable pageable) {
     QArtistInfo artistInfo = QArtistInfo.artistInfo;
     QArtistFile artistFile = QArtistFile.artistFile;

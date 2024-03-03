@@ -10,5 +10,7 @@ public interface MrBeatCustomRepository {
 
   Page<MrBeatResponseDto> findAll(MrBeatConditions query, Pageable pageable);
 
+  long count(MrBeatConditions query);
+
 
 }

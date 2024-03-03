@@ -53,7 +53,7 @@ public class MrBeatService {
 
   public PaginationDto<MrBeatResponseDto> findMrBeat(MrBeatConditions query, Pageable pageable) {
 
-    Long count = mrBeatRepository.count();
+    Long count = mrBeatRepository.count(query);
 
     if (count == 0) {
       return PaginationDto.of(new PagingDto(pageable, count), List.of());
