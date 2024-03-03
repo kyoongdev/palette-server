@@ -1,6 +1,7 @@
 package com.study.palette.module.mrBeat.dto;
 
 import com.study.palette.common.enums.mrBeat.MrBeatMoodType;
+import com.study.palette.module.mrBeat.dto.contact.MrBeatContactDto;
 import com.study.palette.module.mrBeat.entity.MrBeatContact;
 import com.study.palette.module.mrBeat.entity.MrBeatFile;
 import com.study.palette.module.mrBeat.entity.MrBeatInfo;
@@ -27,12 +28,16 @@ public class MrBeatDetailResponseDto {
   @Schema(description = "장르")
   private int genre;
 
+  @Schema(description = "mr/beat 파일")
   private MrBeatFile mrBeatFile;
 
+  @Schema(description = "라이센스 정보")
   private List<MrBeatLicenseInfo> mrBeatLicenseInfo;
 
-  private List<MrBeatContact> mrBeatContact;
+  @Schema(description = "연락수단")
+  private List<MrBeatContactDto> mrBeatContactDto;
 
+  @Schema(description = "유저 정보")
   private CommonUserDto users;
 
   public static MrBeatDetailResponseDto toEntity(MrBeatInfo mrBeatInfo) {
@@ -43,7 +48,7 @@ public class MrBeatDetailResponseDto {
         .genre(mrBeatInfo.getGenre().getCode())
         .mrBeatFile(mrBeatInfo.getMrBeatFile())
         .mrBeatLicenseInfo(mrBeatInfo.getMrBeatLicenseInfo())
-        .mrBeatContact(mrBeatInfo.getMrBeatContact().stream().toList())
+        .mrBeatContactDto(mrBeatInfo.getMrBeatContact().stream().map(MrBeatContactDto::new).toList())
         .users(new CommonUserDto(mrBeatInfo.getUsers()))
         .build();
   }
