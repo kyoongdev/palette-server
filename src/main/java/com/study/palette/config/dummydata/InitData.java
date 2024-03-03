@@ -152,7 +152,7 @@ public class InitData implements ApplicationRunner {
         List<ArtistFile> artistFileList = createArtistDto.getArtistFileDto().stream().map(file -> ArtistFile.from(file, artistInfo)).toList();
 
         CreateMrBeatFileDto createMrBeatFileDto = new CreateMrBeatFileDto("www.test.com", "testFileName", "uploadfilname", 1000, "jpg", true);
-        CreateMrBeatMusicFileDto createMrBeatMusicFileDto = new CreateMrBeatMusicFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "mp3", true, LocalDateTime.now());
+        CreateMrBeatMusicFileDto createMrBeatMusicFileDto = new CreateMrBeatMusicFileDto("www.test.com", "testfilenale", "uploadfilname", 1000, "mp3", 129, true, LocalDateTime.now());
         CreateMrBeatDto createMrBeatDto = new CreateMrBeatDto("serviceName", 1, 1, 1, mrBeatLicenseInfos, mrBeatContacts, createMrBeatFileDto, createMrBeatMusicFileDto);
 
         MrBeatInfo mrBeatInfo = createMrBeatDto.toEntity(initCommUser);

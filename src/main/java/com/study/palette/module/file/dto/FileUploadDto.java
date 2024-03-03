@@ -22,5 +22,8 @@ public class FileUploadDto {
   String uploadFileSize;
   @Schema(description = "파일 확장자", example = "jpg")
   String suffix;
+  @Schema(description = "파일 재생 시간", example = "5572")
+  int duration;
+
 
 }

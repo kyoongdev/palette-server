@@ -51,7 +51,7 @@ public class MrBeatService {
     this.modelMapper = modelMapper;
   }
 
-  public PaginationDto<MrBeatResponseDto> findMrBeat(FindMrBeatsQuery query, Pageable pageable) {
+  public PaginationDto<MrBeatResponseDto> findMrBeat(MrBeatConditions query, Pageable pageable) {
 
     Long count = mrBeatRepository.count();
 

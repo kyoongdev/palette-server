@@ -3,7 +3,6 @@ package com.study.palette.module.mrBeat.dto;
 import com.study.palette.common.enums.mrBeat.MrBeatGenreType;
 import com.study.palette.common.enums.mrBeat.MrBeatMoodType;
 import com.study.palette.common.enums.mrBeat.MrBeatSalesType;
-import com.study.palette.module.users.dto.CommonUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import lombok.Data;
@@ -23,10 +22,12 @@ public class MrBeatResponseDto {
   private int mood;
   @Schema(description = "서비스 타입", example = "true")
   private int salesType;
+
+  private MrBeatMusicFileResponseDto mrBeatMusicFileResponseDto;
+
   @Schema(description = "파일경로", example = "파일경로")
   private String fileUrl;
-  @Schema(description = "파일경로", example = "파일경로")
-  private String musicFileUrl;
+
   @Schema(description = "가격", example = "10000")
   private int price;
   @Schema(description = "요청수", example = "10000")
@@ -39,14 +40,14 @@ public class MrBeatResponseDto {
   private String profileImage;
 
   public MrBeatResponseDto(UUID id, String serviceName, MrBeatMoodType mood, MrBeatGenreType genre, MrBeatSalesType salesType,
-      String fileUrl, String musicFileUrl, int price, long requestCount, String usersName, String profileImage) {
+      String fileUrl, String musicFileUrl, int minutes, int seconds, int price, long requestCount, String usersName, String profileImage) {
     this.id = id.toString();
     this.serviceName = serviceName;
     this.genre = genre.getCode();
     this.mood = mood.getCode();
     this.salesType = salesType.getCode();
     this.fileUrl = fileUrl;
-    this.musicFileUrl = musicFileUrl;
+    this.mrBeatMusicFileResponseDto = new MrBeatMusicFileResponseDto(musicFileUrl, minutes, seconds);
     this.price = price;
     this.requestCount = requestCount;
     this.usersName = usersName;

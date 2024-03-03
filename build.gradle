@@ -53,6 +53,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'// aws 라이브러리
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.4'
+    implementation group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5.4'    // mp3spi 라이브러리
 
 
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'

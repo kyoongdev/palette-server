@@ -43,6 +43,8 @@ public class MrBeatMusicFile {
 
   private int fileType;
 
+  private int duration;
+
   @Column(length = 4)
   private String suffix;
 

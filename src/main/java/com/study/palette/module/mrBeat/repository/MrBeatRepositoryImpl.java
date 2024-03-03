@@ -9,6 +9,7 @@ import com.study.palette.module.mrBeat.entity.QMrBeatInfo;
 import com.study.palette.module.mrBeat.entity.QMrBeatLicenseInfo;
 import com.study.palette.module.mrBeat.entity.QMrBeatMusicFile;
 import com.study.palette.module.mrBeat.entity.QMrBeatRequest;
+import com.study.palette.module.mrBeat.service.MrBeatConditions;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
   }
 
   @Override
-  public Page<MrBeatResponseDto> findAll(FindMrBeatsQuery query, Pageable pageable) {
+  public Page<MrBeatResponseDto> findAll(MrBeatConditions query, Pageable pageable) {
 
     QMrBeatInfo mrBeatInfo = QMrBeatInfo.mrBeatInfo;
     QMrBeatFile mrBeatFile = QMrBeatFile.mrBeatFile;
@@ -45,6 +46,8 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
             mrBeatInfo.salesType,
             mrBeatFile.url.as("fileUrl"),
             mrBeatMusicFile.url.as("musicFileUrl"),
+            mrBeatMusicFile.duration.as("minute"),
+            mrBeatMusicFile.duration.as("second"),
             mrBeatLicenseInfo.price.as("price"),
             mrBeatRequest.id.count().as("requestCount"),
             mrBeatInfo.users.name,
@@ -71,6 +74,7 @@ public class MrBeatRepositoryImpl implements MrBeatCustomRepository {
             mrBeatInfo.users.name,
             mrBeatFile.url,
             mrBeatMusicFile.url,
+            mrBeatMusicFile.duration,
             mrBeatLicenseInfo.price,
             mrBeatInfo.users.name,
             mrBeatInfo.users.profileImage)
