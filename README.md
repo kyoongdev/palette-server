@@ -16,7 +16,8 @@
 ## ERD
 ![palette](https://github.com/kyoongdev/roof-lupin-server/assets/68049802/acc471cf-23a2-4dbf-8cc1-9364cb2a7e44)
 
-
+## Open API
+- https://api-dev.pa1ette.com/swagger-ui/index.html#/
 
 ## Git Flow
 
