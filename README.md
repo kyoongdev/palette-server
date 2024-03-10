@@ -1,10 +1,10 @@
-# palette-server
+# Palette Server
 
 ## Introduction
 음악 오픈 마켓으로서 작곡, 작사, 녹음, 믹스&마스터링, 앨범아트 5가지의 음원 제작 필수 5요소를 거래할 수 있는 서비스 입니다.
 
 ## Stacks
-- Sprint Boot
+- Spring Boot
 - Java
 - JPA
 - MySQL
