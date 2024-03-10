@@ -1,55 +1,14 @@
 # palette-server
 
-## Docker Compose 세팅
+## Role
+- PM : 프로젝트의 일정을 관리하고 FrontEnd 개발자와 기획적인 이슈를 정리하여 전달하는 역할을 맡았습니다.
+- BackEnd : 프로젝트 진행 간 일부 기능에 대한 개발을 진행하였습니다.
 
-(Docker가 설치되어있다면 넘어가셔도 좋습니다.)
-Window : https://docs.docker.com/desktop/install/windows-install/
-Mac : https://docs.docker.com/desktop/install/mac-install/
-위 링크를 통해 도커를 설치합니다.
+## ERD
+![palette](https://github.com/kyoongdev/roof-lupin-server/assets/68049802/acc471cf-23a2-4dbf-8cc1-9364cb2a7e44)
 
-## Mysql 명세
 
-docker-compose.yml 파일 참고 - MYSQL_ROOT_PASSWORD=PalleteSecret123 - MYSQL_USER=pallete - MYSQL_DATABASE=pallete - MYSQL_PASSWORD=PalleteSecret123
 
-## 서버 실행
-
-서버 실행은 다음과 같은 과정을 통해 진행합니다.
-
-```
-$ sh ./docker/start-docker.sh
->>> [Y/N]질문에는 Y를 입력
-```
-
-## 폴더 구조
-
-```
-📦src
-┣ 📂main
-┃ ┣ 📂java/com/study/palette
-┃ ┃ ┣ 📂common
-┃ ┃ ┃ ┗ 📂config
-┃ ┃ ┃ ┗ 📜SwaggerConfig.java
-┃ ┃ ┣ 📂temp
-┃ ┃ ┃ ┗ 📂controller
-┃ ┃ ┃ ┣ 📜TempController.java
-┃ ┃ ┃ ┗ 📜TempController2.java
-┃ ┃ ┗ 📜PaletteApplication.java
-┃ ┗ 📂resources
-┃ ┃ ┗ 📜application.yml
-┃ ┃
-┗ 📂test/java/com/study/palette
-┃ ┗ 📜PaletteApplicationTests.java
-```
-
-## Lint 설정
-
-## 환경 변수 관리
-
-## 실행 방법
-
-## Swagger 주소
-(임시 LocalHost:8080 포트 swagger url)
-http://localhost:8080/swagger-ui
 ## Git Flow
 
 - main : 메인 브랜치
