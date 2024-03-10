@@ -1,5 +1,14 @@
 # palette-server
 
+## Introduction
+음악 오픈 마켓으로서 작곡, 작사, 녹음, 믹스&마스터링, 앨범아트 5가지의 음원 제작 필수 5요소를 거래할 수 있는 서비스 입니다.
+
+## Stacks
+- Sprint Boot
+- Java
+- JPA
+- MySQL
+
 ## Role
 - PM : 프로젝트의 일정을 관리하고 FrontEnd 개발자와 기획적인 이슈를 정리하여 전달하는 역할을 맡았습니다.
 - BackEnd : 프로젝트 진행 간 일부 기능에 대한 개발을 진행하였습니다.
